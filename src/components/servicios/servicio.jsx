@@ -126,7 +126,7 @@ export default class Tematica extends React.Component {
             <CardText >
             Ingrese todos los campos obligatorios y a continuación presione GRABAR para registrar la facultad.
             <div className="row">
-                <div className="col-md-7">
+                <div className="col-md-6">
                     <TextField 
                     onChange = {(e)=>{this.handleChange('title',e);}}
                     value = {this.state.title} 
@@ -147,7 +147,7 @@ export default class Tematica extends React.Component {
                     fullWidth/>
                 </div>
                
-               <div className="col-md-5">
+               <div className="col-md-6">
                    <div id="map-container">
 
 				   </div>

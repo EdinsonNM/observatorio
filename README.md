@@ -1,4 +1,4 @@
-# SIGMA CLOUD
+# OBSERVATORIO CUENCA CHANCAY LAMBAYEQUE
 
-This application is developed using vanilla.js and pure webcomponents
+This application is developed by Edinson Nuñez More and Luis Pintado Huaman
  
