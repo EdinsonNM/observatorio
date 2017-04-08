@@ -1,0 +1,16 @@
+{
+  "name": "app-firebase-function",
+  "version": "1.0.0",
+  "description": "triggers ejecutados por la app de admisión",
+  "main": "index.js",
+  "scripts": {
+    "start":"node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edinson Nuñez More",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^4.1.3",
+    "firebase-functions": "^0.5.3"
+  }
+}
