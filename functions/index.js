@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase)
 
+/*
 exports.triggerEscuelasToFacultad = functions.database.ref('/{origin}/escuelas/{id}')
     .onWrite(event => {
         const escuelas = event.data.numChildren();
@@ -19,7 +20,5 @@ exports.triggerVoucherToVouchersPostulante = functions.database.ref('/{origin}/v
 			 }
 			return admin.database().ref(event.params.origin+'/vouchers/'+event.params.admision+'/'+event.params.postulante).child('montoTotal').set(monto);
 		 });
-        
-
     });
-
+*/
