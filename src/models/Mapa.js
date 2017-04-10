@@ -2,8 +2,9 @@ import Model from './Model';
 const attrs = [
     "title",
     "url",
-    "params",
-	"serverType"
+    "layer",
+	"serverType",
+	"legend"
    
 ]
 

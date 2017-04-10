@@ -5,7 +5,7 @@ export default  class BaseMaps{
   }
   create(){
     let self=this;
-    this._view =  new ol.View({center: ol.proj.transform([-79.28, -6.62], 'EPSG:4326', 'EPSG:3857'),zoom: 10});
+    this._view =  new ol.View({center: ol.proj.transform([-79.28, -6.62], 'EPSG:4326', 'EPSG:3857'),zoom: 9});
     this._map = new ol.Map({
           layers:
               [

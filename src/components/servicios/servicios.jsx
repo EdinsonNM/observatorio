@@ -156,7 +156,7 @@ export default class Mapas extends React.Component {
      
             </CardText>
         </Card>
-         <FloatingActionButton style={style} href="#/dashboard/facultades/new">
+         <FloatingActionButton style={style} href="#/dashboard/servicios/new">
             <ContentAdd />
             </FloatingActionButton>
         </div>

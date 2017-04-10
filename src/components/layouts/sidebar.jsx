@@ -76,11 +76,9 @@ export default class Sidebar extends React.Component {
             />
             <Subheader>Opciones</Subheader>
             <MenuItem href="#/dashboard/main">Inicio</MenuItem>
-            <MenuItem href="#/dashboard/facultades">Facultades</MenuItem>
-            <MenuItem href="#/dashboard/periodos">Periodos</MenuItem>
-            <MenuItem href="#/dashboard/admisiones">Procesos de Admisión</MenuItem>
-            <MenuItem >Registro de Postulantes</MenuItem>
-            <MenuItem >Evaluación de Postulantes</MenuItem>
+            <MenuItem href="#/dashboard/tematicas">Temáticas</MenuItem>
+            <MenuItem href="#/dashboard/servicios">Mapas</MenuItem>
+
         </Drawer>
     );
   }
