@@ -27322,14 +27322,14 @@ var Admin = function (_React$Component) {
           { key: "2" },
           _react2.default.createElement(
             'a',
-            { href: '#/dashboard/admisiones' },
+            { href: '#/dashboard/servicios' },
             _react2.default.createElement(
               _Card.Card,
               { style: { margin: '10px' } },
               _react2.default.createElement(
                 _Card.CardMedia,
                 {
-                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Proceso de Admision', subtitle: 'Realize la apertura del proceso  de Admisi\xF3n' })
+                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Servicios de Mapas', subtitle: 'Realize la apertura del proceso  de Admisi\xF3n' })
                 },
                 _react2.default.createElement('img', { src: 'images/md.gif' })
               )
@@ -27348,7 +27348,7 @@ var Admin = function (_React$Component) {
               _react2.default.createElement(
                 _Card.CardMedia,
                 {
-                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Periodo Acad\xE9mico', subtitle: 'Registro del periodo Acad\xE9mico' })
+                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Menu 3', subtitle: 'Registro del Menu 3' })
                 },
                 _react2.default.createElement('img', { src: 'images/bg02.png' })
               )
@@ -27367,7 +27367,7 @@ var Admin = function (_React$Component) {
               _react2.default.createElement(
                 _Card.CardMedia,
                 {
-                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Evaluaci\xF3n', subtitle: 'Realize el registro de la evaluaci\xF3n de los postulantes' })
+                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Menu 4', subtitle: 'Realize el registro de la evaluaci\xF3n de los postulantes' })
                 },
                 _react2.default.createElement('img', { src: 'images/bg05-01.png' })
               )
@@ -27383,7 +27383,7 @@ var Admin = function (_React$Component) {
             _react2.default.createElement(
               _Card.CardMedia,
               {
-                overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Admisi\xF3n', subtitle: 'Entrega de Constancia' })
+                overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Menu 5', subtitle: 'Entrega de Constancia' })
               },
               _react2.default.createElement('img', { src: 'images/bg02.png' })
             )
@@ -27401,7 +27401,7 @@ var Admin = function (_React$Component) {
               _react2.default.createElement(
                 _Card.CardMedia,
                 {
-                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Postulantes', subtitle: 'Consulte el listado de postulantes' })
+                  overlay: _react2.default.createElement(_Card.CardTitle, { title: 'Menu 6', subtitle: 'Consulte el listado de postulantes' })
                 },
                 _react2.default.createElement('img', { src: 'images/bg02-01.png' })
               )
