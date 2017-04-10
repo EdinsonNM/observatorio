@@ -134,10 +134,10 @@ export default class Admin extends React.Component {
               </a>
               </div>
               <div key={"2"}>
-                <a href="#/dashboard/admisiones">
+                <a href="#/dashboard/servicios">
                   <Card style={{margin:'10px'}} >
                         <CardMedia
-                        overlay={<CardTitle title="Proceso de Admision" subtitle="Realize la apertura del proceso  de Admisión" />}
+                        overlay={<CardTitle title="Servicios de Mapas" subtitle="Realize la apertura del proceso  de Admisión" />}
                       >
                         <img src="images/md.gif" />
                       </CardMedia>
@@ -150,7 +150,7 @@ export default class Admin extends React.Component {
                 <a  href="#/dashboard/periodos">
                     <Card style={{margin:'10px'}} className="card">
                     <CardMedia
-                    overlay={<CardTitle title="Periodo Académico" subtitle="Registro del periodo Académico" />}
+                    overlay={<CardTitle title="Menu 3" subtitle="Registro del Menu 3" />}
                     >
                     <img src="images/bg02.png" />
 
@@ -164,7 +164,7 @@ export default class Admin extends React.Component {
                   <Card style={{margin:'10px'}}>
                 
                   <CardMedia
-                    overlay={<CardTitle title="Evaluación" subtitle="Realize el registro de la evaluación de los postulantes" />}
+                    overlay={<CardTitle title="Menu 4" subtitle="Realize el registro de la evaluación de los postulantes" />}
                   >
                     <img src="images/bg05-01.png" />
                   </CardMedia>
@@ -177,7 +177,7 @@ export default class Admin extends React.Component {
                   <Card style={{margin:'10px'}}>
                 
                   <CardMedia
-                    overlay={<CardTitle title="Admisión" subtitle="Entrega de Constancia" />}
+                    overlay={<CardTitle title="Menu 5" subtitle="Entrega de Constancia" />}
                   >
                     <img src="images/bg02.png" />
                   </CardMedia>
@@ -190,7 +190,7 @@ export default class Admin extends React.Component {
                  <a  href="#/dashboard/postulantes">
                   <Card style={{margin:'10px'}} className="card">
                         <CardMedia
-                        overlay={<CardTitle title="Postulantes" subtitle="Consulte el listado de postulantes" />}
+                        overlay={<CardTitle title="Menu 6" subtitle="Consulte el listado de postulantes" />}
                       >
                         <img src="images/bg02-01.png" />
 
