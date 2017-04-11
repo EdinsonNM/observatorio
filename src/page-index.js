@@ -1,7 +1,10 @@
 //aqui la lógica para el archivo index.html
 import NovedadService from './services/NovedadService';
 let service = new NovedadService();
-/*
+fetch('http://sinia.minam.gob.pe/novedades/xml',{}).then(function(response){
+	console.log(response);
+});
+
 service.getAll({
 	draw:1,
 	start:0,
@@ -9,7 +12,6 @@ service.getAll({
 },(error,data)=>{
 	console.log(data);
 });
-*/
 
 
 /*

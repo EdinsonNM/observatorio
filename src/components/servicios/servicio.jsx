@@ -23,7 +23,10 @@ import MapaService from '../../services/MapaService';
 import Model from '../../models/Mapa';
 import { hashHistory } from 'react-router';
 import Cache from '../../services/Cache';
+import Paper from 'material-ui/Paper';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
+import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import BaseMaps from '../../libs/BaseMaps';
 let service = new MapaService();
 import {
@@ -81,14 +84,14 @@ handleChangeSelect(key, event, index, value){
       let model = new Model(this.state);
       service.post(model,()=>{
           console.log('save ok...');
-          hashHistory.goBack()
-      });
+          this.handleBack();
+      },this.props.tematicaId);
     }else{
 
       let model = new Model(this.state);
       service.update(this.state.id,model,()=>{
           console.log('update ok...');
-          hashHistory.goBack()
+          this.handleBack();
       });
     }
 
@@ -114,7 +117,7 @@ handleChangeSelect(key, event, index, value){
 	this.map.AddLayer(group);
   }
   handleBack(){
-    hashHistory.goBack()
+    this.props.back()
   }
   render(){
     const {finished, stepIndex} = this.state;
@@ -137,28 +140,21 @@ handleChangeSelect(key, event, index, value){
         );
 
     return (
-		<div className="row no-gutter full-height" style={{backgroundColor:'white'}}>
-			<div className="col-md-5 full-height">
+		<Paper className="row no-gutter " style={{backgroundColor:'white'}} zDepth={3} >
+			<div className="col-md-5 full-height-service">
 
-            <CardHeader
-            title="Registro de Servicios"
-             avatar="images/user0.jpg"
-            />
+            <Toolbar style={{backgroundColor:'white'}}>
+					<ToolbarGroup firstChild={true}>
+						 <IconButton onTouchTap={this.handleBack.bind(this)} touch={true} style={{marginLeft:'10px'}}>
+						   	<FontIcon  className="material-icons" >arrow_back</FontIcon>
+					   </IconButton>
+						<ToolbarTitle text={Cache.getItem('tematica',this.props.tematicaId).titulo+"/Servicios de Mapas"} />
+					</ToolbarGroup>
+					
+				</Toolbar>
 
             <CardText >
-					 <SelectField
-								fullWidth
-								floatingLabelText="Temática"
-								value={this.state.tematica}
-								onChange={(event, index, value)=>{this.handleChangeSelect('tematica',event, index, value)}}
-								>
-								{
-									Object.keys(Cache.getData('tematica')).map((key,index)=>{
-										let item = Cache.getItem('tematica',key);
-									return (<MenuItem key={index} value={item.id} primaryText={item.titulo} />)
-									})
-								}
-					</SelectField>
+
                     <TextField 
 								onChange = {(e)=>{this.handleChange('title',e);}}
 								value = {this.state.title} 
@@ -191,12 +187,7 @@ handleChangeSelect(key, event, index, value){
                     required
                     fullWidth/>
                
-                <FlatButton
-                  label="Volver"
-                  disabled={stepIndex === 0}
-                  onTouchTap={this.handleBack.bind(this)}
-                  style={{marginRight: 12}}
-                />
+
 				<RaisedButton
                   label='Preview'
                   secondary={true}
@@ -211,12 +202,12 @@ handleChangeSelect(key, event, index, value){
   
             </CardText>
 			</div>
-			<div className="col-md-7 full-height">
-   <div id="map-container">
+			<div className="col-md-7 full-height-service">
+   					<div id="map-container">
 
 				   </div>
 			</div>
-		</div>
+		</Paper>
           
     );
   }

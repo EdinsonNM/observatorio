@@ -102,10 +102,10 @@ export default class Tematica extends React.Component {
         );
 
     return (
-          <Card>
+          <div>
             <CardHeader
-            title="Registro de Periodo académico"
-            subtitle="Admisión"
+            title="Registro de Temáticas"
+            subtitle="Visor de Mapas"
              avatar="images/user0.jpg"
             />
 
@@ -150,7 +150,7 @@ export default class Tematica extends React.Component {
                 />
   
             </CardText>
-        </Card>
+        </div>
     );
   }
 }

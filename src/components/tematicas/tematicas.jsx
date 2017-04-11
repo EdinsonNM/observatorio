@@ -15,12 +15,14 @@ import Subheader from 'material-ui/Subheader';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import TematicaService from '../../services/TematicaService';
+import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 
 import FileFolder from 'material-ui/svg-icons/file/folder';
 let SelectableList = makeSelectable(List);
 
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
-
+import RaisedButton from 'material-ui/RaisedButton';
 const style={
   appbar:{
     backgroundColor:'var(--paper-purple-700)'
@@ -61,8 +63,8 @@ export default class Tematicas extends React.Component {
   edit(id){
     document.location.hash=`#/dashboard/tematicas/${id}/edit`;
   }
-  escuelas(id){
-    document.location.hash=`#/dashboard/tematicas/${id}/escuelas`;
+  disabled(value){
+    this.setState({disabled:value})
   }
 
   handleRequestChange (event, index){
@@ -87,7 +89,6 @@ export default class Tematicas extends React.Component {
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
             <IconMenu iconButtonElement={iconButtonElement}>
-            <MenuItem onTouchTap={this.escuelas.bind(this,item.id)}>Escuelas</MenuItem>
             <MenuItem onTouchTap={this.edit.bind(this,item.id)}>Editar</MenuItem>
             <MenuItem onTouchTap={this.remove.bind(this,item.id)}>Delete</MenuItem>
             </IconMenu>
@@ -96,7 +97,7 @@ export default class Tematicas extends React.Component {
                         <ListItem
                             key={index}
 							value={item.id}
-                           leftAvatar={<Avatar icon={<FileFolder />} />}
+                           leftAvatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
                             rightIconButton={rightIconMenu}
                             primaryText={item.titulo}
                             secondaryText={
@@ -120,24 +121,11 @@ export default class Tematicas extends React.Component {
 
 		return (
 			<div style={{width:'100%',height:'100%',position:'relative',overflowY:'auto'}}>
-				<Card>
-					<CardHeader
-					title="Listado de Temáticas"
-					subtitle="Inicio / Temáticas"
-					avatar="images/user0.jpg"
-					/>
-
-					<CardText >
-
-		
-			<SelectableList defaultValue={2}  value={this.state.selectedIndex}  onChange={this.handleRequestChange.bind(this)}>
+				<SelectableList defaultValue={2}  value={this.state.selectedIndex}  onChange={this.handleRequestChange.bind(this)}>
 				<Subheader>Listado de Temáticas</Subheader>
 				{items}
-			</SelectableList>
-					</CardText>
-				</Card>
-				
-				</div>
+				</SelectableList>
+			</div>
 			);
 
 		

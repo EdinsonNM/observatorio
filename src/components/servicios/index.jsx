@@ -33,11 +33,11 @@ export default class ServicioIndex extends React.Component {
 	}
 
 	return(
-		<div style={{width:'100%',height:'100%',position:'relative'}}>
+		<div style={{width:'100%',height:'100%',position:'relative',padding:'20px','overflowY':'auto'}}>
 			{component}
 			{
 				(!this.state.isNew)?
-				<FloatingActionButton className="btn-servicio-new"  onTouchTap={this.toggleNew.bind(this)}>
+				<FloatingActionButton className="btn-servicio-new"  onTouchTap={this.toggleNew.bind(this)} secondary={true}>
 					<ContentAdd />
 				</FloatingActionButton>
 				:null

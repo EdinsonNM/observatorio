@@ -1,6 +1,7 @@
 @import "fonts.css";
 @import "login.css";
 @import "admin.css";
+@import "cards.css";
 
 html,body{
     padding: 0;
@@ -54,7 +55,7 @@ html,body{
 }
 
 #map-container{
-    min-height: 100%;
+    height: 100%;
     background-color: #ffffff;
 
 }

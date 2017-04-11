@@ -20,7 +20,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import Cache from '../../services/Cache';
 import SelectField from 'material-ui/SelectField';
-import {GridList, GridTile} from 'material-ui/GridList';
+import {pink500, teal500, blue500} from 'material-ui/styles/colors';
+
 
 const style={
   appbar:{
@@ -34,6 +35,7 @@ export default class Mapas extends React.Component {
     super(props);
     this.state={
       tematicas: Cache.getData('tematica'),
+	  tematicaId: this.props.tematicaId,
 	  data:[]
     };
   }
@@ -42,17 +44,20 @@ export default class Mapas extends React.Component {
     this.loadData();
   }
   componentDidMount(){
-    service.on((error,data)=>{
-      this.loadData();
-    })
+    this.loadData();
   }
-  componentWillUnmount(){
-      service.off();
+ 
+  componentWillReceiveProps(nextProps, nextState){
+	   this.setState({tematicaId:nextProps.tematicaId},()=>{
+		this.loadData();
+	   });
   }
-  loadData(tematicaID){
+
+  loadData(){
+	  console.log('load data...');
     service.getAll({},(error,data)=>{
         this.setState({data:data});
-    },true);
+    },false,this.state.tematicaId);
   }
   remove(id){
     console.log(id);
@@ -85,18 +90,27 @@ export default class Mapas extends React.Component {
             </IconMenu>
             );
             items.push(
-					<div className="col-md-3">
+					<div className="col-lg-3 col-md-4 col-sm-6">
 						<Card>
 					
-								<CardMedia>
+								<CardMedia overlay={
+									<div>
+								<IconButton touch={true} >
+										<FontIcon  className="material-icons" color="white">search</FontIcon>
+								</IconButton>
+								<IconButton touch={true} >
+										<FontIcon  className="material-icons" color="white">mode_edit</FontIcon>
+								</IconButton>
+								<IconButton touch={true} >
+										<FontIcon  className="material-icons" color="white">delete</FontIcon>
+								</IconButton>
+								</div>
+								}>
 									<img src="images/bg01-01.png" />
 								</CardMedia>
-								<CardTitle title="titulo" subtitle="Card subtitle" />
+								<CardTitle title={item.title} subtitle={Cache.getItem('tematica',this.state.tematicaId).titulo} />
 
-								<CardActions>
-								<FlatButton label="Action1" />
-								<FlatButton label="Action2" />
-								</CardActions>
+							
 							</Card>
 						</div>
                     );
@@ -114,7 +128,7 @@ export default class Mapas extends React.Component {
             <CardHeader
             title={ this.state.tematicas[this.props.tematicaId].titulo } 
             subtitle="Listados de Servicios de Mapa por temática"
-             avatar="images/user0.jpg"
+             avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
 			 titleColor="#FFF"
 			 subtitleColor="#FFF"
             />

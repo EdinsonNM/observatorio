@@ -14,6 +14,7 @@ import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
 import Menu from 'material-ui/svg-icons/navigation/menu';
+import Paper from 'material-ui/Paper';
 
 import {Responsive, WidthProvider} from 'react-grid-layout';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -69,11 +70,11 @@ export default class Admin extends React.Component {
           
 		     <div className="window-container">
 
-				<div className="tematica-container">
+				<Paper className="tematica-container" zDepth={2}>
 					
 					<TematicasUI onChange={this.handleChangeTematica.bind(this)}/>
-				</div>
-				<div className="servicios-container  visible-sm-inline-block visible-md-inline-block visible-lg-inline-block">
+				</Paper>
+				<Paper style={{backgroundColor:'var(--paper-teal-700)'}} className="servicios-container visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" zDepth={1}>
 					{
 						(this.state.tematicaId!=0)?
 						<ServiciosUI tematicaId={this.state.tematicaId}/>
@@ -81,7 +82,7 @@ export default class Admin extends React.Component {
 						null
 					}
 					
-				</div>
+				</Paper>
 			</div>
       
     );

@@ -1,5 +1,5 @@
 .no-gutter{
-  margin-left: 5px!important;
+  margin-left: 0!important;
   margin-right: 0!important;
 }
 .no-gutter > [class*='col-'] {
@@ -7,8 +7,8 @@
     padding-left:0;
 }
 
-.full-height{
-  height: 100%;
+.full-height-service{
+  height: 550px!important;
 }
 .main-container{
     width: 100%;
@@ -31,9 +31,8 @@
   background-color: white;
 }
 .btn-tematica-new{
-  margin-right: -40px;
   position:absolute;
-  top: 20px;
+  top: 10px;
   right:10px;
   z-index:1000;
 }
