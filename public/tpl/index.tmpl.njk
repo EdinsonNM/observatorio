@@ -4,10 +4,10 @@
 
 		<!-- Basic -->
 		<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">	
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="theme-color" content="#1A354A">
 
-		<title>Observatorio de la Cuenta Chancay Lambayeque - PERÚ</title>	
+		<title>Observatorio de la Cuenta Chancay Lambayeque - PERÚ</title>
 
 		<meta name="keywords" content="HTML5 Template" />
 		<meta name="description" content="Porto - Responsive HTML5 Template">
@@ -57,7 +57,7 @@
 	<body>
 
 		<div class="body">
-			{% @include 'partials/header' %}
+			{% include './partials/header.njk' %}
 
 			<div role="main" class="main">
 
@@ -65,11 +65,11 @@
 					<div id="revolutionSlider" class="slider rev_slider" data-plugin-revolution-slider data-plugin-options='{"gridwidth": 800, "gridheight": 400}'>
 						<ul>
 							<li data-transition="fade">
-								<img src="web/img/slides/mapa-bg.jpg"  
+								<img src="web/img/slides/mapa-bg.jpg"
 									alt=""
-									data-bgposition="center center" 
-									data-bgfit="cover" 
-									data-bgrepeat="no-repeat" 
+									data-bgposition="center center"
+									data-bgfit="cover"
+									data-bgrepeat="no-repeat"
 									class="rev-slidebg">
 
 								<div class="tp-caption"
@@ -108,7 +108,7 @@
 									data-y="200"
 									data-start="2000"
 									data-transform_in="y:[100%];opacity:0;s:500;">Perú</div>
-								
+
 							</li>
 						</ul>
 					</div>
@@ -139,7 +139,7 @@
 					<div class="row center">
 						<div class="col-md-12">
 							<h1 class="word-rotator-title mb-sm">
-								En el Observatorio de la Cuenta Chancay-Lambayeque podemos 
+								En el Observatorio de la Cuenta Chancay-Lambayeque podemos
 								<strong class="inverted">
 									<span class="word-rotate" data-plugin-options='{"delay": 2000}'>
 										<span class="word-rotate-items">
@@ -190,7 +190,7 @@
 								</div>
 							</div>
 						</div>
-					</div>					
+					</div>
 				</div>
 
 				<section class="section section-default">
@@ -199,24 +199,24 @@
 							<div class="col-md-6">
 								<h2 class="mt-lg">Observatorio de la Cuenca <br/><strong>Chancay - Lambayeque</strong></h2>
 								<p class="lead">
-									El observatorio de la Cuenca Chancay-Lambayeque se crea con la finalidad de poner a disposición de los usuarios, la 
-									información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y 
+									El observatorio de la Cuenca Chancay-Lambayeque se crea con la finalidad de poner a disposición de los usuarios, la
+									información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y
 									gestión de riesgos).
 								</p>
 								<p class="mt-lg">
-									El observatorio es un portal web, que toma información de instituciones que la generan, y la ofrece utilizando 
-									procedimientos de interoperabilidad comparten información de forma efectiva, mediante una interconexión libre, 
-									automática y transparente, utilizando servicios web configurados por cada entidad participante. 
+									El observatorio es un portal web, que toma información de instituciones que la generan, y la ofrece utilizando
+									procedimientos de interoperabilidad comparten información de forma efectiva, mediante una interconexión libre,
+									automática y transparente, utilizando servicios web configurados por cada entidad participante.
 								</p>
 								<p class="mt-lg">
-									Esta su fase inicial surgió como iniciativa conjunta del Ministerio del Ambiente, la Autoridad Nacional del Agua y el 
-									Proyecto PARA-Agua de USAID. Sin embargo, tiene gran potencial de crecimiento, integrando a las instituciones generadoras 
+									Esta su fase inicial surgió como iniciativa conjunta del Ministerio del Ambiente, la Autoridad Nacional del Agua y el
+									Proyecto PARA-Agua de USAID. Sin embargo, tiene gran potencial de crecimiento, integrando a las instituciones generadoras
 									de información y dispuestas a interoperar.
 								</p>
 							</div>
 							<div class="col-md-6 mt-lg">
-								<div class="embed-responsive embed-responsive-16by9">                        
-				                    <iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="https://maps.google.com.pe/maps/ms?msid=217558796961593721160.0004b157d25d98c163e51&amp;msa=0&amp;hl=es&amp;ie=UTF8&amp;t=h&amp;ll=-6.653695,-79.367981&amp;spn=0.818418,1.452942&amp;z=9&amp;output=embed"></iframe>                        
+								<div class="embed-responsive embed-responsive-16by9">
+				                    <iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="https://maps.google.com.pe/maps/ms?msid=217558796961593721160.0004b157d25d98c163e51&amp;msa=0&amp;hl=es&amp;ie=UTF8&amp;t=h&amp;ll=-6.653695,-79.367981&amp;spn=0.818418,1.452942&amp;z=9&amp;output=embed"></iframe>
 				                </div>
 							</div>
 						</div>
@@ -407,7 +407,7 @@
 
 				<hr class="tall">
 
-				<div class="container">				
+				<div class="container">
 					<div class="row center">
 						<div class="col-md-12">
 							<h2 class="mb-sm word-rotator-title">
@@ -416,7 +416,7 @@
 							<h4 class="heading-primary lead tall">Instituciones del estado que contribuyen con el medio ambiente ...</h4>
 						</div>
 					</div>
-				
+
 					<div class="row center">
 						<div class="owl-carousel owl-theme" data-plugin-options='{"items": 6, "autoplay": true, "autoplayTimeout": 3000}'>
 							<div style="padding: 10px 20px;">
@@ -448,7 +448,7 @@
 				</div>
 			</div>
 
-			{% @include 'partials/footer.njk' %}
+			{% include './partials/footer.njk' %}
 		</div>
 
 		<!-- Vendor -->
@@ -467,19 +467,19 @@
 		<script src="web/vendor/owl.carousel/owl.carousel.min.js"></script>
 		<script src="web/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 		<script src="web/vendor/vide/vide.min.js"></script>
-		
+
 		<!-- Theme Base, Components and Settings -->
 		<script src="web/js/theme.js"></script>
-		
+
 		<!-- Current Page Vendor and Views -->
 		<script src="web/vendor/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
 		<script src="web/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
 		<script src="web/vendor/circle-flip-slideshow/js/jquery.flipshow.min.js"></script>
 		<script src="web/js/views/view.home.js"></script>
-		
+
 		<!-- Theme Custom -->
 		<script src="web/js/custom.js"></script>
-		
+
 		<!-- Theme Initialization Files -->
 		<script src="web/js/theme.init.js"></script>
 
@@ -489,7 +489,7 @@
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-		
+
 			ga('create', 'UA-12345678-1', 'auto');
 			ga('send', 'pageview');
 		</script>
