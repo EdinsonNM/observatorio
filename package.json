@@ -7,7 +7,8 @@
     "build": "node_modules\\.bin\\webpack --watch --colors",
     "build-win": "webpack --watch --colors",
     "start": "node_modules/.bin/webpack-dev-server --progress --colors",
-    "start-win": "node_modules\\.bin\\webpack-dev-server --progress --colors"
+    "start-win": "node_modules\\.bin\\webpack-dev-server --progress --colors",
+    "sw": "node_modules\\.bin\\webpack-dev-server --progress --colors"
   },
   "keywords": [],
   "author": "Edinson Nuñez More",

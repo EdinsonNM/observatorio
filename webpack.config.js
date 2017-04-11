@@ -32,7 +32,8 @@ module.exports={
         exclude: /node_modules/,
         loader:'babel-loader',
         query:babelSettings
-      }
+      },
+      { test: /\.handlebars$/, loader: "handlebars-loader" }
     ]
   },
   externals: {
@@ -47,7 +48,7 @@ module.exports={
 			inject: 'body'
 		}),
 		new HtmlWebpackPlugin({
-			template: path.resolve(__dirname, 'public/index.html'),
+			template: path.resolve(__dirname, 'public/index.handlebars'),
 			hash: true,
 			chunks: ['page-index'],
 			filename: 'index.html',
