@@ -48,7 +48,7 @@ export default class Servicio extends React.Component {
 
 
   componentDidMount(){
-    let id=this.props.params.id;
+    let id=this.props.servicioId;
     if(id){
       service.get(id,(error,data)=>{
         this.setState(data);
@@ -137,19 +137,16 @@ handleChangeSelect(key, event, index, value){
         );
 
     return (
-          <Card>
+		<div className="row no-gutter full-height" style={{backgroundColor:'white'}}>
+			<div className="col-md-5 full-height">
+
             <CardHeader
-            title="Registro de Servicios de Mapas"
-            subtitle="Ingrese todos los campos obligatorios y a continuación presione GRABAR para registrar sl servicio."
+            title="Registro de Servicios"
              avatar="images/user0.jpg"
             />
 
             <CardText >
-            <div className="row">
-                <div className="col-md-6">
-					<div className="row">
-						<div className="col-md-6">
-							 <SelectField
+					 <SelectField
 								fullWidth
 								floatingLabelText="Temática"
 								value={this.state.tematica}
@@ -161,18 +158,13 @@ handleChangeSelect(key, event, index, value){
 									return (<MenuItem key={index} value={item.id} primaryText={item.titulo} />)
 									})
 								}
-							</SelectField>
-						</div>
-						<div className="col-md-6">
-							 <TextField 
+					</SelectField>
+                    <TextField 
 								onChange = {(e)=>{this.handleChange('title',e);}}
 								value = {this.state.title} 
 								floatingLabelText="Título" 
 								required
 								fullWidth/>
-						</div>
-					</div>
-                   
 					<TextField 
                     onChange = {(e)=>{this.handleChange('url',e);}}
                     value = {this.state.url} 
@@ -198,15 +190,7 @@ handleChangeSelect(key, event, index, value){
                     floatingLabelText="Leyenda" 
                     required
                     fullWidth/>
-                </div>
                
-               <div className="col-md-6">
-                   <div id="map-container">
-
-				   </div>
-                </div>
-				
-            </div>
                 <FlatButton
                   label="Volver"
                   disabled={stepIndex === 0}
@@ -226,7 +210,14 @@ handleChangeSelect(key, event, index, value){
                 />
   
             </CardText>
-        </Card>
+			</div>
+			<div className="col-md-7 full-height">
+   <div id="map-container">
+
+				   </div>
+			</div>
+		</div>
+          
     );
   }
 }

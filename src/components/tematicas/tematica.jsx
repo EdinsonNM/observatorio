@@ -66,20 +66,20 @@ export default class Tematica extends React.Component {
       let model = new Model(this.state);
       service.post(model,()=>{
           console.log('save ok...');
-          hashHistory.goBack()
+          this.props.back();
       });
     }else{
 
       let model = new Model(this.state);
       service.update(this.state.id,model,()=>{
           console.log('update ok...');
-          hashHistory.goBack()
+          this.props.back();
       });
     }
 
   }
   handleBack(){
-    hashHistory.goBack()
+   this.props.back();
   }
   render(){
     const {finished, stepIndex} = this.state;

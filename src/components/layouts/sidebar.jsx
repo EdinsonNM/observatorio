@@ -17,7 +17,7 @@ import Auth from '../../services/Auth';
 import Users from '../../services/Users';
 const style={
   appbar:{
-    backgroundColor:'var(--paper-purple-700)'
+    backgroundColor:'var(--paper-cyan-900)'
   }
 }
 export default class Sidebar extends React.Component {
@@ -65,7 +65,7 @@ export default class Sidebar extends React.Component {
             style={style.appbar}
             onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
             />
-            <div className="logo-sidebar layout center-center">
+            <div className="logo-sidebar layout center-center" style={style.appbar}>
             <img src="images/logo.svg" />
             </div>
             <ListItem

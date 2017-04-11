@@ -8,16 +8,19 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
-import {List, ListItem} from 'material-ui/List';
+import {List, ListItem, makeSelectable} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 import TematicaService from '../../services/TematicaService';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+
 import FileFolder from 'material-ui/svg-icons/file/folder';
+let SelectableList = makeSelectable(List);
+
+
+
 const style={
   appbar:{
     backgroundColor:'var(--paper-purple-700)'
@@ -29,7 +32,8 @@ export default class Tematicas extends React.Component {
   constructor (props) {
     super(props);
     this.state={
-      data:[]
+      data:[],
+	  isNew:false
     };
   }
   
@@ -60,6 +64,13 @@ export default class Tematicas extends React.Component {
   escuelas(id){
     document.location.hash=`#/dashboard/tematicas/${id}/escuelas`;
   }
+
+  handleRequestChange (event, index){
+	  this.props.onChange(index);
+      this.setState({
+        selectedIndex: index,
+      });
+    };
   render(){
     
     const iconButtonElement = (
@@ -73,7 +84,6 @@ export default class Tematicas extends React.Component {
         );
     
     let items=[];
-	debugger;
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
             <IconMenu iconButtonElement={iconButtonElement}>
@@ -85,6 +95,7 @@ export default class Tematicas extends React.Component {
             items.push(
                         <ListItem
                             key={index}
+							value={item.id}
                            leftAvatar={<Avatar icon={<FileFolder />} />}
                             rightIconButton={rightIconMenu}
                             primaryText={item.titulo}
@@ -100,36 +111,35 @@ export default class Tematicas extends React.Component {
 
     });
      const style = {
-        marginRight: 20,
-        position:'fixed',
-        bottom:'10px',
+        marginRight: -40,
+        position:'absolute',
+        top: 70,
         right:'10px',
         zIndex:'1000'
     };
 
-    return (
-      <div>
-          <Card>
-            <CardHeader
-            title="Listado de Temáticas"
-            subtitle="Inicio / Temáticas"
-             avatar="images/user0.jpg"
-            />
+		return (
+			<div style={{width:'100%',height:'100%',position:'relative',overflowY:'auto'}}>
+				<Card>
+					<CardHeader
+					title="Listado de Temáticas"
+					subtitle="Inicio / Temáticas"
+					avatar="images/user0.jpg"
+					/>
 
-            <CardText >
-           Una temática es una categoria que permite agrupar los diferentes servicios de mapas existentes en el visor de mapas
+					<CardText >
 
-   
-      <List>
-        <Subheader>Listado de Temáticas</Subheader>
-        {items}
-      </List>
-            </CardText>
-        </Card>
-         <FloatingActionButton style={style} href="#/dashboard/tematicas/new">
-            <ContentAdd />
-            </FloatingActionButton>
-        </div>
-    );
+		
+			<SelectableList defaultValue={2}  value={this.state.selectedIndex}  onChange={this.handleRequestChange.bind(this)}>
+				<Subheader>Listado de Temáticas</Subheader>
+				{items}
+			</SelectableList>
+					</CardText>
+				</Card>
+				
+				</div>
+			);
+
+		
   }
 }

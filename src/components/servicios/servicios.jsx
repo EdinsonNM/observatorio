@@ -20,6 +20,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import Cache from '../../services/Cache';
 import SelectField from 'material-ui/SelectField';
+import {GridList, GridTile} from 'material-ui/GridList';
+
 const style={
   appbar:{
     backgroundColor:'var(--paper-purple-700)'
@@ -60,17 +62,8 @@ export default class Mapas extends React.Component {
   edit(id){
     document.location.hash=`#/dashboard/facultades/${id}/edit`;
   }
-  escuelas(id){
-    document.location.hash=`#/dashboard/facultades/${id}/escuelas`;
-  }
-  handleChangeSelect(key, event, index, value){
-    let state = this.state;
-    state[key] = value;
-    this.setState(state);
-    if(key=='tematica'){
-      this.loadData(value);
-    }
-  }
+
+
   render(){
     
     const iconButtonElement = (
@@ -87,26 +80,26 @@ export default class Mapas extends React.Component {
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
             <IconMenu iconButtonElement={iconButtonElement}>
-            <MenuItem onTouchTap={this.escuelas.bind(this,item.id)}>Escuelas</MenuItem>
             <MenuItem onTouchTap={this.edit.bind(this,item.id)}>Editar</MenuItem>
             <MenuItem onTouchTap={this.remove.bind(this,item.id)}>Delete</MenuItem>
             </IconMenu>
             );
             items.push(
-                        <ListItem
-                            key={index}
-                           leftAvatar={<Avatar icon={<FileFolder />} />}
-                            rightIconButton={rightIconMenu}
-                            primaryText={item.nombre}
-                            secondaryText={
-                                <p>
-                                {item.escuelas} escuelas registradas
-                                </p>
-                            }
-                            secondaryTextLines={1}
-                            />
+					<div className="col-md-3">
+						<Card>
+					
+								<CardMedia>
+									<img src="images/bg01-01.png" />
+								</CardMedia>
+								<CardTitle title="titulo" subtitle="Card subtitle" />
+
+								<CardActions>
+								<FlatButton label="Action1" />
+								<FlatButton label="Action2" />
+								</CardActions>
+							</Card>
+						</div>
                     );
-            items.push(  <Divider key={'divider'+index} inset={true} />);
 
     });
      const style = {
@@ -118,47 +111,21 @@ export default class Mapas extends React.Component {
     };
     return (
       <div>
-          <Card>
             <CardHeader
-            title="Listado de Servicios de Mapas"
-            subtitle="Inicio / Servicios"
+            title={ this.state.tematicas[this.props.tematicaId].titulo } 
+            subtitle="Listados de Servicios de Mapa por temática"
              avatar="images/user0.jpg"
+			 titleColor="#FFF"
+			 subtitleColor="#FFF"
             />
 
             <CardText >
-			<div className="row">
-              <div className="col-md-4">
-                <SelectField
-					fullWidth
-					floatingLabelText="Temática"
-					value={this.state.tematica}
-					onChange={(event, index, value)=>{this.handleChangeSelect('tematica',event, index, value)}}
-					>
-					{
-						Object.keys(this.state.tematicas).map((key,index)=>{
-							let item = Cache.getItem('tematica',key);
-						return (<MenuItem key={index} value={item.id} primaryText={item.titulo} />)
-						})
-					}
-				</SelectField>
-              </div>
 
-            </div>
-   			<div className="row">
-				<div className="col-md-5">
-					 <List>
-						{items}
-					</List>
-				</div>
-				<div className="col-md-7">
-				</div>
-   			</div>
-     
+			<div className="row">
+				{items}
+			</div>
             </CardText>
-        </Card>
-         <FloatingActionButton style={style} href="#/dashboard/servicios/new">
-            <ContentAdd />
-            </FloatingActionButton>
+
         </div>
     );
   }

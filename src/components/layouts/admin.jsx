@@ -14,10 +14,14 @@ import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
 
-
+import Menu from 'material-ui/svg-icons/navigation/menu';
 const style={
   appbar:{
-    backgroundColor:'var(--paper-purple-700)'
+    color:'#c6c6c6',
+	backgroundColor:'white'
+  },
+  title:{
+	color:'#c6c6c6',
   }
 }
 
@@ -41,18 +45,18 @@ export default class Admin extends React.Component {
   render(){
      return (
       <div className="flex layout vertical center-center " style={{width:'100%',height:'100%'}}>
-        <AppBar
-            title="Visor de Mapas"
-            iconClassNameRight="menu"
-            style={style.appbar}
-            onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
-          />
-          <Sidebar ref="sidebar"/>
-          <div className="flex layout vertical scroll center main-scroll" style={{overflowX:'hidden'}}>
-            <div className="main-container">
-             {this.props.children}
-            </div>
-          </div>
+       	<AppBar
+						title="Visor de Mapas"
+						style={style.appbar}
+					
+						titleStyle={style.title}
+						onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
+						iconElementLeft={<IconButton  iconStyle={{fill:'#c6c6c6'}}><Menu/></IconButton>}
+					/>
+				           <Sidebar ref="sidebar"/>
+
+            		   {this.props.children}
+
       </div>
     );
   }
