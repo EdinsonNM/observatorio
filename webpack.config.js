@@ -60,6 +60,12 @@ module.exports = {
 	            to: 'index.html'
 	        }
 	    }),
+	    new NunjucksWebpackPlugin({
+	        template: {
+	            from: path.resolve(__dirname, 'public/tpl/caracterizacion_biofisica.tmpl.njk'),
+	            to: 'caracterizacion_biofisica.html'
+	        }
+	    }),
 		new CopyWebpackPlugin([
 			{from: 'public/css', to: 'css'},
 			{from: 'public/fonts', to: 'fonts'},
