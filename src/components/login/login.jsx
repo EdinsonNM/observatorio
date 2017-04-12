@@ -70,7 +70,7 @@ export default class Login extends React.Component{
 		return (
 			<div className="flex layout vertical center-center center-justified" style={{height:'100%'}} >
 				<div className="login-container layout vertical center-center center-justified">
-					<img src="images/logo.svg" width="200PX" height="auto"/>
+					<img src="visor/images/logo.svg" width="200PX" height="auto"/>
 					<h1>Visor de Mapas</h1>
 					<h3>Cuenca Chancay - Lambayeque</h3>
 					<form>

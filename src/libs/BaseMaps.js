@@ -47,8 +47,8 @@ export default  class BaseMaps{
                         visible:true,
                         source: new ol.source.Vector({
 							format: new ol.format.GeoJSON(),
-                          projection : 'EPSG:3857',
-                         url: 'data/chancay_lambayeque_geojson.geojson'
+                          	projection : 'EPSG:3857',
+                         	url: 'visor/data/chancay_lambayeque_geojson.geojson'
                         })
                       })
                   ]

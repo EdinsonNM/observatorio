@@ -1,7 +1,7 @@
 @import "fonts.css";
 @import "login.css";
 @import "admin.css";
-@import "cards.css";
+@import "searchbox.css";
 
 html,body{
     padding: 0;
@@ -56,6 +56,7 @@ html,body{
 
 #map-container{
     height: 100%;
+    width:100%;
     background-color: #ffffff;
 
 }
