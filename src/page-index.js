@@ -1,5 +1,4 @@
 //aqui la lógica para el archivo index.html
-
 import NovedadService from './services/NovedadService';
 let service = new NovedadService();
 

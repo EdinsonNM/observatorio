@@ -4,11 +4,8 @@
   "version": "1.0.0",
   "main": "main.jsx",
   "scripts": {
-    "build": "node_modules\\.bin\\webpack --watch --colors",
-    "build-win": "webpack --watch --colors",
-    "start": "node_modules/.bin/webpack-dev-server --progress --colors",
-    "start-win": "node_modules\\.bin\\webpack-dev-server --progress --colors",
-    "sw": "node_modules\\.bin\\webpack-dev-server --progress --colors"
+    "build": "gulp build",
+    "start": "gulp server"
   },
   "keywords": [],
   "author": "Edinson Nuñez More",
@@ -21,6 +18,10 @@
     "babel-preset-react": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.2",
+    "gulp": "^3.9.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-nunjucks-render": "^2.2.1",
+    "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.28.0",
     "nunjucks": "^3.0.0",
     "nunjucks-html-loader": "^1.1.0",
@@ -28,7 +29,8 @@
     "nunjucks-webpack-plugin": "^2.0.1",
     "style-loader": "^0.13.2",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.4.1"
+    "webpack-dev-server": "^2.4.1",
+    "webpack-stream": "^3.2.0"
   },
   "dependencies": {
     "custom-event": "^1.0.1",

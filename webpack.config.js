@@ -5,15 +5,6 @@ var webpack = require('webpack'),
 	CopyWebpackPlugin = require('copy-webpack-plugin'),
 	fs = require('fs');var controllers = fs.readdirSync(__dirname);
 
-
-/* read templates */
-var templates = fs.readdirSync(path.resolve(__dirname, 'src/tpl/pages/'));
-var tpls=[];
-for (var i = 0; i < templates.length; i++) {
-	file = templates[i];
-	templateName = file.split('.')[0];
-	tpls.push({from: path.resolve(__dirname, 'src/tpl/pages/'+file),to:templateName+'.html'});
-}
 /* babel */
 const babelSettings = JSON.parse(fs.readFileSync(".babelrc"));
 
@@ -24,10 +15,10 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		filename: '[name].[ext]'
+		filename: '[name].js'
 	},
 	resolve: {
-		extensions: ['.jsx', '.js','.njk']
+		extensions: ['.jsx', '.js']
 	},
 	devServer: {
 		contentBase: path.resolve(__dirname, 'public'),
@@ -42,24 +33,7 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: 'babel-loader',
 				query: babelSettings
-			},
-			{
-                test: /\.(njk|nunjucks)$/,
-                loader: 'nunjucks-loader',
-				query: {
-					root: __dirname + '/src/tpl',
-                    quiet: true
-                }
-            },
-			{
-    			test: /\.njk$/,
-    			loader: 'file?context=' + __dirname + '/src/tpl' + '&name=[path][name].html!nunjucks-html?' +
-				JSON.stringify({
-				'searchPaths': [
-					'/src/tpls/pages'
-				]
-    			})
-}
+			}
 		]
 	},
 	externals: {
@@ -74,21 +48,13 @@ module.exports = {
 			inject: 'body'
 		}),
 
-		new NunjucksWebpackPlugin({
-			template: tpls
-		}),
 		
-	
 		new CopyWebpackPlugin([
 			{from: 'public/visor', to: 'visor'},
 			{from: 'public/web', to: 'web'},
 			{from: 'public/manifest.json', to: 'manifest.json'},
 			{from: 'public/sw.js', to: 'sw.js'},
-			 {
-                context: 'public/',
-                from: '**/*',
-                to: '/'
-            },
+			{from: 'public/*', to: '/'}
 		]),
 
 	],
