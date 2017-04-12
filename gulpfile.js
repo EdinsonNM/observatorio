@@ -13,7 +13,13 @@ gulp.task('nunjucks', function() {
    .pipe(gulp.dest('public'))
   pipe(livereload({ start: true }));
 });
-
+gulp.task('nunjucks-build', function() {
+  return gulp.src('src/tpl/pages/**/*.+(html|njk)')
+  	.pipe(nunjucksRender({
+      path: ['src/tpl/layouts','src/tpl/partials']
+    }))
+   .pipe(gulp.dest('build'));
+});
 gulp.task('watch', function() {
   livereload.listen({ start: true });
   gulp.watch('src/tpl/pages/**/*.nunjucks', ['nunjucks']);
@@ -47,7 +53,7 @@ gulp.task("webpack-dev-server", function(callback) {
 	});
 });
 
-gulp.task("build",["nunjucks"], function(callback) {
+gulp.task("build",["nunjucks-build"], function(callback) {
 	// modify some webpack config options
 	var myConfig = Object.create(webpackConfig);
 

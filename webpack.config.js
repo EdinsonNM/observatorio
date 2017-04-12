@@ -54,7 +54,13 @@ module.exports = {
 			{from: 'public/web', to: 'web'},
 			{from: 'public/manifest.json', to: 'manifest.json'},
 			{from: 'public/sw.js', to: 'sw.js'},
-			{from: 'public/*', to: '/'}
+			{from: 'public/*.html', to: '/'},
+			{
+                context: 'public',
+                from: '**/*',
+                to: '/'
+            },
+            
 		]),
 
 	],
