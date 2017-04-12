@@ -7,7 +7,14 @@ var webpack = require('webpack'),
 
 /* babel */
 const babelSettings = JSON.parse(fs.readFileSync(".babelrc"));
-
+/* read templates */
+var templates = fs.readdirSync(path.resolve(__dirname, 'src/tpl/pages/'));
+var tpls=[];
+for (var i = 0; i < templates.length; i++) {
+	file = templates[i];
+	templateName = file.split('.')[0];
+	tpls.push({from: path.resolve(__dirname, 'src/tpl/pages/'+file),to:templateName+'.html'});
+}
 module.exports = {
 	entry: {
 		app: './src/main.jsx',
@@ -33,7 +40,15 @@ module.exports = {
 				exclude: /node_modules/,
 				loader: 'babel-loader',
 				query: babelSettings
-			}
+			},
+			{
+                test: /\.(njk|nunjucks)$/,
+                loader: 'nunjucks-loader',
+				query: {
+					root: __dirname + '/src/tpl',
+                    quiet: true
+                }
+            }
 		]
 	},
 	externals: {
@@ -47,7 +62,9 @@ module.exports = {
 			filename: 'visor.html',
 			inject: 'body'
 		}),
-
+		new NunjucksWebpackPlugin({
+			template: tpls
+		}),
 		
 		new CopyWebpackPlugin([
 			{from: 'public/visor', to: 'visor'},
