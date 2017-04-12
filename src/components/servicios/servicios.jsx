@@ -106,7 +106,7 @@ export default class Mapas extends React.Component {
 								</IconButton>
 								</div>
 								}>
-									<img src="images/bg01-01.png" />
+									<img src="visor/images/bg01-01.png" />
 								</CardMedia>
 								<CardTitle title={item.title} subtitle={Cache.getItem('tematica',this.state.tematicaId).titulo} />
 
