@@ -5,7 +5,7 @@
   "main": "main.jsx",
   "scripts": {
     "build": "gulp build",
-    "start": "gulp server"
+    "start": "node_modules/.bin/webpack-dev-server --progress --colors"
   },
   "keywords": [],
   "author": "Edinson Nuñez More",
