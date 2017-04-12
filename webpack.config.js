@@ -2,23 +2,32 @@ var webpack = require('webpack'),
 	path = require('path'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
 	NunjucksWebpackPlugin = require('nunjucks-webpack-plugin'),
-	CopyWebpackPlugin = require('copy-webpack-plugin')
-fs = require('fs');
+	CopyWebpackPlugin = require('copy-webpack-plugin'),
+	fs = require('fs');var controllers = fs.readdirSync(__dirname);
 
+
+/* read templates */
+var templates = fs.readdirSync(path.resolve(__dirname, 'src/tpl/pages/'));
+var tpls=[];
+for (var i = 0; i < templates.length; i++) {
+	file = templates[i];
+	templateName = file.split('.')[0];
+	tpls.push({from: path.resolve(__dirname, 'src/tpl/pages/'+file),to:templateName+'.html'});
+}
 /* babel */
 const babelSettings = JSON.parse(fs.readFileSync(".babelrc"));
 
 module.exports = {
 	entry: {
 		app: './src/main.jsx',
-		'page-index': './src/page-index.js',
+		pageIndex: './src/page-index.js',
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		filename: '[name].js'
+		filename: '[name].[ext]'
 	},
 	resolve: {
-		extensions: ['.jsx', '.js']
+		extensions: ['.jsx', '.js','.njk']
 	},
 	devServer: {
 		contentBase: path.resolve(__dirname, 'public'),
@@ -37,10 +46,20 @@ module.exports = {
 			{
                 test: /\.(njk|nunjucks)$/,
                 loader: 'nunjucks-loader',
-                query: {
-                    root: __dirname + '/public/tpl'
+				query: {
+					root: __dirname + '/src/tpl',
+                    quiet: true
                 }
-            }
+            },
+			{
+    			test: /\.njk$/,
+    			loader: 'file?context=' + __dirname + '/src/tpl' + '&name=[path][name].html!nunjucks-html?' +
+				JSON.stringify({
+				'searchPaths': [
+					'/src/tpls/pages'
+				]
+    			})
+}
 		]
 	},
 	externals: {
@@ -54,26 +73,22 @@ module.exports = {
 			filename: 'visor.html',
 			inject: 'body'
 		}),
+
 		new NunjucksWebpackPlugin({
-	        template: {
-	            from: path.resolve(__dirname, 'public/tpl/index.tmpl.njk'),
-	            to: 'index.html'
-	        }
-	    }),
-	    new NunjucksWebpackPlugin({
-	        template: {
-	            from: path.resolve(__dirname, 'public/tpl/caracterizacion_biofisica.tmpl.njk'),
-	            to: 'caracterizacion_biofisica.html'
-	        }
-	    }),
+			template: tpls
+		}),
+		
+	
 		new CopyWebpackPlugin([
-			{from: 'public/css', to: 'css'},
-			{from: 'public/fonts', to: 'fonts'},
+			{from: 'public/visor', to: 'visor'},
 			{from: 'public/web', to: 'web'},
-			{from: 'public/images', to: 'images'},
-			{from: 'public/js', to: 'js'},
 			{from: 'public/manifest.json', to: 'manifest.json'},
-			{from: 'public/sw.js', to: 'sw.js'}
+			{from: 'public/sw.js', to: 'sw.js'},
+			 {
+                context: 'public/',
+                from: '**/*',
+                to: '/'
+            },
 		]),
 
 	],
