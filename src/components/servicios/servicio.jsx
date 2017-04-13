@@ -44,9 +44,7 @@ const style={
 export default class Servicio extends React.Component {
   constructor (props) {
     super(props);
-     this.state = {
-        id:0
-    };
+     this.state = this.props.data||{}
   }
 
 
@@ -80,19 +78,17 @@ handleChangeSelect(key, event, index, value){
     }
   }
   handleSave(){
-    if(this.state.id==0){
-      let model = new Model(this.state);
+	let model = new Model(this.state);
+    if(!this.props.edit){
       service.post(model,()=>{
           console.log('save ok...');
           this.handleBack();
       },this.props.tematicaId);
     }else{
-
-      let model = new Model(this.state);
       service.update(this.state.id,model,()=>{
           console.log('update ok...');
           this.handleBack();
-      });
+      },this.props.tematicaId);
     }
 
   }

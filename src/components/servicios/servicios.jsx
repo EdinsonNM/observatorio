@@ -60,12 +60,13 @@ export default class Mapas extends React.Component {
     },false,this.state.tematicaId);
   }
   remove(id){
-    console.log(id);
-    service.delete(id,null);
-    this.loadData();
+	service.delete(id,()=>{
+		
+	},this.props.tematicaId)
+	this.loadData();
   }
   edit(item){
-    this.props.toggleEdit(item);
+    this.props.edit(item);
   }
 
 
@@ -98,11 +99,11 @@ export default class Mapas extends React.Component {
 								<IconButton touch={true} >
 										<FontIcon  className="material-icons" color="white">search</FontIcon>
 								</IconButton>
-								<IconButton touch={true} onTouchTap={this.props.edit.bind(item)} >
+								<IconButton touch={true} onTouchTap={this.edit.bind(this,item)} >
 										<FontIcon  className="material-icons" color="white">mode_edit</FontIcon>
 								</IconButton>
 								<IconButton touch={true} >
-										<FontIcon  className="material-icons" color="white">delete</FontIcon>
+										<FontIcon  className="material-icons" color="white" onTouchTap={this.remove.bind(this,item.id)}>delete</FontIcon>
 								</IconButton>
 								</div>
 								}>
