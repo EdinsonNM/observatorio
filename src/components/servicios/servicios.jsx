@@ -64,8 +64,8 @@ export default class Mapas extends React.Component {
     service.delete(id,null);
     this.loadData();
   }
-  edit(id){
-    document.location.hash=`#/dashboard/facultades/${id}/edit`;
+  edit(item){
+    this.props.toggleEdit(item);
   }
 
 
@@ -90,7 +90,7 @@ export default class Mapas extends React.Component {
             </IconMenu>
             );
             items.push(
-					<div className="col-lg-3 col-md-4 col-sm-6">
+					<div className="col-lg-3 col-md-4 col-sm-6" key={index}>
 						<Card>
 					
 								<CardMedia overlay={
@@ -98,7 +98,7 @@ export default class Mapas extends React.Component {
 								<IconButton touch={true} >
 										<FontIcon  className="material-icons" color="white">search</FontIcon>
 								</IconButton>
-								<IconButton touch={true} >
+								<IconButton touch={true} onTouchTap={this.props.edit.bind(item)} >
 										<FontIcon  className="material-icons" color="white">mode_edit</FontIcon>
 								</IconButton>
 								<IconButton touch={true} >

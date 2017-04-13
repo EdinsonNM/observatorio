@@ -60,16 +60,16 @@ export default class Sidebar extends React.Component {
     return (
         <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={300}>
             <AppBar
-            title="Sistema de Admisión"
+            title="Visor de Mapas"
             iconClassNameRight="menu"
             style={style.appbar}
             onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
             />
             <div className="logo-sidebar layout center-center" style={style.appbar}>
-            <img src="images/logo.svg" />
+            <img src="visor/images/logo.svg" />
             </div>
             <ListItem
-            leftAvatar={<Avatar src="images/user00.jpg" />}
+            leftAvatar={<Avatar src="visor/images/user00.jpg" />}
             rightIconButton={rightIconMenu}
             primaryText={`${user.nombres} ${user.apellidos}`}  
 

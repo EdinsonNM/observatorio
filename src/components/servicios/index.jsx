@@ -16,20 +16,28 @@ export default class ServicioIndex extends React.Component {
   constructor (props) {
     super(props);
     this.state={
-	  isNew:props.new||false
+	  isNew:props.new||false,
+		isEdit:props.edit||false,
     };
   }
   toggleNew(){
 	this.setState({isNew:!this.state.isNew});
   }
+  toggleEdit(data){
+	  this.setState({isEdit:!this.state.isEdit,data:data});
+  }
   
   render(){
   	let component;
-	
-	if(this.state.isNew){
-		component = <Servicio back={this.toggleNew.bind(this)} tematicaId={this.props.tematicaId}/>
-	}else{
-		component = <Servicios tematicaId={this.props.tematicaId}/>
+	switch (true) {
+		case this.state.isNew:
+			component = <Servicio back={this.toggleNew.bind(this)} tematicaId={this.props.tematicaId} edit={false}/>
+			break;
+		case this.state.isEdit:
+			component = <Servicio back={this.toggleEdit.bind(this)} tematicaId={this.props.tematicaId} data={this.state.data} edit={true}/>
+			break;
+		default:
+			component = <Servicios tematicaId={this.props.tematicaId} edit={this.toggleEdit.bind(this)}/>
 	}
 
 	return(
