@@ -14,9 +14,9 @@ export default class Model{
 		this.modelName = name||'';
 	}
 
-	getAll(params,next){
+	getAll(params,next,headers={}){
 		var service = api.all(this.modelName);
-		service.getAll(params,{'Content-Type':'application/xml'}).then(
+		service.getAll(params,headers).then(
 			(response)=>{
 				//success
 				next(null,response.body().data());
