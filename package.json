@@ -5,7 +5,8 @@
   "main": "main.jsx",
   "scripts": {
     "build": "gulp build",
-    "start": "node_modules/.bin/webpack-dev-server --progress --colors"
+    "start": "node_modules/.bin/webpack-dev-server --progress --colors",
+    "publish":"gulp publish"
   },
   "keywords": [],
   "author": "Edinson Nuñez More",
@@ -18,6 +19,7 @@
     "babel-preset-react": "^6.23.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.26.2",
+    "gh-pages": "^0.12.0",
     "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-nunjucks-render": "^2.2.1",

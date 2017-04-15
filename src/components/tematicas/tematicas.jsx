@@ -60,8 +60,8 @@ export default class Tematicas extends React.Component {
     service.delete(id,null);
     this.loadData();
   }
-  edit(id){
-    document.location.hash=`#/dashboard/tematicas/${id}/edit`;
+  edit(item){
+    this.props.edit(item);
   }
   disabled(value){
     this.setState({disabled:value})
@@ -89,7 +89,7 @@ export default class Tematicas extends React.Component {
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
             <IconMenu iconButtonElement={iconButtonElement}>
-            <MenuItem onTouchTap={this.edit.bind(this,item.id)}>Editar</MenuItem>
+            <MenuItem onTouchTap={this.edit.bind(this,item)}>Editar</MenuItem>
             <MenuItem onTouchTap={this.remove.bind(this,item.id)}>Delete</MenuItem>
             </IconMenu>
             );

@@ -40,11 +40,7 @@ const style={
 export default class Tematica extends React.Component {
   constructor (props) {
     super(props);
-     this.state = {
-        id:0,
-        codigo: '',
-        nombre: '',
-    };
+     this.state = this.props.data||{};
   }
 
 
@@ -62,7 +58,7 @@ export default class Tematica extends React.Component {
 		this.setState(state);
 	}
   handleSave(){
-    if(this.state.id==0){
+    if(!this.props.edit){
       let model = new Model(this.state);
       service.post(model,()=>{
           console.log('save ok...');

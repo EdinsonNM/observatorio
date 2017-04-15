@@ -21,7 +21,7 @@
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<!-- Web Fonts  -->
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
 
 		<!-- Vendor CSS -->
 		<link rel="stylesheet" href="web/vendor/bootstrap/css/bootstrap.min.css">
@@ -150,18 +150,9 @@
 								<p class="lead">
 									El observatorio de la Cuenca Chancay-Lambayeque se crea con la finalidad de poner a disposición de los usuarios, la
 									información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y
-									gestión de riesgos).
+									gestión de riesgos). <a href  class="learn-more">Leer mas</a>
 								</p>
-								<p class="mt-lg">
-									El observatorio es un portal web, que toma información de instituciones que la generan, y la ofrece utilizando
-									procedimientos de interoperabilidad comparten información de forma efectiva, mediante una interconexión libre,
-									automática y transparente, utilizando servicios web configurados por cada entidad participante.
-								</p>
-								<p class="mt-lg">
-									Esta su fase inicial surgió como iniciativa conjunta del Ministerio del Ambiente, la Autoridad Nacional del Agua y el
-									Proyecto PARA-Agua de USAID. Sin embargo, tiene gran potencial de crecimiento, integrando a las instituciones generadoras
-									de información y dispuestas a interoperar.
-								</p>
+								
 							</div>
 							<div class="col-md-6 mt-lg">
 								<div class="embed-responsive embed-responsive-16by9">
@@ -181,8 +172,10 @@
 						</div>
 					</div>
 
-					{% include '../partials/last_news.njk' %}
-
+					<div class="row">
+						<div class="col-md-12" id="noticias-container">
+						</div>
+					</div>
 				<hr class="tall">
 
 				{% include '../partials/entidades.njk' %}

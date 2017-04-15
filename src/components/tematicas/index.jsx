@@ -22,20 +22,29 @@ export default class TematicaIndex extends React.Component {
   constructor (props) {
     super(props);
     this.state={
-	  isNew:props.new||false
+	  isNew:props.new||false,
+	  isEdit:props.edit||false
     };
   }
   toggleNew(){
 	this.setState({isNew:!this.state.isNew});
   }
+  toggleEdit(data){
+	  this.setState({isEdit:!this.state.isEdit,data:data});
+  }
   
   render(){
   	let component;
   
-	if(this.state.isNew){
-		component = <Tematica back={this.toggleNew.bind(this)} />
-	}else{
-		component = <Tematicas onChange={this.props.onChange}/>
+	switch(true){
+		case this.state.isNew:
+			component = <Tematica back={this.toggleNew.bind(this)} />;
+			break;
+		case this.state.isEdit:
+			component = <Tematica back={this.toggleEdit.bind(this)} data={this.state.data} edit={true}/>
+			break;
+		default:
+			component = <Tematicas onChange={this.props.onChange} edit={this.toggleEdit.bind(this)}/>
 	}
 
 	return(

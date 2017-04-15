@@ -24,7 +24,6 @@ export default class ServicioIndex extends React.Component {
 	this.setState({isNew:!this.state.isNew});
   }
   toggleEdit(data){
-	  debugger;
 	  this.setState({isEdit:!this.state.isEdit,data:data});
   }
   
