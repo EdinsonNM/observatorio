@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block content %}
-							<h2><strong>Ubicación y Extensión</strong> </h2>
+							<h2 id="ubicacion"><strong>Ubicación y Extensión</strong> </h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -50,7 +50,7 @@
 
 							<hr class="tall">
 
-							<h2><strong>Características Topográficas y Fisiográficas</strong></h2>
+							<h2 id="topografia"><strong>Características Topográficas y Fisiográficas</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -88,7 +88,7 @@
 
 							<hr class="tall">
 
-							<h2><strong>Caracterización Climática</strong></h2>
+							<h2 id="climatica"><strong>Caracterización Climática</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -98,7 +98,10 @@
 								</div>
 
 								<div class="col-md-12">
-									<img class="img-responsive" src="web/img/caracterizacion/clima.jpg" alt="Características Climática" width="100%">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/clima.jpg" alt="Características Climática" width="100%">										
+									</span>
+									<br />
 									<br />
 								</div>
 							</div>
@@ -189,7 +192,7 @@
 
 							<hr class="tall">
 
-							<h2><strong>Caracterización Geológica</strong></h2>
+							<h2 id="geologica"><strong>Caracterización Geológica</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -209,24 +212,30 @@
 							<hr class="tall">
 
 
-							<h2><strong>Caracterización de Usos de Suelo</strong></h2>
+							<h2 id="suelo"><strong>Caracterización de Usos de Suelo</strong></h2>
 
 							<div class="row">
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Baja o Valle</h4>
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Baja o Valle</h4>
+									</div>
 
 									<p>Esta es la zona donde predominan las áreas bajo riego.</p>
 									<p>En mayor proporción se encuentran las áreas ocupadas por arroz, caña de azúcar, y policultivo; también se ubican áreas de bosque seco estacional en la margen derecha del canal Taymi.</p>
 								</div>
 
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Media</h4>
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Media</h4>
+									</div>
 
 									<p>La cuenca media se caracteriza porque existen apreciables áreas con vegetación arbustiva, casi en igual proporción cultivos de secano, así como considerables áreas de terreno desnudo. En pequeña proporción pastos naturales y muy pocas áreas de cultivo con riego.</p>
 								</div>
 
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Alta</h4>
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Alta</h4>
+									</div>
 
 									<p>Casi toda la totalidad de la cuenca alta está ocupada por cultivos de secano y pastos naturales. Existen pequeñas áreas con bosque denso y menos todavía áreas de cultivo con riego. Aquí se resalta el uso minero, caracterizado por la Minera La Zanja SRL y el uso agropecuario.</p>
 								</div>
@@ -235,11 +244,13 @@
 							<hr class="tall">
 
 
-							<h2><strong>Caracterización Biótica</strong></h2>
+							<h2 id="biotica"><strong>Caracterización Biótica</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
-									<img class="img-responsive" src="web/img/caracterizacion/especie.jpg" alt="Características Biótica" width="100%">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/especie.jpg" alt="Características Biótica" width="100%">
+									</span>										
 									<br />
 								</div>
 
@@ -294,6 +305,63 @@
 									<h4 class="heading-tertiary">Especies exóticas</h4>
 
 									<p>Desde la construcción del reservorio de Tinajones, especies como la "tilpia" (Tilapia rendalli y Tilapianiloticus) y las "carpas comunes" (Cypirinuscarpio) y "plateadas" (Hypopthalmichthysmolitrix) han invadido la parte baja de la cuenca, lo que ha supuesto un gran problema para especies nativas que se han visto desplazadas.</p>
+								</div>
+							</div>
+
+							<hr class="tall">
+
+
+							<h2 id="hidrico"><strong>Caracterización de los Recursos Hídricos</strong></h2>
+
+							<div class="row">
+								<div class="col-md-12">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/rh.jpg" alt="Características Biótica" width="100%">
+									</span>										
+									<br />
+								</div>
+
+								<div class="col-md-6">
+									 <h4 class="heading-tertiary">Recursos Hídricos Superficiales</h4>
+
+									 <ul class="list list-icons list-primary">
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Rio Chancay-Lambayeque</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Río Chotano</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Río Conchano</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Rio Chancay-Lambayeque con Trasvases Chotano y Conchano</li>
+									</ul>
+									
+								</div>
+
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Recursos Hídricos Subterráneos</h4>
+
+									<p>El acuífero Chancay-Lambayeque se considera superficialmente formado por una zona de cabecera comprendida desde la bocatoma Raca Rumi hasta el partidor La Puntilla.</p>
+									<p>Se estiman como reservas geológicas un volumen de 683 MMC y como reservas explotables hasta 341 MMC.</p>
+								</div>
+
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Oferta hídrica en la cuenca baja</h4>
+
+									<p>La oferta hídrica en términos medios, sin contar el almacenamiento inicial en el embalse Tinajones, es de 1173,70 MMC y comprende los recursos hídricos superficiales, subterráneos y agua de retorno. Los recursos hídricos provenientes de los ríos, quebradas y manantiales existentes en las partes medias y altas de la cuenca son utilizados para complementar el riego de los cultivos en la campaña principal.</p>
+								</div>
+
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Recursos Hídricos en la cuenca media y alta</h4>
+
+									<p>Las áreas ubicadas en la parte media y alta de la cuenca de gestión Chancay-Lambayeque tienen como fuente de abastecimiento los recursos hídricos superficiales provenientes del río principal Chancay-Lambayeque, de sus 24 ríos secundarios, de sus 186 quebradas importantes importantes y otras 434 quebradas naturales, los afluentes de los trasvases de los túneles de los ríos Chotano y Conchano, además de los puquios existentes en las microcuencas.</p>
+								</div>
+
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Aguas servidas tratadas</h4>
+
+									<p>En toda la cuenca Chancay-Lambayeque no existe oficialmente uso de aguas servidas tratadas, es decir, que dichas aguas formen parte del balance hídrico que realiza la Junta de Usuarios de Chancay-Lambayeque en el Plan Anual de Operación del Sistema Tinajones.</p>
+								</div>
+
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Aguas de retorno</h4>
+
+									<p>Las aguas de retorno se estiman en 61,0 MMC, obtenidos sobre la base de estudios realizados por la entonces Dirección General de Agua y Suelo DGAS, en 1989, y que, según esta fuente, fueron medidos en el periodo 1956-1960. Este volumen de agua de recuperación data de antes del funcionamiento de los túneles Chotano y Conchano.</p>
 								</div>
 							</div>
 
