@@ -6,7 +6,7 @@
   "scripts": {
     "build": "gulp build",
     "start": "node_modules/.bin/webpack-dev-server --progress --colors",
-    "publish":"gulp publish"
+    "publish": "gulp publish"
   },
   "keywords": [],
   "author": "Edinson Nuñez More",
@@ -25,6 +25,7 @@
     "gulp-nunjucks-render": "^2.2.1",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.28.0",
+    "imports-loader": "^0.7.1",
     "nunjucks": "^3.0.0",
     "nunjucks-html-loader": "^1.1.0",
     "nunjucks-loader": "^2.4.8",
@@ -36,9 +37,11 @@
   },
   "dependencies": {
     "custom-event": "^1.0.1",
-    "jquery": "^2.2.3",
+    "jquery": "^2.2.4",
+    "jquery-mousewheel": "^3.1.13",
     "json-loader": "^0.5.4",
     "lory.js": "^2.2.1",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
     "material-ui": "^0.17.0",
     "moment": "^2.18.1",
     "native-toast": "^1.1.0",
