@@ -1,5 +1,12 @@
+.searchbox-container{
+  position: absolute;
+  top: 0;
+  width:100%;
+  padding: 20px;
+}
 .searchbox{
-
+  width:100%;
+  position: relative;
 }
 .searchbox > div > div > input{
   padding-left: 40px!important;
