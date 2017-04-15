@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block content %}
-							<h2><strong>Ubicación y Extensión</strong> </h2>
+							<h2 id="ubicacion"><strong>Ubicación y Extensión</strong> </h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -50,7 +50,8 @@
 
 							<hr class="tall">
 
-							<h2><strong>Características Topográficas y Fisiográficas</strong></h2>
+
+							<h2 id="topografia"><strong>Características Topográficas y Fisiográficas</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -63,9 +64,8 @@
 
 							<div class="row">
 								<div class="col-md-12">
-									<p>Tiene una superficie de 5555,49 km2, una altitud media de 1622 msnm y una pendiente media del orden del 35%; de acuerdo con su curva hipsométrica, corresponde a un río maduro. Su factor de forma es de 0,27, lo que indica que tiene buena respuesta a las crecidas. Además, su coeficiente de compacidad es de 1,92, que corresponde a cuencas de forma alargada.</p>
-									<p>La mayor parte del microrrelieve es plana; menos de 0,5% de la superficie de las tierras es ligeramente ondulado y menos del 0,2% son tierras onduladas, lo que revela la poca o nula necesidad de realizar movimientos considerables de tierra destinados a efectuar nivelaciones.</p>
-									<div class="pull-right" style="margin-left: 20px">
+
+									<div class="pull-left" style="margin-right: 20px">
 										<a class="img-thumbnail lightbox" href="web/img/caracterizacion/topog.jpg" data-plugin-options='{"type":"image"}'>
 											<img class="img-responsive" src="web/img/caracterizacion/topog.jpg" width="335" height="208" alt="Características Topográficas y Fisiográficas">
 											<span class="zoom">
@@ -73,6 +73,9 @@
 											</span>
 										</a>
 									</div>
+
+									<p>Tiene una superficie de 5555,49 km2, una altitud media de 1622 msnm y una pendiente media del orden del 35%; de acuerdo con su curva hipsométrica, corresponde a un río maduro. Su factor de forma es de 0,27, lo que indica que tiene buena respuesta a las crecidas. Además, su coeficiente de compacidad es de 1,92, que corresponde a cuencas de forma alargada.</p>
+									<p>La mayor parte del microrrelieve es plana; menos de 0,5% de la superficie de las tierras es ligeramente ondulado y menos del 0,2% son tierras onduladas, lo que revela la poca o nula necesidad de realizar movimientos considerables de tierra destinados a efectuar nivelaciones.</p>
 									<p>Fisográficamente, en el valle se distinguen hasta 6 paisajes principales:</p>
 
 									<ul class="list list-icons list-primary">
@@ -88,13 +91,21 @@
 
 							<hr class="tall">
 
-							<h2><strong>Caracterización Climática</strong></h2>
+							<h2 id="climatica"><strong>Caracterización Climática</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
 									<p class="lead">
 										La cuenca Chancay Lambayeque nace de 4 lagunas interconectadas situadas en la cordillera occidental de los Andes: la laguna Morococha, ubicada a 3797 msnm; la Lejiacocha, ubicada a 3776 msnm; la Alforjacocha, ubicada a 3772 msnm; y la Misachocha, ubicada a 3746 msnm.
 									</p>
+								</div>
+
+								<div class="col-md-12">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/clima.jpg" alt="Características Climática" width="100%">
+									</span>
+									<br />
+									<br />
 								</div>
 							</div>
 
@@ -184,7 +195,8 @@
 
 							<hr class="tall">
 
-							<h2><strong>Caracterización Geológica</strong></h2>
+
+							<h2 id="geologica"><strong>Caracterización Geológica</strong></h2>
 
 							<div class="row">
 								<div class="col-md-12">
@@ -204,24 +216,32 @@
 							<hr class="tall">
 
 
-							<h2><strong>Caracterización de Usos de Suelo</strong></h2>
+							<h2 id="suelo"><strong>Caracterización de Usos de Suelo</strong></h2>
 
 							<div class="row">
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Baja o Valle</h4>
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Baja o Valle</h4>
+									</div>
 
 									<p>Esta es la zona donde predominan las áreas bajo riego.</p>
 									<p>En mayor proporción se encuentran las áreas ocupadas por arroz, caña de azúcar, y policultivo; también se ubican áreas de bosque seco estacional en la margen derecha del canal Taymi.</p>
 								</div>
 
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Media</h4>
+
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Media</h4>
+									</div>
 
 									<p>La cuenca media se caracteriza porque existen apreciables áreas con vegetación arbustiva, casi en igual proporción cultivos de secano, así como considerables áreas de terreno desnudo. En pequeña proporción pastos naturales y muy pocas áreas de cultivo con riego.</p>
 								</div>
 
 								<div class="col-md-4">
-									<h4 class="heading-primary">Cuenca Alta</h4>
+
+									<div class="heading heading-border heading-middle-border">
+										<h4 class="heading-primary">Cuenca Alta</h4>
+									</div>
 
 									<p>Casi toda la totalidad de la cuenca alta está ocupada por cultivos de secano y pastos naturales. Existen pequeñas áreas con bosque denso y menos todavía áreas de cultivo con riego. Aquí se resalta el uso minero, caracterizado por la Minera La Zanja SRL y el uso agropecuario.</p>
 								</div>
@@ -230,80 +250,128 @@
 							<hr class="tall">
 
 
-							<h2><strong>Caracterización Biótica</strong></h2>
+							<h2 id="biotica"><strong>Caracterización Biótica</strong></h2>
 
 							<div class="row">
+								<div class="col-md-12">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/especie.jpg" alt="Características Biótica" width="100%">
+									</span>
+									<br />
+								</div>
+
 								<div class="col-md-6">
 									 <h4 class="heading-tertiary">Áreas protegidas según el SERNANP</h4>
 
-									- Área de Conservación Privada Chaparrí
-									- Zona Reservada de Chancay Baños
-									- Zona Reservada de Udima
+									 <ul class="list list-icons list-primary">
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Área de Conservación Privada Chaparrí</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Zona Reservada de Chancay Baños</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Zona Reservada de Udima</li>
+									</ul>
+
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Desembocaduras del río Reque</h4>
 
-									La desembocadura de este río suele encontrarse bloqueada por dunas, lo que permite la formación de un complejo de lagunas (humedal) que abarca aproximadamente un área de 150 ha. (Carbajal, W. et al., 2005). Este ecosistema lagunar, al igual que los humedales de la ciudad de Eten, son importantes para ciertas aves migratorias y aves de la zona, ya que sirven de descanso y alimentación.
+									<p>La desembocadura de este río suele encontrarse bloqueada por dunas, lo que permite la formación de un complejo de lagunas (humedal) que abarca aproximadamente un área de 150 ha. (Carbajal, W. et al., 2005). Este ecosistema lagunar, al igual que los humedales de la ciudad de Eten, son importantes para ciertas aves migratorias y aves de la zona, ya que sirven de descanso y alimentación.</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Pastos de alta montaña</h4>
 
-									Se trata de las zonas productoras y captadoras de agua, indispensables para la recarga de acuíferos y para contar con flujos más constantes. No están reguladas ni protegidas y están amenazadas por actividades como el sobrepastoreo, las quemas, la erosión, la construcción de embalses, entre otras.
+									<p>Se trata de las zonas productoras y captadoras de agua, indispensables para la recarga de acuíferos y para contar con flujos más constantes. No están reguladas ni protegidas y están amenazadas por actividades como el sobrepastoreo, las quemas, la erosión, la construcción de embalses, entre otras.</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Especies de fauna acuática</h4>
 
-									Especies encontradas en la cuenca como: Pimelodellayuncensis-"bagre",Aequidensrivulatus-"mojarra" (Günther-1860), Bryconatrocaudatus - "cascafe" (Kner-1863),Leblasinabimaculata-"chalcoca" (Valenciennes-1847), Trychomycteruspunctulatus - "life" (Valenciennes-1846), Cryphiopscaementarius - "camaron nativo" (Molina-1762)
+									<p>Especies encontradas en la cuenca como: Pimelodellayuncensis-"bagre",Aequidensrivulatus-"mojarra" (Günther-1860), Bryconatrocaudatus - "cascafe" (Kner-1863),Leblasinabimaculata-"chalcoca" (Valenciennes-1847), Trychomycteruspunctulatus - "life" (Valenciennes-1846), Cryphiopscaementarius - "camaron nativo" (Molina-1762)</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Áreas no protegidas</h4>
 
-									En toda la cuenca existen diversas zonas que no están protegidas, ni siquiera reguladas, pero que tienen un valor ambiental importante y que deberían ser preservadas.
+									<p>En toda la cuenca existen diversas zonas que no están protegidas, ni siquiera reguladas, pero que tienen un valor ambiental importante y que deberían ser preservadas.</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Riberas y nacientes</h4>
 
-									Es importante proteger las riberas y reforestar las zonas que se encuentran degradadas, para prevenir riesgos naturales y dar consistencia a estos ecosistemas y los corredores biológicos naturales. Asimismo, las zonas puquiales o nacientes que se encuentran degradados deben ser recuperados.
+									<p>Es importante proteger las riberas y reforestar las zonas que se encuentran degradadas, para prevenir riesgos naturales y dar consistencia a estos ecosistemas y los corredores biológicos naturales. Asimismo, las zonas puquiales o nacientes que se encuentran degradados deben ser recuperados.</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Lagunas</h4>
 
-									Ciertas lagunas podrían estar protegidas, reconociendo su importante aporte a la cuenca hidrográfica como zonas de producción de recursos hídricos que además, están amenazadas por el cambio climático. En la cuenca se han inventariado 20 lagunas y destacan: Mishacocha, Tantahuatay, Yanacocha, Alforjacocha, Lejiacocha, Morococha, La Aurora, Oscura y Clara de Mishahuanga.
+									<p>Ciertas lagunas podrían estar protegidas, reconociendo su importante aporte a la cuenca hidrográfica como zonas de producción de recursos hídricos que además, están amenazadas por el cambio climático. En la cuenca se han inventariado 20 lagunas y destacan: Mishacocha, Tantahuatay, Yanacocha, Alforjacocha, Lejiacocha, Morococha, La Aurora, Oscura y Clara de Mishahuanga.</p>
 								</div>
 
 								<div class="col-md-6">
 									<h4 class="heading-tertiary">Especies exóticas</h4>
 
-									Desde la construcción del reservorio de Tinajones, especies como la "tilpia" (Tilapia rendalli y Tilapianiloticus) y las "carpas comunes" (Cypirinuscarpio) y "plateadas" (Hypopthalmichthysmolitrix) han invadido la parte baja de la cuenca, lo que ha supuesto un gran problema para especies nativas que se han visto desplazadas.
+									<p>Desde la construcción del reservorio de Tinajones, especies como la "tilpia" (Tilapia rendalli y Tilapianiloticus) y las "carpas comunes" (Cypirinuscarpio) y "plateadas" (Hypopthalmichthysmolitrix) han invadido la parte baja de la cuenca, lo que ha supuesto un gran problema para especies nativas que se han visto desplazadas.</p>
 								</div>
 							</div>
 
+							<hr class="tall">
 
 
+							<h2 id="hidrico"><strong>Caracterización de los Recursos Hídricos</strong></h2>
 
+							<div class="row">
+								<div class="col-md-12">
+									<span class="img-thumbnail center-block">
+										<img class="img-responsive" src="web/img/caracterizacion/rh.jpg" alt="Características Biótica" width="100%">
+									</span>
+									<br />
+								</div>
 
+								<div class="col-md-6">
+									 <h4 class="heading-tertiary">Recursos Hídricos Superficiales</h4>
 
+									 <ul class="list list-icons list-primary">
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Rio Chancay-Lambayeque</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Río Chotano</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Río Conchano</li>
+										<li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="0"><i class="fa fa-check"></i> Rio Chancay-Lambayeque con Trasvases Chotano y Conchano</li>
+									</ul>
 
+								</div>
 
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Recursos Hídricos Subterráneos</h4>
 
-------------------------------------------------------------------
- Caracterización Biótica
+									<p>El acuífero Chancay-Lambayeque se considera superficialmente formado por una zona de cabecera comprendida desde la bocatoma Raca Rumi hasta el partidor La Puntilla.</p>
+									<p>Se estiman como reservas geológicas un volumen de 683 MMC y como reservas explotables hasta 341 MMC.</p>
+								</div>
 
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Oferta hídrica en la cuenca baja</h4>
 
+									<p>La oferta hídrica en términos medios, sin contar el almacenamiento inicial en el embalse Tinajones, es de 1173,70 MMC y comprende los recursos hídricos superficiales, subterráneos y agua de retorno. Los recursos hídricos provenientes de los ríos, quebradas y manantiales existentes en las partes medias y altas de la cuenca son utilizados para complementar el riego de los cultivos en la campaña principal.</p>
+								</div>
 
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Recursos Hídricos en la cuenca media y alta</h4>
 
+									<p>Las áreas ubicadas en la parte media y alta de la cuenca de gestión Chancay-Lambayeque tienen como fuente de abastecimiento los recursos hídricos superficiales provenientes del río principal Chancay-Lambayeque, de sus 24 ríos secundarios, de sus 186 quebradas importantes importantes y otras 434 quebradas naturales, los afluentes de los trasvases de los túneles de los ríos Chotano y Conchano, además de los puquios existentes en las microcuencas.</p>
+								</div>
 
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Aguas servidas tratadas</h4>
 
+									<p>En toda la cuenca Chancay-Lambayeque no existe oficialmente uso de aguas servidas tratadas, es decir, que dichas aguas formen parte del balance hídrico que realiza la Junta de Usuarios de Chancay-Lambayeque en el Plan Anual de Operación del Sistema Tinajones.</p>
+								</div>
 
-----------------------
+								<div class="col-md-6">
+									<h4 class="heading-tertiary">Aguas de retorno</h4>
 
+									<p>Las aguas de retorno se estiman en 61,0 MMC, obtenidos sobre la base de estudios realizados por la entonces Dirección General de Agua y Suelo DGAS, en 1989, y que, según esta fuente, fueron medidos en el periodo 1956-1960. Este volumen de agua de recuperación data de antes del funcionamiento de los túneles Chotano y Conchano.</p>
+								</div>
+							</div>
 
- Caracterización de los Recursos Hídricos
+							<br />
+
 
 {% endblock %}
