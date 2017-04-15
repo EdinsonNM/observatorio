@@ -15,9 +15,6 @@ import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
 import Menu from 'material-ui/svg-icons/navigation/menu';
 import Paper from 'material-ui/Paper';
-
-import {Responsive, WidthProvider} from 'react-grid-layout';
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
 import TematicasUI from '../tematicas';
 import ServiciosUI from '../servicios';
 const style={

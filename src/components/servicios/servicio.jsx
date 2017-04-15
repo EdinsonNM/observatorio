@@ -44,7 +44,7 @@ const style={
 export default class Servicio extends React.Component {
   constructor (props) {
     super(props);
-     this.state = this.props.data||{}
+     this.state = this.props.data||{serverType:'geoserver'};
   }
 
 

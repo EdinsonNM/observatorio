@@ -5,6 +5,8 @@ var webpack = require('webpack'),
 	CopyWebpackPlugin = require('copy-webpack-plugin'),
 	fs = require('fs');var controllers = fs.readdirSync(__dirname);
 
+
+
 /* babel */
 const babelSettings = JSON.parse(fs.readFileSync(".babelrc"));
 /* read templates */
@@ -48,7 +50,8 @@ module.exports = {
 					root: __dirname + '/src/tpl',
                     quiet: true
                 }
-            }
+            },
+
 		]
 	},
 	externals: {

@@ -91,7 +91,7 @@ export default class Mapas extends React.Component {
             </IconMenu>
             );
             items.push(
-					<div className="col-lg-3 col-md-4 col-sm-6" key={index}>
+					<div className="col-lg-3 col-md-4 col-sm-6" key={index} style={{paddingBottom:'10px'}}>
 						<Card>
 					
 								<CardMedia overlay={
@@ -107,7 +107,7 @@ export default class Mapas extends React.Component {
 								</IconButton>
 								</div>
 								}>
-									<img src="visor/images/bg01-01.png" />
+									<img src="./visor/images/bg01-01.png" />
 								</CardMedia>
 								<CardTitle subtitle={item.title} />
 

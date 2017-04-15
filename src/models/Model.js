@@ -9,7 +9,6 @@ export default class Model{
 		return obj;
 	}
 	copy(objSource,objTarget){
-		debugger;
 		for(let key in objSource){
 			objTarget[key] = objSource[key];
 		}

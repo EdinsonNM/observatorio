@@ -22,8 +22,6 @@ import TematicaService from './services/TematicaService';
 import MapaService from './services/MapaService';
 import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
-
-
 import _ from 'underscore';
 let tematicaService=new TematicaService();
 let mapaService=new MapaService();
@@ -42,7 +40,8 @@ export default class Index extends React.Component{
 			mapas:[],
 			tematicaSource:[],
 			open:false,
-			layers:[]
+			layers:[],
+			group:null
 		}
     }
 	loadData(){
@@ -76,15 +75,27 @@ export default class Index extends React.Component{
 				title: 'Servicios WMS',
 				layers: layers,
 			});
+			if(this.state.group) this.map.RemoveLayer(this.state.group)
 			this.map.AddLayer(group);
 			var mylayers = BaseMaps.getLayers(this.map.getMap());
       		console.log(mylayers);
-			this.setState({mapas:data,layers:mylayers});
+			this.setState({mapas:data,layers:mylayers,group:group});
 		},true,tematicaId);
 	}
 	componentDidMount(){
     	this.loadMap();
 		this.loadData();
+		  $(".services-list").mCustomScrollbar({
+               theme:'dark',
+               axis: "y",
+               scrollbarPosition: "inside",
+               contentTouchScroll: true,
+               autoHideScrollbar: true,
+               advanced:{ updateOnImageLoad: true, updateOnSelectorChange: "li" },
+               setTop: 30,
+               keyboard:{ enable: true }
+         });
+		
 	}
 	loadMap(){
 		let self=this;
@@ -113,6 +124,7 @@ export default class Index extends React.Component{
 		let layers = this.state.layers;
 		layers[groupIndex].items[itemIndex].visible = !item.visible;
 		this.setState({layers:layers});
+		//$(".services-list").mCustomScrollbar("scrollTo");
 	}
     render() {
 		let services=[];
@@ -120,7 +132,7 @@ export default class Index extends React.Component{
 			switch(group.type){
 				case 'services':
 					group.items.map((item,index)=>{
-						services.push( <ListItem key={index} primaryText={item.title}  rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
+						services.push( <ListItem key={item.id} primaryText={item.title}  rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
 					break;
 				case 'basemaps':
@@ -162,7 +174,7 @@ export default class Index extends React.Component{
 						</div>
 					</div>
 					</div>
-					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={300}>
+					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={320} containerStyle={{display:'flex',flexDirection:'column'}}>
 						<AppBar
 						title="Visor de Mapas"
 						iconClassNameRight="menu"
@@ -170,17 +182,26 @@ export default class Index extends React.Component{
 						onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
 						/>
 						<CardHeader
+						textStyle={{paddingRight:0}}
 						style={{backgroundColor: '#006064'}}
 						titleColor="#FFFFFF"
+						titleStyle={{
+							width: '200px',
+							whiteSpace: 'nowrap',
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
+							}}
 						subtitleColor="#FFFFFF"
 						title={this.state.tematica.titulo}
 						subtitle="Listado de Servicios"
 						avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
 						/>
+						<div className="services-list mCustomScrollbar" style={{flex:1,overflow:'hidden'}}>
+							<List>
+							{ services }
+							</List>
+						</div>
 						
-						<List>
-						{ services }
-						</List>
 
 					</Drawer>
 			</div>
