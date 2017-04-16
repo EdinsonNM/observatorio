@@ -11,10 +11,12 @@
 					<span class="day">{{ item.fecha_creacion.date() }}</span>
 					<span class="month">{{ item.fecha_creacion.format("MMM") }}</span>
 				</div>
-				<h4 class="heading-primary"><a href="{{item.url_novedad}}" target="_blank">{{ item.title }}</a></h4>
+				<h5 class="heading-primary clearfix">
+					<a href="{{item.url_novedad}}" target="_blank">{{ item.title }}</a>
+				</h5>
 				<p>
-				{{ item.title }}
-				 <a href="{{item.url_novedad}}" class="read-more" target="_blank">read more <i class="fa fa-angle-right"></i></a>
+					{{ item.title }}
+					<a href="{{item.url_novedad}}" class="read-more" target="_blank">read more <i class="fa fa-angle-right"></i></a>
 				</p>
 			</article>
 		</div>
