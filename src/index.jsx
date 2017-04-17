@@ -7,6 +7,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -41,7 +42,11 @@ export default class Index extends React.Component{
 			tematicaSource:[],
 			open:false,
 			layers:[],
-			group:null
+			group:null,
+			showclear:false,
+			searchText:'',
+			selectedBaseMap:1,
+			showbasemaps:false
 		}
     }
 	loadData(){
@@ -101,22 +106,37 @@ export default class Index extends React.Component{
 		let self=this;
 		this.map = new BaseMaps('map-container');
 		this.map.create();
-		this.map.createControlMousePosition();
+		//this.map.createControlMousePosition();
+		var mylayers = BaseMaps.getLayers(this.map.getMap());
+		this.setState({layers:mylayers});
+		this.map.GetInfo((error,url)=>{
+			if(!error){
+				console.log(url);
+			}
+		});
 			
 	}
 	handleUpdateInput(value){
-		console.log(value);
+		let showclear=false;
+		if(value!=''){
+			showclear=true;
+		}
 		let tematica = _.find(this.state.tematicas, function(item){ return item.titulo.toLowerCase() == value.toLowerCase(); });
 		if(tematica){
 			console.log(tematica);
 			this.loadMapas(tematica.id);
-			this.setState({tematica:tematica});
+			this.setState({tematica:tematica,showclear:showclear,searchText:value});
+		}else{
+			this.setState({showclear:showclear,searchText:value});
 		}
 
 
 	}
 	handleDrawerToggle(){
 		this.setState({open:!this.state.open});
+	}
+	clearSearchBox(){
+		this.setState({tematica:{titulo:''},showclear:false,searchText:''});
 	}
 	handleService(item,itemIndex,groupIndex){
 		item.ref.setVisible(!item.visible);
@@ -126,8 +146,19 @@ export default class Index extends React.Component{
 		this.setState({layers:layers});
 		//$(".services-list").mCustomScrollbar("scrollTo");
 	}
+	selectBaseMap(item,index,items){
+		items[this.state.selectedBaseMap].ref.setVisible(false);
+		item.ref.setVisible(true);
+		this.setState({selectedBaseMap:index});
+	}
+	handleBaseMaps(){
+		this.setState({showbasemaps:!this.state.showbasemaps});
+	}
     render() {
+		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
+		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
 		let services=[];
+		let basemaps=[];
 		this.state.layers.map((group,groupIndex)=>{
 			switch(group.type){
 				case 'services':
@@ -136,16 +167,34 @@ export default class Index extends React.Component{
 					});
 					break;
 				case 'basemaps':
+					group.items.map((item,index)=>{
+						basemaps.push(<BottomNavigationItem
+							label={item.title}
+							icon={favoritesIcon}
+							onTouchTap={() => this.selectBaseMap(item,index,group.items)}
+						/>);
+					});
+						
 					break;
 			}
 			
 		});
+		let classBaseMaps="basemap-container";
+		if(!this.state.showbasemaps){
+			classBaseMaps+=" hidden-basemap"
+		}
 	    return (
 	    	<div className="flex layout vertical center-center center-justified" style={{height:'100%',width:'100%'}} >
 
 				<div id="map-container">		
 
 				</div>
+				<Paper className={classBaseMaps}>
+
+					<BottomNavigation selectedIndex={this.state.selectedBaseMap}>
+						{basemaps}
+					</BottomNavigation>
+				</Paper>
 				<div className="searchbox-container">
 					<div className="row">
 						<div className="col-md-4">
@@ -160,8 +209,25 @@ export default class Index extends React.Component{
 								dataSource={this.state.tematicaSource}
 								onUpdateInput={this.handleUpdateInput.bind(this)}
 								fullWidth={true}
+								searchText={this.state.searchText}
 								/>
-								<FontIcon className="material-icons searchbox-icon">search</FontIcon>
+								<span className="searchbox-icon">
+								
+									{
+										(this.state.showclear)?
+											<IconButton tooltip="Mostrar Servicios" onTouchTap={this.clearSearchBox.bind(this)}>
+												<FontIcon className="material-icons">clear</FontIcon>
+											</IconButton>
+										:
+											<IconButton tooltip="Buscar" onTouchTap={this.handleDrawerToggle.bind(this)}>
+												<FontIcon className="material-icons" color="#c3c3c3" >search</FontIcon>
+											</IconButton>
+									}
+									<IconButton tooltip="Seleccionar mapa base"  onTouchTap={this.handleBaseMaps.bind(this)}>
+										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>maps</FontIcon>
+									</IconButton>
+									
+								</span>
 								<span className="searchbox-icon-left">
 									<IconButton tooltip="Mostrar Servicios" onTouchTap={this.handleDrawerToggle.bind(this)}>
 										<FontIcon className="material-icons">menu</FontIcon>
