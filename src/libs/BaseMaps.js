@@ -145,6 +145,7 @@ export default  class BaseMaps{
 
       var data=  {
         title: lyr.get('title'),
+		subtitle: lyr.get('subtitle'),
         type: lyr.get('type')||'custom'
       }
      

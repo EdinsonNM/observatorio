@@ -57,3 +57,7 @@
 .basemap-container.hidden-basemap{
   bottom: -50px;
 }
+
+.mCSB_inside > .mCSB_container {
+    margin-right: 0!important;
+}

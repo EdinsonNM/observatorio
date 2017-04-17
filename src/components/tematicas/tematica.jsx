@@ -116,6 +116,14 @@ export default class Tematica extends React.Component {
                     required
                     fullWidth/>
                 </div>
+				 <div className="col-md-12">
+                    <TextField 
+                    onChange = {(e)=>{this.handleChange('subtitulo',e);}}
+                    value = {this.state.subtitulo} 
+                    floatingLabelText="Subtítulo" 
+                    required
+                    fullWidth/>
+                </div>
                 <div className="col-md-12">
                     <TextField 
                     onChange = {(e)=>{this.handleChange('descripcion',e);}}

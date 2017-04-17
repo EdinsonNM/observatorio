@@ -50,12 +50,13 @@ export default class Index extends React.Component{
 		}
     }
 	loadData(){
-		tematicaService.getAll({},(error,data)=>{
-			let dataSource=[];
-			data.forEach(function(item) {
-				dataSource.push(item.titulo);
-			}, this);
-			this.setState({tematicas:data,tematicaSource:dataSource});
+		tematicaService.getAll({},(error,tematicas)=>{
+			mapaService.getAll({},(error,layers)=>{
+				this.setState({tematicas:tematicas, mapas:layers},()=>{
+					this.AddAllLayers();
+				});			
+			});
+			
 		},true);
 	}
 	loadMapas(tematicaId){
@@ -87,10 +88,54 @@ export default class Index extends React.Component{
 			this.setState({mapas:data,layers:mylayers,group:group});
 		},true,tematicaId);
 	}
+	AddAllLayers(){
+		let tematicasItems=[];
+		let datasource=[];
+		this.state.tematicas.forEach((tematica,indexTematica)=>{
+			let mapas = _.findWhere(this.state.mapas, {id:tematica.id}) ;
+			if(mapas){
+				let layerItems=[];
+				Object.keys(mapas).forEach((layerId,indexLayer)=>{
+					if(layerId!='id'){
+						let item = mapas[layerId];
+						item.visible = item.visible||false;
+						layerItems.push(
+							new ol.layer.Tile({
+								title: item.title,
+								visible: item.visible,
+								transparent: true,
+								source: new ol.source.TileWMS({
+									url: item.url,
+									params: {'LAYERS': item.layer},
+									serverType: item.serverType
+								})
+							})
+						);
+						datasource.push(item.title)
+
+					}
+					
+					
+				});
+				let group = new ol.layer.Group({
+					type:'services',
+					title: tematica.titulo,
+					subtitle:tematica.subtitulo||'',
+					layers: layerItems,
+				});
+				this.map.AddLayer(group);
+
+			}
+
+		});
+		var mylayers = BaseMaps.getLayers(this.map.getMap());
+		this.setState({layers:mylayers,tematicaSource:datasource});
+	}
+	
 	componentDidMount(){
     	this.loadMap();
 		this.loadData();
-		  $(".services-list").mCustomScrollbar({
+		  $("#layers").mCustomScrollbar({
                theme:'dark',
                axis: "y",
                scrollbarPosition: "inside",
@@ -121,15 +166,22 @@ export default class Index extends React.Component{
 		if(value!=''){
 			showclear=true;
 		}
-		let tematica = _.find(this.state.tematicas, function(item){ return item.titulo.toLowerCase() == value.toLowerCase(); });
-		if(tematica){
-			console.log(tematica);
-			this.loadMapas(tematica.id);
-			this.setState({tematica:tematica,showclear:showclear,searchText:value});
-		}else{
-			this.setState({showclear:showclear,searchText:value});
-		}
 
+		this.state.layers.map((group,groupIndex)=>{
+			if(group.type=='services'){
+					group.items.map((item,index)=>{
+						if(item.title==value){
+							item.ref.setVisible(true);
+							item.visible = true;
+						}else{
+							item.ref.setVisible(false);
+							item.visible = false;
+						}
+						
+					});
+			}
+		});
+		this.setState({showclear:showclear,searchText:value,layers:this.state.layers});
 
 	}
 	handleDrawerToggle(){
@@ -159,12 +211,26 @@ export default class Index extends React.Component{
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
 		let services=[];
 		let basemaps=[];
+		let tematicas=[];
 		this.state.layers.map((group,groupIndex)=>{
 			switch(group.type){
 				case 'services':
+					services=[];
 					group.items.map((item,index)=>{
-						services.push( <ListItem key={item.id} primaryText={item.title}  rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
+						services.push( <ListItem 
+						key={item.id} 
+						primaryText={item.title}  
+						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
+					tematicas.push(
+						<ListItem
+						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
+						primaryText={group.title}
+						secondaryText={group.subtitle}
+						initiallyOpen={false}
+						primaryTogglesNestedList={true}
+						nestedItems={services}/>
+					);
 					break;
 				case 'basemaps':
 					group.items.map((item,index)=>{
@@ -204,12 +270,13 @@ export default class Index extends React.Component{
 							<Paper className="searchbox">
 								<AutoComplete
 								hintText="Busqueda por temática"
-								openOnFocus={true}
+								openOnFocus={false}
 								filter={AutoComplete.caseInsensitiveFilter}
 								dataSource={this.state.tematicaSource}
 								onUpdateInput={this.handleUpdateInput.bind(this)}
 								fullWidth={true}
 								searchText={this.state.searchText}
+								maxSearchResults={10}
 								/>
 								<span className="searchbox-icon">
 								
@@ -240,7 +307,7 @@ export default class Index extends React.Component{
 						</div>
 					</div>
 					</div>
-					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={320} containerStyle={{display:'flex',flexDirection:'column'}}>
+					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={350} containerStyle={{display:'flex',flexDirection:'column'}}>
 						<AppBar
 						title="Visor de Mapas"
 						iconClassNameRight="menu"
@@ -258,14 +325,16 @@ export default class Index extends React.Component{
 							textOverflow: 'ellipsis'
 							}}
 						subtitleColor="#FFFFFF"
-						title={this.state.tematica.titulo}
+						title={tematicas.length+" temáticas registradas"}
 						subtitle="Listado de Servicios"
 						avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
 						/>
-						<div className="services-list mCustomScrollbar" style={{flex:1,overflow:'hidden'}}>
-							<List>
-							{ services }
-							</List>
+						<div className="services-list" style={{flex:1,overflow:'hidden',marginRight:'5px',position:'relative'}}>
+							<div id="layers" className="mCustomScrollbar" style={{flex:1,overflow:'hidden',height:'100%'}}>
+								<List>
+								{ tematicas }
+								</List>
+							</div>
 						</div>
 						
 
