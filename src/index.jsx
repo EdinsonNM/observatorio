@@ -271,7 +271,7 @@ export default class Index extends React.Component{
 						<div className="col-md-4">
 							<Paper className="searchbox">
 								<AutoComplete
-								hintText="Busqueda por temática"
+								hintText="Busqueda por nombre del servicio"
 								openOnFocus={false}
 								filter={AutoComplete.caseInsensitiveFilter}
 								dataSource={this.state.tematicaSource}
