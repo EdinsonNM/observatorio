@@ -145,8 +145,9 @@ export default  class BaseMaps{
 
       var data=  {
         title: lyr.get('title'),
-		subtitle: lyr.get('subtitle'),
-        type: lyr.get('type')||'custom'
+		subtitle: lyr.get('subtitle')||'',
+        type: lyr.get('type')||'custom',
+		expanded: lyr.get('expanded')||false
       }
      
       if (lyr.getLayers && !lyr.get('combine')) {

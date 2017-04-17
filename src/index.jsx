@@ -118,6 +118,7 @@ export default class Index extends React.Component{
 					
 				});
 				let group = new ol.layer.Group({
+					expanded:false,
 					type:'services',
 					title: tematica.titulo,
 					subtitle:tematica.subtitulo||'',
@@ -173,6 +174,7 @@ export default class Index extends React.Component{
 						if(item.title==value){
 							item.ref.setVisible(true);
 							item.visible = true;
+							group.expanded = true;
 						}else{
 							item.ref.setVisible(false);
 							item.visible = false;
@@ -227,7 +229,7 @@ export default class Index extends React.Component{
 						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
 						primaryText={group.title}
 						secondaryText={group.subtitle}
-						initiallyOpen={false}
+						open={group.expanded}
 						primaryTogglesNestedList={true}
 						nestedItems={services}/>
 					);
