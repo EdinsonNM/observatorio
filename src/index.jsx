@@ -208,6 +208,11 @@ export default class Index extends React.Component{
 	handleBaseMaps(){
 		this.setState({showbasemaps:!this.state.showbasemaps});
 	}
+	handleExpandedTematica(group,index){
+		let layers = this.state.layers;
+		layers[index].expanded=!group.expanded;
+		this.setState({layers:layers});
+	}
     render() {
 		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
@@ -226,12 +231,15 @@ export default class Index extends React.Component{
 					});
 					tematicas.push(
 						<ListItem
+						key={group.id}
 						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
 						primaryText={group.title}
 						secondaryText={group.subtitle}
 						open={group.expanded}
 						primaryTogglesNestedList={true}
-						nestedItems={services}/>
+						nestedItems={services}
+						onNestedListToggle={this.handleExpandedTematica.bind(this,group,groupIndex)}
+						/>
 					);
 					break;
 				case 'basemaps':
