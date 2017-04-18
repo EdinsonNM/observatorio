@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	{% include '../partials/head.njk' %}
+	<body>
+
+		<div class="body">
+			{% include '../partials/header.njk' %}
+
+			<div role="main" class="main">
+
+				{% block pageHeader %} {% endblock %}
+
+				<div class="container">
+
+					<div class="row">
+						<div class="col-md-9 text-justify">
+							{% block content %} {% endblock %}
+						</div>
+
+						<div class="col-md-3">
+							{% include '../partials/aside_tematicas.njk' %}
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
+			{% include '../partials/footer.njk' %}
+		</div>
+
+		{% include '../partials/scripts.njk' %}
+
+	</body>
+</html>
