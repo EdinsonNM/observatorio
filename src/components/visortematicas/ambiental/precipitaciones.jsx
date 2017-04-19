@@ -18,7 +18,7 @@ import Subheader from 'material-ui/Subheader';
 import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 
-
+import SelectField from 'material-ui/SelectField';
 
 const style={
   appbar:{
@@ -45,32 +45,32 @@ export default class Precipitaciones extends React.Component{
       ]
 		}
 	}
+	handleChange(key, event) {
+		let state = this.state;
+		state[key] = event.target.value;
+		this.setState(state);
+	}
+	handleChangeSelect(key, event, index, value) {
+		let state = this.state;
+		state[key] = value;
+		this.setState(state);
+		if (key == 'tematica') {
+			this.loadData(value);
+		}
+	}
 	render(){
 		return(
-			<div>
-					<AppBar
-						title="Temática Ambiental"
+
+			<div className="tematica-home">
+				<AppBar
+						title="Precipitación y Temperatura"
 						iconElementLeft={<IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats"><FontIcon  className="material-icons" >arrow_back</FontIcon></IconButton>}
 						style={style.appbar}
 						/>
-						<CardHeader
-						textStyle={{paddingRight:0}}
-						style={{backgroundColor: '#006064'}}
-						titleColor="#FFFFFF"
-						titleStyle={{
-							width: '200px',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis'
-							}}
-						subtitleColor="#FFFFFF"
-						title="Precipitación y Temperatura"
-						subtitle="Precipitación Total diaria, Temperatura Máxima, Temperatura Mínima"
-						avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
-						/>
+				
 
-				<div className="col-md-12">
-
+	
+				<div className="col-md-12" className="tematica-home-container">
 					<div className={'my-pretty-chart-container'}>
 						<Chart
 						chartType="LineChart"
@@ -82,8 +82,126 @@ export default class Precipitaciones extends React.Component{
 						legend_toggle
 						/>
 					</div>
+					<div className="container-fluid">
+					<div className="row">
+						<div className="col-md-6">
+							<SelectField
+							fullWidth
+							floatingLabelText="Frequency"
+							value={this.state.value}
+							onChange={this.handleChange}
+							>
+							<MenuItem value={1} primaryText="Never" />
+							<MenuItem value={2} primaryText="Every Night" />
+							<MenuItem value={3} primaryText="Weeknights" />
+							<MenuItem value={4} primaryText="Weekends" />
+							<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+									fullWidth
+									floatingLabelText="Frequency"
+									value={this.state.value}
+									onChange={this.handleChange}
+									>
+									<MenuItem value={1} primaryText="Never" />
+									<MenuItem value={2} primaryText="Every Night" />
+									<MenuItem value={3} primaryText="Weeknights" />
+									<MenuItem value={4} primaryText="Weekends" />
+									<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+							fullWidth
+							floatingLabelText="Frequency"
+							value={this.state.value}
+							onChange={this.handleChange}
+							>
+							<MenuItem value={1} primaryText="Never" />
+							<MenuItem value={2} primaryText="Every Night" />
+							<MenuItem value={3} primaryText="Weeknights" />
+							<MenuItem value={4} primaryText="Weekends" />
+							<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+									fullWidth
+									floatingLabelText="Frequency"
+									value={this.state.value}
+									onChange={this.handleChange}
+									>
+									<MenuItem value={1} primaryText="Never" />
+									<MenuItem value={2} primaryText="Every Night" />
+									<MenuItem value={3} primaryText="Weeknights" />
+									<MenuItem value={4} primaryText="Weekends" />
+									<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+							fullWidth
+							floatingLabelText="Frequency"
+							value={this.state.value}
+							onChange={this.handleChange}
+							>
+							<MenuItem value={1} primaryText="Never" />
+							<MenuItem value={2} primaryText="Every Night" />
+							<MenuItem value={3} primaryText="Weeknights" />
+							<MenuItem value={4} primaryText="Weekends" />
+							<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+									fullWidth
+									floatingLabelText="Frequency"
+									value={this.state.value}
+									onChange={this.handleChange}
+									>
+									<MenuItem value={1} primaryText="Never" />
+									<MenuItem value={2} primaryText="Every Night" />
+									<MenuItem value={3} primaryText="Weeknights" />
+									<MenuItem value={4} primaryText="Weekends" />
+									<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+							fullWidth
+							floatingLabelText="Frequency"
+							value={this.state.value}
+							onChange={this.handleChange}
+							>
+							<MenuItem value={1} primaryText="Never" />
+							<MenuItem value={2} primaryText="Every Night" />
+							<MenuItem value={3} primaryText="Weeknights" />
+							<MenuItem value={4} primaryText="Weekends" />
+							<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+									fullWidth
+									floatingLabelText="Frequency"
+									value={this.state.value}
+									onChange={this.handleChange}
+									>
+									<MenuItem value={1} primaryText="Never" />
+									<MenuItem value={2} primaryText="Every Night" />
+									<MenuItem value={3} primaryText="Weeknights" />
+									<MenuItem value={4} primaryText="Weekends" />
+									<MenuItem value={5} primaryText="Weekly" />
+							</SelectField>
+						</div>
+					</div>
+					</div>
 				</div>
 			</div>
+
+
 		);
 	}
 }

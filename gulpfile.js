@@ -10,28 +10,28 @@ var path = require('path');
 
 gulp.task('nunjucks', function() {
   return gulp.src('src/tpl/pages/**/*.+(html|njk)')
-  	.pipe(nunjucksRender({
-      path: ['src/tpl/layouts','src/tpl/partials']
+    .pipe(nunjucksRender({
+    path: ['src/tpl/layouts','src/tpl/partials']
     }))
-   .pipe(gulp.dest('build'));
+    .pipe(gulp.dest('build'));
 });
 
 gulp.task("webpack", function(callback) {
-    webpack(webpackConfig, function(err, stats) {
-        if(err) throw new gutil.PluginError("webpack", err);
-        callback();
-    });
+  webpack(webpackConfig, function(err, stats) {
+    if(err) throw new gutil.PluginError("webpack", err);
+    callback();
+  });
 });
 
 gulp.task("build",["nunjucks","webpack"], function(callback) {
-	callback();
+  callback();
 });
 
 gulp.task("publish",["build"], function(callback) {
-	ghpages.publish(path.join(__dirname, 'build'),
-	{
-		branch: 'gh-pages',
-		repo: 'https://github.com/EdinsonNM/observatorio.git'
-	},
-	function(err) { console.log("published in gh-pages") });
+  ghpages.publish(path.join(__dirname, 'build'),
+  {
+    branch: 'gh-pages',
+    repo: 'https://github.com/EdinsonNM/observatorio.git'
+  },
+  function(err) { console.log("published in gh-pages") });
 });
