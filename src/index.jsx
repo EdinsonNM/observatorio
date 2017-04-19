@@ -29,12 +29,12 @@ let mapaService=new MapaService();
 
 const style={
   appbar:{
-    backgroundColor:'var(--paper-cyan-900)'
+	backgroundColor:'var(--paper-cyan-900)'
   }
 }
 export default class Index extends React.Component{
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 		this.state ={
 			tematica:{titulo:''},
 			tematicas:[],
@@ -48,20 +48,20 @@ export default class Index extends React.Component{
 			selectedBaseMap:1,
 			showbasemaps:false
 		}
-    }
+	}
 	loadData(){
 		tematicaService.getAll({},(error,tematicas)=>{
 			mapaService.getAll({},(error,layers)=>{
 				this.setState({tematicas:tematicas, mapas:layers},()=>{
 					this.AddAllLayers();
-				});			
+				});
 			});
-			
+
 		},true);
 	}
 	loadMapas(tematicaId){
 		mapaService.getAll({},(error,data)=>{
-			
+
 			let layers=[];
 			data.forEach((item)=>{
 				item.visible = item.visible || false;
@@ -84,7 +84,7 @@ export default class Index extends React.Component{
 			if(this.state.group) this.map.RemoveLayer(this.state.group)
 			this.map.AddLayer(group);
 			var mylayers = BaseMaps.getLayers(this.map.getMap());
-      		console.log(mylayers);
+	  		console.log(mylayers);
 			this.setState({mapas:data,layers:mylayers,group:group});
 		},true,tematicaId);
 	}
@@ -114,8 +114,8 @@ export default class Index extends React.Component{
 						datasource.push(item.title)
 
 					}
-					
-					
+
+
 				});
 				let group = new ol.layer.Group({
 					expanded:false,
@@ -132,21 +132,21 @@ export default class Index extends React.Component{
 		var mylayers = BaseMaps.getLayers(this.map.getMap());
 		this.setState({layers:mylayers,tematicaSource:datasource});
 	}
-	
+
 	componentDidMount(){
-    	this.loadMap();
+		this.loadMap();
 		this.loadData();
-		  $("#layers").mCustomScrollbar({
-               theme:'dark',
-               axis: "y",
-               scrollbarPosition: "inside",
-               contentTouchScroll: true,
-               autoHideScrollbar: true,
-               advanced:{ updateOnImageLoad: true, updateOnSelectorChange: "li" },
-               setTop: 30,
-               keyboard:{ enable: true }
-         });
-		
+		$("#layers").mCustomScrollbar({
+			theme:'dark',
+			axis: "y",
+			scrollbarPosition: "inside",
+			contentTouchScroll: true,
+			autoHideScrollbar: true,
+			advanced:{ updateOnImageLoad: true, updateOnSelectorChange: "li" },
+			setTop: 30,
+			keyboard:{ enable: true }
+		});
+
 	}
 	loadMap(){
 		let self=this;
@@ -160,7 +160,7 @@ export default class Index extends React.Component{
 				console.log(url);
 			}
 		});
-			
+
 	}
 	handleUpdateInput(value){
 		let showclear=false;
@@ -179,7 +179,7 @@ export default class Index extends React.Component{
 							item.ref.setVisible(false);
 							item.visible = false;
 						}
-						
+
 					});
 			}
 		});
@@ -213,7 +213,7 @@ export default class Index extends React.Component{
 		layers[index].expanded=!group.expanded;
 		this.setState({layers:layers});
 	}
-    render() {
+	render() {
 		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
 		let services=[];
@@ -224,9 +224,9 @@ export default class Index extends React.Component{
 				case 'services':
 					services=[];
 					group.items.map((item,index)=>{
-						services.push( <ListItem 
-						key={item.id} 
-						primaryText={item.title}  
+						services.push( <ListItem
+						key={item.id}
+						primaryText={item.title}
 						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
 					tematicas.push(
@@ -250,19 +250,19 @@ export default class Index extends React.Component{
 							onTouchTap={() => this.selectBaseMap(item,index,group.items)}
 						/>);
 					});
-						
+
 					break;
 			}
-			
+
 		});
 		let classBaseMaps="basemap-container";
 		if(!this.state.showbasemaps){
 			classBaseMaps+=" hidden-basemap"
 		}
-	    return (
-	    	<div className="flex layout vertical center-center center-justified" style={{height:'100%',width:'100%'}} >
+		return (
+			<div className="flex layout vertical center-center center-justified" style={{height:'100%',width:'100%'}} >
 
-				<div id="map-container">		
+				<div id="map-container">
 
 				</div>
 				<Paper className={classBaseMaps}>
@@ -289,7 +289,7 @@ export default class Index extends React.Component{
 								maxSearchResults={10}
 								/>
 								<span className="searchbox-icon">
-								
+
 									{
 										(this.state.showclear)?
 											<IconButton tooltip="Mostrar Servicios" onTouchTap={this.clearSearchBox.bind(this)}>
@@ -303,7 +303,7 @@ export default class Index extends React.Component{
 									<IconButton tooltip="Seleccionar mapa base"  onTouchTap={this.handleBaseMaps.bind(this)}>
 										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>maps</FontIcon>
 									</IconButton>
-									
+
 								</span>
 								<span className="searchbox-icon-left">
 									<IconButton tooltip="Mostrar Servicios" onTouchTap={this.handleDrawerToggle.bind(this)}>
@@ -313,7 +313,7 @@ export default class Index extends React.Component{
 							</Paper>
 						</div>
 						<div className="col-md-4">
-							
+
 						</div>
 					</div>
 					</div>
@@ -346,10 +346,10 @@ export default class Index extends React.Component{
 								</List>
 							</div>
 						</div>
-						
+
 
 					</Drawer>
 			</div>
 	  	);
-    }
+	}
 }
