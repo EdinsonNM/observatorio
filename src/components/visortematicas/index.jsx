@@ -224,7 +224,7 @@ export default class Index extends React.Component{
 			classBaseMaps+=" hidden-basemap"
 		}
 	    return (
-	    	<div className="flex layout horizontal center-center center-justified" style={{height:'100%',width:'100%'}} >
+	    	<div className="flex layout horizontal center-center center-justified visor-tematica-container" style={{height:'100%',width:'100%'}} >
 
 				<div className="tematica-map-container">	
 					
@@ -235,7 +235,7 @@ export default class Index extends React.Component{
 						<div className="col-md-12">
 							<Paper className="searchbox">
 								<AutoComplete
-								hintText="Busqueda por nombre del servicio"
+								hintText="Busqueda por servicio"
 								openOnFocus={false}
 								filter={AutoComplete.caseInsensitiveFilter}
 								dataSource={this.state.tematicaSource}

@@ -17,7 +17,7 @@ export default class IndexAmbiental extends React.Component{
 	}
 	render(){
 		return(
-			<div style={{display:'flex',height:'100%','flexDirection':'column'}}>
+			<div className="tematica-home">
 				<CardHeader
 						textStyle={{paddingRight:0}}
 						style={{backgroundColor: '#006064'}}
@@ -35,7 +35,7 @@ export default class IndexAmbiental extends React.Component{
 						/>
 
 	
-				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
+				<div className="col-md-12" className="tematica-home-container">
 					<div className="feature-box feature-box-style-2">
 						<div className="feature-box-icon">
 							<i className="fa fa-thermometer-full"></i>
