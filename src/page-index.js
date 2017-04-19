@@ -7,7 +7,7 @@ service.getAll({
 	draw:1,
 	start:0,
 	length:10
-},(error,data)=>{
+}, (error, data)=>{
 
 	var html = tpl.render({ items:  data });
 	document.querySelector('#noticias-container').innerHTML = html;
@@ -16,9 +16,9 @@ service.getAll({
 			opts;
 
 		var pluginOptions = $this.data('plugin-options');
-		if (pluginOptions)
+		if (pluginOptions) {
 			opts = pluginOptions;
-
+		}
 		$this.themePluginCarousel(opts);
 	});
 });
