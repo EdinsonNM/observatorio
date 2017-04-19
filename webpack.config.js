@@ -45,11 +45,7 @@ module.exports = {
 			},
 			{
                 test: /\.(njk|nunjucks)$/,
-                loader: 'nunjucks-loader',
-				query: {
-					root: __dirname + '/src/tpl',
-                    quiet: true
-                }
+                loader: 'nunjucks-loader'
             },
 
 		]

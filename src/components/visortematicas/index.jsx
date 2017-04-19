@@ -1,7 +1,7 @@
 import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import BaseMaps from './libs/BaseMaps';
+import BaseMaps from '../../libs/BaseMaps';
 import Paper from 'material-ui/Paper';
 import AutoComplete from 'material-ui/AutoComplete';
 import IconButton from 'material-ui/IconButton';
@@ -19,8 +19,8 @@ import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
-import TematicaService from './services/TematicaService';
-import MapaService from './services/MapaService';
+import TematicaService from '../../services/TematicaService';
+import MapaService from '../../services/MapaService';
 import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 import _ from 'underscore';
@@ -50,85 +50,60 @@ export default class Index extends React.Component{
 		}
     }
 	loadData(){
-		tematicaService.getAll({},(error,tematicas)=>{
+		let tematicaId=this.props.params.tematica;
+		tematicaService.get(tematicaId,(error,tematica)=>{
 			mapaService.getAll({},(error,layers)=>{
-				this.setState({tematicas:tematicas, mapas:layers},()=>{
+				this.setState({tematica:tematica, mapas:layers},()=>{
 					this.AddAllLayers();
-				});			
+				},tematica.id);			
 			});
 			
-		},true);
-	}
-	loadMapas(tematicaId){
-		mapaService.getAll({},(error,data)=>{
-			
-			let layers=[];
-			data.forEach((item)=>{
-				item.visible = item.visible || false;
-				layers.push(new ol.layer.Tile({
-					title: item.title,
-					visible: item.visible,
-					transparent: true,
-					source: new ol.source.TileWMS({
-						url: item.url,
-						params: {'LAYERS': item.layer},
-						serverType: item.serverType
-					})
-				}));
-			});
-			let group = new ol.layer.Group({
-				type:'services',
-				title: 'Servicios WMS',
-				layers: layers,
-			});
-			if(this.state.group) this.map.RemoveLayer(this.state.group)
-			this.map.AddLayer(group);
-			var mylayers = BaseMaps.getLayers(this.map.getMap());
-      		console.log(mylayers);
-			this.setState({mapas:data,layers:mylayers,group:group});
-		},true,tematicaId);
-	}
-	AddAllLayers(){
-		let tematicasItems=[];
-		let datasource=[];
-		this.state.tematicas.forEach((tematica,indexTematica)=>{
-			let mapas = _.findWhere(this.state.mapas, {id:tematica.id}) ;
-			if(mapas){
-				let layerItems=[];
-				Object.keys(mapas).forEach((layerId,indexLayer)=>{
-					if(layerId!='id'){
-						let item = mapas[layerId];
-						item.visible = item.visible||false;
-						layerItems.push(
-							new ol.layer.Tile({
-								title: item.title,
-								visible: item.visible,
-								transparent: true,
-								source: new ol.source.TileWMS({
-									url: item.url,
-									params: {'LAYERS': item.layer},
-									serverType: item.serverType
-								})
-							})
-						);
-						datasource.push(item.title)
-
-					}
-					
-					
-				});
-				let group = new ol.layer.Group({
-					expanded:false,
-					type:'services',
-					title: tematica.titulo,
-					subtitle:tematica.subtitulo||'',
-					layers: layerItems,
-				});
-				this.map.AddLayer(group);
-
-			}
-
 		});
+	}
+
+	AddAllLayers(){
+		let datasource=[];
+		let layerItems=[];
+		let tematica = this.state.tematica
+		let mapas = _.findWhere(this.state.mapas, {id:tematica.id}) ;
+		
+		if(mapas){
+			
+			Object.keys(mapas).forEach((layerId,indexLayer)=>{
+				if(layerId!='id'){
+					let item = mapas[layerId];
+					item.visible = item.visible||false;
+					layerItems.push(
+						new ol.layer.Tile({
+							title: item.title,
+							visible: item.visible,
+							transparent: true,
+							source: new ol.source.TileWMS({
+								url: item.url,
+								params: {'LAYERS': item.layer},
+								serverType: item.serverType
+							})
+						})
+					);
+					datasource.push(item.title)
+
+				}
+				
+				
+			});
+		
+
+		}
+		let group = new ol.layer.Group({
+			expanded:false,
+			type:'services',
+			title: tematica.titulo,
+			subtitle:tematica.subtitulo||'',
+			layers: layerItems,
+		});
+		this.map.AddLayer(group);
+
+	
 		var mylayers = BaseMaps.getLayers(this.map.getMap());
 		this.setState({layers:mylayers,tematicaSource:datasource});
 	}
@@ -229,18 +204,7 @@ export default class Index extends React.Component{
 						primaryText={item.title}  
 						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
-					tematicas.push(
-						<ListItem
-						key={group.id}
-						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
-						primaryText={group.title}
-						secondaryText={group.subtitle}
-						open={group.expanded}
-						primaryTogglesNestedList={true}
-						nestedItems={services}
-						onNestedListToggle={this.handleExpandedTematica.bind(this,group,groupIndex)}
-						/>
-					);
+					
 					break;
 				case 'basemaps':
 					group.items.map((item,index)=>{
@@ -260,26 +224,18 @@ export default class Index extends React.Component{
 			classBaseMaps+=" hidden-basemap"
 		}
 	    return (
-	    	<div className="flex layout vertical center-center center-justified" style={{height:'100%',width:'100%'}} >
+	    	<div className="flex layout horizontal center-center center-justified visor-tematica-container" style={{height:'100%',width:'100%'}} >
 
-				<div id="map-container">		
-
-				</div>
-				<Paper className={classBaseMaps}>
-
-					<BottomNavigation selectedIndex={this.state.selectedBaseMap}>
-						{basemaps}
-					</BottomNavigation>
-				</Paper>
-				<div className="searchbox-container">
+				<div className="tematica-map-container">	
+					
+					<div id="map-container"></div>
+					<div className="searchbox-container">
 					<div className="row">
-						<div className="col-md-4">
 
-						</div>
-						<div className="col-md-4">
+						<div className="col-md-12">
 							<Paper className="searchbox">
 								<AutoComplete
-								hintText="Busqueda por nombre del servicio"
+								hintText="Busqueda por servicio"
 								openOnFocus={false}
 								filter={AutoComplete.caseInsensitiveFilter}
 								dataSource={this.state.tematicaSource}
@@ -312,11 +268,21 @@ export default class Index extends React.Component{
 								</span>
 							</Paper>
 						</div>
-						<div className="col-md-4">
-							
-						</div>
+					
 					</div>
-					</div>
+					</div>	
+					<Paper className={classBaseMaps} style={{position:'absolute'}}>
+
+					<BottomNavigation selectedIndex={this.state.selectedBaseMap}>
+						{basemaps}
+					</BottomNavigation>
+				</Paper>
+				</div>
+				<div className="tematica-stats-container">	
+					{ this.props.children }
+				</div>
+				
+				
 					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={350} containerStyle={{display:'flex',flexDirection:'column'}}>
 						<AppBar
 						title="Visor de Mapas"
@@ -335,14 +301,14 @@ export default class Index extends React.Component{
 							textOverflow: 'ellipsis'
 							}}
 						subtitleColor="#FFFFFF"
-						title={tematicas.length+" temáticas registradas"}
+						title={(this.state.tematica)?this.state.tematica.titulo:''}
 						subtitle="Listado de Servicios"
 						avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
 						/>
 						<div className="services-list" style={{flex:1,overflow:'hidden',marginRight:'5px',position:'relative'}}>
 							<div id="layers" className="mCustomScrollbar" style={{flex:1,overflow:'hidden',height:'100%'}}>
 								<List>
-								{ tematicas }
+								{ services }
 								</List>
 							</div>
 						</div>

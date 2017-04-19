@@ -10,18 +10,18 @@
 }
 .searchbox > div > div > input{
   padding-left: 40px!important;
-  padding-right: 40px!important;
+  padding-right: 85px!important;
 }
 .searchbox > div > div > input:not(:focus){
   color:#c3c3c3;
 }
 .searchbox > div > div > div{
   padding-left: 40px!important;
-  padding-right: 40px!important;
+  padding-right: 85px!important;
 }
 .searchbox > div > div > div  hr{
   margin-left: -40px!important;
-  margin-right: -40px!important;
+  margin-right: -85px!important;
   bottom: 0!important;
 }
 .searchbox-icon{
@@ -29,7 +29,6 @@
   position: absolute!important;
   top: 0;
   right: 0;
-  width: 32px;
   height: 48px;
   align-items: center;
   justify-content: center;
@@ -48,4 +47,17 @@
   justify-content: center;
   align-content: center;
   display: flex!important
+}
+
+.basemap-container{
+  width:100%;
+  position:fixed;
+  bottom:0;
+}
+.basemap-container.hidden-basemap{
+  bottom: -60px;
+}
+
+.mCSB_inside > .mCSB_container {
+    margin-right: 0!important;
 }

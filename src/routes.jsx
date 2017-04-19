@@ -13,11 +13,26 @@ import Tematicas from './components/tematicas/tematicas';
 import Tematica from './components/tematicas/tematica';
 import Servicios from './components/servicios/servicios';
 import Servicio from './components/servicios/servicio';
-
+import VisorTematica from './components/visortematicas';
+import VisorTematicaHome from './components/visortematicas/home';
+import Precipitaciones from './components/visortematicas/ambiental/precipitaciones';
 export default (
 	
 	<Route path="/" component={App} >
 		<IndexRoute component={Index}/>
+		<Route
+			path="/tematica/:tematica"
+			component={ VisorTematica }
+		>
+			<Route
+				path="stats"
+				component={ VisorTematicaHome }
+			/>
+			<Route
+				path="precipitaciones"
+				component={ Precipitaciones }
+			/>
+		</Route>
 		<Route
 			path="/login"
 			component={ Login }

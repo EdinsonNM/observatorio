@@ -1,6 +1,7 @@
 import Model from './Model';
 const attrs = [
     "titulo",
+	"subtitulo",
     "nombre",
     "descripcion",
 	"detalles"

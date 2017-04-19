@@ -10,6 +10,7 @@ export default  class BaseMaps{
           layers:
               [
               new ol.layer.Group({
+				  type:'basemaps',
                   title: 'Mapas Base',
                   layers: [
                       new ol.layer.Tile({
@@ -80,9 +81,15 @@ export default  class BaseMaps{
               var viewResolution =  (self._view.getResolution());
               var url = wmsSource.getGetFeatureInfoUrl(
                   evt.coordinate, viewResolution, 'EPSG:3857',
-                  {'INFO_FORMAT': 'text/html'});
+                  {'INFO_FORMAT': 'text/plain'});
               if (url) {
-                  next(null,url)
+				  $.get(url,{
+					  	jsonp: "callback",
+						dataType: "jsonp",
+				  },(data)=>{
+					next(null,data);
+				  })
+                  
               }else{
                     next("no data");
               } 
@@ -138,7 +145,9 @@ export default  class BaseMaps{
 
       var data=  {
         title: lyr.get('title'),
-        type: lyr.get('type')||'custom'
+		subtitle: lyr.get('subtitle')||'',
+        type: lyr.get('type')||'custom',
+		expanded: lyr.get('expanded')||false
       }
      
       if (lyr.getLayers && !lyr.get('combine')) {
