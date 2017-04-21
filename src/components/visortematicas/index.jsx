@@ -53,6 +53,7 @@ export default class Index extends React.Component{
 
 	loadData(){
 		let tematicaId=this.props.params.tematica;
+
 		tematicaService.get(tematicaId,(error,tematica)=>{
 			mapaService.getAll({},(error,layers)=>{
 				this.setState({
@@ -72,7 +73,6 @@ export default class Index extends React.Component{
 		let mapas = _.findWhere(this.state.mapas, {id:tematica.id});
 
 		if (mapas) {
-
 			Object.keys(mapas).forEach((layerId,indexLayer)=>{
 				if (layerId!='id') {
 					let item = mapas[layerId];
@@ -92,11 +92,9 @@ export default class Index extends React.Component{
 					);
 					datasource.push(item.title);
 				}
-
 			});
-
-
 		}
+
 		let group = new ol.layer.Group({
 			expanded: false,
 			type: 'services',
@@ -104,6 +102,7 @@ export default class Index extends React.Component{
 			subtitle: tematica.subtitulo||'',
 			layers: layerItems,
 		});
+
 		this.map.AddLayer(group);
 
 		let mylayers = BaseMaps.getLayers(this.map.getMap());

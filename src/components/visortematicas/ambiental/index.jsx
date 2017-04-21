@@ -19,22 +19,22 @@ export default class IndexAmbiental extends React.Component{
 		return(
 			<div className="tematica-home">
 				<CardHeader
-						textStyle={{paddingRight:0}}
-						style={{backgroundColor: '#006064'}}
-						titleColor="#FFFFFF"
-						titleStyle={{
-							width: '200px',
-							whiteSpace: 'nowrap',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis'
-							}}
-						subtitleColor="#FFFFFF"
-						title="Temática Ambiental"
-						subtitle="Listados de estadísticas"
-						avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
-						/>
+					textStyle={{paddingRight:0}}
+					style={{backgroundColor: '#006064'}}
+					titleColor="#FFFFFF"
+					titleStyle={{
+						width: '200px',
+						whiteSpace: 'nowrap',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+						}}
+					subtitleColor="#FFFFFF"
+					title="Temática Ambiental"
+					subtitle="Listados de estadísticas"
+					avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
+				/>
 
-	
+
 				<div className="col-md-12" className="tematica-home-container">
 					<div className="feature-box feature-box-style-2">
 						<div className="feature-box-icon">
