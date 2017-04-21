@@ -85,7 +85,19 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
     							fullWidth
-    							floatingLabelText="Frequency"
+    							floatingLabelText="Departamento:"
+    							value={this.state.value}
+    							onChange={this.handleChange}
+							>
+    							<MenuItem value={0} primaryText="Selecciona" />
+    							<MenuItem value={1} primaryText="Lambayeque" />
+    							<MenuItem value={2} primaryText="Cajamarca" />
+							</SelectField>
+						</div>
+						<div className="col-md-6">
+							<SelectField
+    							fullWidth
+    							floatingLabelText="Provincia: "
     							value={this.state.value}
     							onChange={this.handleChange}
 							>
@@ -99,7 +111,7 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
     							fullWidth
-    							floatingLabelText="Frequency"
+    							floatingLabelText="Distrito: "
     							value={this.state.value}
     							onChange={this.handleChange}
 							>
@@ -113,7 +125,7 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
     							fullWidth
-    							floatingLabelText="Frequency"
+    							floatingLabelText="Estación: "
     							value={this.state.value}
     							onChange={this.handleChange}
 							>
@@ -127,21 +139,7 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
     							fullWidth
-    							floatingLabelText="Frequency"
-    							value={this.state.value}
-    							onChange={this.handleChange}
-							>
-    							<MenuItem value={1} primaryText="Never" />
-    							<MenuItem value={2} primaryText="Every Night" />
-    							<MenuItem value={3} primaryText="Weeknights" />
-    							<MenuItem value={4} primaryText="Weekends" />
-    							<MenuItem value={5} primaryText="Weekly" />
-							</SelectField>
-						</div>
-						<div className="col-md-6">
-							<SelectField
-    							fullWidth
-    							floatingLabelText="Frequency"
+    							floatingLabelText="Variable: "
     							value={this.state.value}
     							onChange={this.handleChange}
 							>
@@ -155,7 +153,7 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
 								fullWidth
-								floatingLabelText="Frequency"
+								floatingLabelText="Año: "
 								value={this.state.value}
 								onChange={this.handleChange}
 							>
@@ -169,7 +167,7 @@ export default class Precipitaciones extends React.Component{
 						<div className="col-md-6">
 							<SelectField
     							fullWidth
-    							floatingLabelText="Frequency"
+    							floatingLabelText="Mes"
     							value={this.state.value}
     							onChange={this.handleChange}
 							>
@@ -178,20 +176,6 @@ export default class Precipitaciones extends React.Component{
     							<MenuItem value={3} primaryText="Weeknights" />
     							<MenuItem value={4} primaryText="Weekends" />
     							<MenuItem value={5} primaryText="Weekly" />
-							</SelectField>
-						</div>
-						<div className="col-md-6">
-							<SelectField
-								fullWidth
-								floatingLabelText="Frequency"
-								value={this.state.value}
-								onChange={this.handleChange}
-							>
-								<MenuItem value={1} primaryText="Never" />
-								<MenuItem value={2} primaryText="Every Night" />
-								<MenuItem value={3} primaryText="Weeknights" />
-								<MenuItem value={4} primaryText="Weekends" />
-								<MenuItem value={5} primaryText="Weekly" />
 							</SelectField>
 						</div>
 					</div>
