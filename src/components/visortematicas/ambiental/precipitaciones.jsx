@@ -71,16 +71,10 @@ export default class Precipitaciones extends React.Component{
         this.setState({tabIndex: value});
     }
 
-    render(){
-        const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
-        </IconButton>;
-        const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
+    buildTableRows (data) {
+    	let tableRows = [];
 
-        let tableRows = [];
-        let data = this.state.data;
-
-        for (let idx=1; idx<data.length; idx++) {
+    	for (let idx=1; idx<data.length; idx++) {
             if (idx % 2 === 0) {
                 tableRows.push(
                     <TableRow key={`tr-${idx}`}>
@@ -92,6 +86,16 @@ export default class Precipitaciones extends React.Component{
                 );
             }
         }
+
+        return tableRows;
+    }
+
+    render (){
+        const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
+            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+        </IconButton>;
+        const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
+        let tableRows = buildTableRows(this.state.data);
 
         return(
 			<div className="tematica-home">
