@@ -58,7 +58,7 @@ export default class IndexAmbiental extends React.Component{
 							<p className="tall">
 								Este servicio proporciona información de los investigadores registrados en El Directorio Nacional de Investigadores e Innovadores DINA.
 								<br/>
-								<a href="visor.htm">Mostrar gráfica</a>
+								<a href="#/tematica/-KhDkIXgXKSWQpblXLLk/investigadores">Mostrar gráfica</a>
 							</p>
 						</div>
 					</div>
@@ -71,7 +71,7 @@ export default class IndexAmbiental extends React.Component{
 							<p className="tall">
 								Este servicio presenta Denuncias Ambientales a través del Servicio Nacional de Denuncias Ambientales - SINADA, unidad especializada del Organismo de Evaluación y Fiscalización Ambiental - OEFA.
 								<br/>
-								<a href="visor.htm">Mostrar gráfica</a>
+								<a href="#/tematica/-KhDkIXgXKSWQpblXLLk/denuncias">Mostrar gráfica</a>
 							</p>
 						</div>
 					</div>
@@ -84,7 +84,7 @@ export default class IndexAmbiental extends React.Component{
 							<p className="tall">
 								Servicio de consulta en línea de legajos sobre Delitos Ambientales
 								<br/>
-								<a href="visor.htm">Mostrar gráfica</a>
+								<a href="#/tematica/-KhDkIXgXKSWQpblXLLk/legajos">Mostrar gráfica</a>
 							</p>
 						</div>
 					</div>

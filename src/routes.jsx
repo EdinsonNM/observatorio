@@ -16,21 +16,37 @@ import Servicio from './components/servicios/servicio';
 import VisorTematica from './components/visortematicas';
 import VisorTematicaHome from './components/visortematicas/home';
 import Precipitaciones from './components/visortematicas/ambiental/precipitaciones';
+import Investigadores from './components/visortematicas/ambiental/investigadores';
+import Denuncias from './components/visortematicas/ambiental/denuncias';
+import Legajos from './components/visortematicas/ambiental/legajos';
+
 export default (
-	
+
 	<Route path="/" component={App} >
 		<IndexRoute component={Index}/>
 		<Route
 			path="/tematica/:tematica"
-			component={ VisorTematica }
+			component={VisorTematica}
 		>
 			<Route
 				path="stats"
-				component={ VisorTematicaHome }
+				component={VisorTematicaHome}
 			/>
 			<Route
 				path="precipitaciones"
-				component={ Precipitaciones }
+				component={Precipitaciones}
+			/>
+			<Route
+				path="investigadores"
+				component={Investigadores}
+			/>
+			<Route
+				path="denuncias"
+				component={Denuncias}
+			/>
+			<Route
+				path="legajos"
+				component={Legajos}
 			/>
 		</Route>
 		<Route
@@ -38,7 +54,7 @@ export default (
 			component={ Login }
 			onEnter={ RouteUtil.validateAuth }
 		/>
-	
+
 		<Route
 			path="/logout"
 			component={ Index }
@@ -49,7 +65,7 @@ export default (
 			component={ Login }
 			onEnter={ RouteUtil.setTokenUrl }
 		/>
-	
+
 		<Route
 			path="/dashboard"
 			component={Admin}
@@ -84,7 +100,7 @@ export default (
 				path="servicios/:id/edit"
 				component={ Servicio }
 			/>
-			
+
 		</Route>
 		<Route path="*" component={NotFound} />
 	</Route>

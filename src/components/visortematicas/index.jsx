@@ -222,7 +222,7 @@ export default class Index extends React.Component{
 					group.items.map((item, index)=>{
 						services.push(
 							<ListItem
-								key={item.id}
+								key={`li-${index}`}
 								primaryText={item.title}
 								rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>}
 							/>
@@ -234,6 +234,7 @@ export default class Index extends React.Component{
 					group.items.map((item, index)=>{
 						basemaps.push(
 							<BottomNavigationItem
+								key={`bni-${index}`}
 								label={item.title}
 								icon={favoritesIcon}
 								onTouchTap={() => this.selectBaseMap(item,index,group.items)}

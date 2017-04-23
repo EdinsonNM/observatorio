@@ -28,11 +28,11 @@ const style={
 };
 
 
-export default class Precipitaciones extends React.Component{
+export default class Denuncias extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
-			title: 'Precipitación y Temperatura',
+            title: 'Denuncias Ambientales',
             tabIndex: 0,
 			data:[
                 ['unidad', 'Por Dia'],
@@ -93,11 +93,9 @@ export default class Precipitaciones extends React.Component{
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon className="material-icons">arrow_back</FontIcon>
+            <FontIcon  className="material-icons" >arrow_back</FontIcon>
         </IconButton>;
-        const buttonFilter = <IconButton >
-        	<FontIcon className="material-icons">filter_list</FontIcon>
-        </IconButton>;
+        const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
 
         return(

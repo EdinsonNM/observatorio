@@ -9,41 +9,48 @@ import Auth from './services/Auth';
 import nativeToast from 'native-toast'
 import UserService from './services/Users';
 import TematicaService from './services/TematicaService';
+import {cyan500, cyan800, amber500} from 'material-ui/styles/colors';
 
-var initUI = function(){
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: cyan800,
+        primary2Color: cyan500,
+        accent1Color: amber500
+    }
+});
+const initUI = function () {
     const route = (
-        <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <MuiThemeProvider muiTheme={muiTheme}>
             <Router history={hashHistory}>{routes}</Router>
         </MuiThemeProvider>
     );
     ReactDOM.render(route,document.querySelector("#app"));
     console.log(' %c STOP: %c This browser feature is intended for developers.!', 'color: red; font-weight: bold; font-size:20px;','color:green;font-size:20px;');
 }
-Auth.init((error,user)=>{
-    if(error){
-		initUI();  
+
+Auth.init((error,user) => {
+    if (error) {
+		initUI();
     }
     else{
         nativeToast({
             message: 'Bienvenido, estamos optimizando tu experiencia!',
             position: 'top',
             timeout: 5000
-          });
-        Auth.me((error,data)=>{
+        });
+        Auth.me((error, data) => {
             UserService.setMe(data);
-			if(UserService.me().isAnonymous){
+			if (UserService.me().isAnonymous) {
 				initUI()
-			}else{
+			} else {
 				let tematicaService = new TematicaService();
-				tematicaService.getAll({},(error,data)=>{
-					initUI();
-				},true);
-			}
-           
-            
-        })
-    }
-    
 
+                tematicaService.getAll({}, (error, data) => {
+					initUI();
+				}, true);
+			}
+        });
+    }
 });
+
 //injectTapEventPlugin();
