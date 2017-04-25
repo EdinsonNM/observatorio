@@ -278,7 +278,7 @@ export default class Precipitaciones extends React.Component{
                                 </SelectField>
                             </div>
                             <div className="col-md-12">
-                                <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} />
+                                <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
                                 <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
                             </div>
                         </div>
