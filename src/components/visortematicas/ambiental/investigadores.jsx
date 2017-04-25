@@ -102,39 +102,37 @@ export default class Investigadores extends React.Component{
 				/>
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                                    <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                                        <div className={'my-pretty-chart-container'}>
-                                            <Chart
-                                                chartType="BarChart"
-                                                data={this.state.data}
-                                                options={{}}
-                                                graph_id="ScatterChart"
-                                                width="100%"
-                                                height="500px"
-                                                legend_toggle
-                                            />
-                                        </div>
-                                    </Tab>
-                                    <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                                        <div>
-                                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                                    <TableRow>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody displayRowCheckbox={false}>
-                                                    {tableRows}
-                                                </TableBody>
-                                            </Table>
-                                        </div>
-                                    </Tab>
-                                </Tabs>
-
-
+                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="BarChart"
+                                    data={this.state.data}
+                                    options={{}}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="500px"
+                                    legend_toggle
+                                />
+                            </div>
+                        </Tab>
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                            <TableHeaderColumn>Dia</TableHeaderColumn>
+                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                            <TableHeaderColumn>Dia</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
 				</div>
 			</div>
 		);
