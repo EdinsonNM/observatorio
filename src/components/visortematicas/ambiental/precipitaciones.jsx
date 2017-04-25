@@ -21,9 +21,13 @@ import {CardHeader} from 'material-ui/Card';
 
 import SelectField from 'material-ui/SelectField';
 
+import DepartamentoService from '../../../services/DepartamentoService';
+import ProvinciaService from '../../../services/ProvinciaService';
+import DistritoService from '../../../services/DistritoService';
+
 const style={
   appbar: {
-    backgroundColor:'var(--paper-cyan-900)'
+    backgroundColor:'white'
   }
 };
 
@@ -33,9 +37,7 @@ export default class Precipitaciones extends React.Component{
 		super(props);
 		this.state={
 			title: 'Precipitación y Temperatura',
-            departamentos: [],
-            provincias: [],
-            distritos: [],
+
             anios: [],
             meses: [],
             variables: [],
@@ -66,18 +68,12 @@ export default class Precipitaciones extends React.Component{
 
     }
 
-    handleChangeSelect(key, event) {
-		this.setState({[key]: event.target.value});
-	}
+    handleChangeSelect(key, event, index, value){
+        let state = this.state;
+        state[key] = value;
+        this.setState(state);
+    }
 
-    handleChangeSelect2(key, event, index, value) {
-		let state = this.state;
-		state[key] = value;
-		this.setState(state);
-		if (key == 'tematica') {
-			this.loadData(value);
-		}
-	}
 
     handleChangeTab (value) {
         this.setState({tabIndex: value});
@@ -103,8 +99,9 @@ export default class Precipitaciones extends React.Component{
     }
 
     render (){
+        let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon className="material-icons">arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#000000">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <IconButton >
         	<FontIcon className="material-icons">filter_list</FontIcon>
@@ -118,20 +115,54 @@ export default class Precipitaciones extends React.Component{
     				iconElementLeft={iconButton}
     				style={style.appbar}
                     iconElementRight={buttonFilter}
+                    titleStyle={{color:'black'}}
 				/>
+
                 <div className="col-md-12" className="tematica-home-container">
+                    <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
+                                    <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                                        <div className={'my-pretty-chart-container'}>
+                                            <Chart
+                                                chartType="LineChart"
+                                                data={this.state.data}
+                                                options={{}}
+                                                graph_id="ScatterChart"
+                                                width="100%"
+                                                height="400px"
+                                                legend_toggle
+                                            />
+                                        </div>
+                                    </Tab>
+                                    <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                                        <div>
+                                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                                    <TableRow>
+                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
+                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
+                                                    </TableRow>
+                                                </TableHeader>
+                                                <TableBody displayRowCheckbox={false}>
+                                                    {tableRows}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    </Tab>
+                                </Tabs>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-4">
                                 <SelectField
                                     fullWidth
                                     floatingLabelText="Departamento:"
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
+                                    value={this.state.departamento}
+                                    onChange={(event, index, value)=>{this.handleChangeSelect('departamento',event, index, value)}}
                                 >
                                     <MenuItem value={0} primaryText="Seleccionar" />
                                     {
-                                        departamentos.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        DepartamentoService.getAll({}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                     }
                                 </SelectField>
                             </div>
@@ -139,12 +170,12 @@ export default class Precipitaciones extends React.Component{
                                 <SelectField
                                     fullWidth
                                     floatingLabelText="Provincia: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
+                                    value={this.state.provincia}
+                                    onChange={(event, index, value)=>{this.handleChangeSelect('provincia',event, index, value)}}
                                 >
                                     <MenuItem value={0} primaryText="Seleccionar" />
                                     {
-                                        provincias.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        ProvinciaService.getAll(this.state.departamento,{}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                     }
                                 </SelectField>
                             </div>
@@ -152,12 +183,12 @@ export default class Precipitaciones extends React.Component{
                                 <SelectField
                                     fullWidth
                                     floatingLabelText="Distrito: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
+                                    value={this.state.distrito}
+                                    onChange={(event, index, value)=>{this.handleChangeSelect('distrito',event, index, value)}}
                                 >
                                     <MenuItem value={0} primaryText="Seleccionar" />
                                     {
-                                        distritos.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        DistritoService.getAll(this.state.provincia,{}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                     }
                                 </SelectField>
                             </div>
@@ -219,38 +250,7 @@ export default class Precipitaciones extends React.Component{
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-12">
-                                <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                                    <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                                        <div className={'my-pretty-chart-container'}>
-                                            <Chart
-                                                chartType="LineChart"
-                                                data={this.state.data}
-                                                options={{}}
-                                                graph_id="ScatterChart"
-                                                width="100%"
-                                                height="400px"
-                                                legend_toggle
-                                            />
-                                        </div>
-                                    </Tab>
-                                    <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                                        <div>
-                                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                                    <TableRow>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody displayRowCheckbox={false}>
-                                                    {tableRows}
-                                                </TableBody>
-                                            </Table>
-                                        </div>
-                                    </Tab>
-                                </Tabs>
+
                             </div>
                         </div>
                     </div>

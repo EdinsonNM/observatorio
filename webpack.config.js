@@ -19,6 +19,7 @@ for (var i = 0; i < templates.length; i++) {
 }
 module.exports = {
 	entry: {
+    tpl: './src/tpl.js',
 		app: './src/main.jsx',
 		pageIndex: './src/page-index.js',
 	},
@@ -64,7 +65,7 @@ module.exports = {
 		new NunjucksWebpackPlugin({
 			template: tpls
 		}),
-		
+
 		new CopyWebpackPlugin([
 			{from: 'public/visor', to: 'visor'},
 			{from: 'public/web', to: 'web'},
@@ -76,7 +77,7 @@ module.exports = {
                 from: '**/*',
                 to: '/'
             },
-            
+
 		]),
 
 	],
