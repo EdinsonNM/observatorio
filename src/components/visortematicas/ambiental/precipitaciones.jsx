@@ -33,6 +33,13 @@ export default class Precipitaciones extends React.Component{
 		super(props);
 		this.state={
 			title: 'Precipitación y Temperatura',
+            departamentos: [],
+            provincias: [],
+            distritos: [],
+            anios: [],
+            meses: [],
+            variables: [],
+            estaciones: [],
             tabIndex: 0,
 			data:[
                 ['unidad', 'Por Dia'],
@@ -54,6 +61,10 @@ export default class Precipitaciones extends React.Component{
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
 	}
+
+    componentDidMount() {
+
+    }
 
     handleChangeSelect(key, event) {
 		this.setState({[key]: event.target.value});
@@ -118,9 +129,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={0} primaryText="Selecciona" />
-                                    <MenuItem value={1} primaryText="Lambayeque" />
-                                    <MenuItem value={2} primaryText="Cajamarca" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        departamentos.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -130,11 +142,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        provincias.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -144,11 +155,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        distritos.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -158,11 +168,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        estaciones.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -172,11 +181,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        variables.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -186,11 +194,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        anios.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                             <div className="col-md-4">
@@ -200,11 +207,10 @@ export default class Precipitaciones extends React.Component{
                                     value={this.state.value}
                                     onChange={this.handleChangeSelect}
                                 >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {
+                                        meses.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                    }
                                 </SelectField>
                             </div>
                         </div>
