@@ -36,7 +36,7 @@
 	.tematica-stats-container{
 		width: 100%;
 	}
-	
+
 }
 
 /* Feature Box */
@@ -176,4 +176,11 @@ color: #52bd7f;
 }
 .fa{
   text-align: center;
+}
+
+.text-filter{
+  font-size: 13px;
+  color: #c2c2c2;
+  padding-left: 20px;
+  padding-top: 20px;
 }

@@ -12,22 +12,32 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack,pink500,teal500,cyan800,cyan100} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Subheader from 'material-ui/Subheader';
 // import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import SelectField from 'material-ui/SelectField';
 
 import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
+import Chip from 'material-ui/Chip';
 
 const style={
   appbar: {
     backgroundColor:'white'
+  },
+   chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    padding:10
   }
 };
 
@@ -37,7 +47,7 @@ export default class Precipitaciones extends React.Component{
 		super(props);
 		this.state={
 			title: 'Precipitación y Temperatura',
-
+            showFilter:false,
             anios: [],
             meses: [],
             variables: [],
@@ -63,6 +73,9 @@ export default class Precipitaciones extends React.Component{
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
 	}
+    toggleFilter(){
+        this.setState({showFilter:!this.state.showFilter});
+    }
 
     componentDidMount() {
 
@@ -101,11 +114,9 @@ export default class Precipitaciones extends React.Component{
     render (){
         let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon className="material-icons" color="#000000">arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
-        const buttonFilter = <IconButton >
-        	<FontIcon className="material-icons">filter_list</FontIcon>
-        </IconButton>;
+
         let tableRows = this.buildTableRows(this.state.data);
 
         return(
@@ -114,13 +125,32 @@ export default class Precipitaciones extends React.Component{
     				title={this.state.title}
     				iconElementLeft={iconButton}
     				style={style.appbar}
-                    iconElementRight={buttonFilter}
                     titleStyle={{color:'black'}}
 				/>
 
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                                     <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                                        <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
+
+                                        {
+                                            (!this.state.showFilter)?
+                                            <div className="text-filter" style={style.wrapper}>
+
+                                                <Chip  style={style.chip}>Departamento</Chip>
+                                                <Chip  style={style.chip}>Provincia</Chip>
+                                                <Chip  style={style.chip}>Distrito</Chip>
+                                                <Chip  style={style.chip}>Diaria</Chip>
+                                                <span>
+                                                    <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
+                                                        <FontIcon className="material-icons" color="white">filter_list</FontIcon>
+                                                    </FloatingActionButton>
+                                                </span>
+
+                                            </div>
+                                            :null
+                                        }
+
                                         <div className={'my-pretty-chart-container'}>
                                             <Chart
                                                 chartType="LineChart"
@@ -133,6 +163,7 @@ export default class Precipitaciones extends React.Component{
                                             />
                                         </div>
                                     </Tab>
+
                                     <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
                                         <div>
                                             <Table fixedHeader={true} selectable={false} multiselectable={false}>
@@ -151,7 +182,9 @@ export default class Precipitaciones extends React.Component{
                                         </div>
                                     </Tab>
                                 </Tabs>
-                    <div className="container-fluid">
+                     {
+                         (this.state.showFilter)?
+                          <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-4">
                                 <SelectField
@@ -244,8 +277,15 @@ export default class Precipitaciones extends React.Component{
                                     }
                                 </SelectField>
                             </div>
+                            <div className="col-md-12">
+                                <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} />
+                                <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
+                            </div>
                         </div>
                     </div>
+                    :
+                    null
+                     }
 
                     <div className="container-fluid">
                         <div className="row">
