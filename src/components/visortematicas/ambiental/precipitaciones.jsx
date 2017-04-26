@@ -16,23 +16,21 @@ import {grey400, darkBlack, lightBlack,pink500,teal500,cyan800,cyan100} from 'ma
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Subheader from 'material-ui/Subheader';
-// import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-
 import SelectField from 'material-ui/SelectField';
+import Chip from 'material-ui/Chip';
 
 import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
-import Chip from 'material-ui/Chip';
 
 const style={
   appbar: {
     backgroundColor:'white'
   },
-   chip: {
-    margin: 4,
+  chip: {
+      margin: 4,
   },
   wrapper: {
     display: 'flex',
@@ -48,6 +46,9 @@ export default class Precipitaciones extends React.Component{
 		this.state={
 			title: 'Precipitación y Temperatura',
             showFilter:false,
+            departamentos: [],
+            provincias: [],
+            distritos: [],
             anios: [],
             meses: [],
             variables: [],
@@ -78,13 +79,54 @@ export default class Precipitaciones extends React.Component{
     }
 
     componentDidMount() {
-
+        let departamentos = DepartamentoService.getAll({});
+        this.setState({departamentos});
     }
 
     handleChangeSelect(key, event, index, value){
-        let state = this.state;
-        state[key] = value;
-        this.setState(state);
+        switch (key) {
+            case 'departamento':
+                let provincias = ProvinciaService.getAll(value, {});
+
+                this.setState({
+                    [key]: value,
+                    provincias
+                });
+                break;
+            case 'provincia':
+                let distritos = DistritoService.getAll(value,{});
+
+                this.setState({
+                    [key]: value,
+                    distritos
+                });
+                break;
+             case 'distrito':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'estacion':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'variable':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'anio':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'mes':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+        }
     }
 
 
@@ -111,13 +153,54 @@ export default class Precipitaciones extends React.Component{
         return tableRows;
     }
 
+    buildSelectOptions (type) {
+        let options = [];
+
+        switch (type) {
+            case "departamentos":
+                options = this.state.departamentos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                })
+                break;
+            case "provincias":
+                options = this.state.provincias.map((obj, idx) => {
+                    return <MenuItem key={`mi-prov-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                });
+                break;
+            case 'distritos':
+                options = this.state.distritos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dist-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                });
+                break;
+        }
+
+        return options;
+    }
+
     render (){
         let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
-
         let tableRows = this.buildTableRows(this.state.data);
+
+        let departamento_nombre = '';
+        if (this.state.departamento) {
+        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.id_ubigeo);
+        	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
+        }
+
+        let provincia_nombre = '';
+        if (this.state.provincia) {
+        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.id_ubigeo);
+        	provincia_nombre = obj_provincia ? obj_provincia.nombre_ubigeo : '';
+        }
+
+        let distrito_nombre = '';
+        if (this.state.distrito) {
+        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.id_ubigeo);
+        	distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
+        }
 
         return(
 			<div className="tematica-home">
@@ -130,162 +213,158 @@ export default class Precipitaciones extends React.Component{
 
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                                    <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                                        <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
+                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                            <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
 
+                            {
+                                (!this.state.showFilter)?
+                                <div className="text-filter" style={style.wrapper}>
+
+                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
+                                    {this.state.provincia ? <Chip style={style.chip}>{provincia_nombre}</Chip> : null}
+                                    {this.state.distrito ? <Chip style={style.chip}>{distrito_nombre}</Chip> : null}
+                                    {this.state.estacion ? <Chip style={style.chip}>{this.state.estacion}</Chip> : null}
+                                    {this.state.anio ? <Chip style={style.chip}>{this.state.anio}</Chip> : null}
+                                    {this.state.mes ? <Chip style={style.chip}>{this.state.mes}</Chip> : null}
+
+                                    <span>
+                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
+                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
+                                        </FloatingActionButton>
+                                    </span>
+
+                                </div>
+                                :null
+                            }
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.state.data}
+                                    options={{}}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
+                        </Tab>
+
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                            <TableHeaderColumn>Dia</TableHeaderColumn>
+                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                            <TableHeaderColumn>Dia</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
+                    {
+                        this.state.showFilter
+                        ? <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Provincia: "
+                                        value={this.state.provincia}
+                                        onChange={this.handleChangeSelect.bind(this, 'provincia')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('provincias')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Distrito: "
+                                        value={this.state.distrito}
+                                        onChange={this.handleChangeSelect.bind(this, 'distrito')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('distritos')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Estación: "
+                                        value={this.state.value}
+                                        onChange={this.handleChangeSelect}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            (!this.state.showFilter)?
-                                            <div className="text-filter" style={style.wrapper}>
-
-                                                <Chip  style={style.chip}>Departamento</Chip>
-                                                <Chip  style={style.chip}>Provincia</Chip>
-                                                <Chip  style={style.chip}>Distrito</Chip>
-                                                <Chip  style={style.chip}>Diaria</Chip>
-                                                <span>
-                                                    <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                                        <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                                    </FloatingActionButton>
-                                                </span>
-
-                                            </div>
-                                            :null
+                                            estaciones.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                         }
-
-                                        <div className={'my-pretty-chart-container'}>
-                                            <Chart
-                                                chartType="LineChart"
-                                                data={this.state.data}
-                                                options={{}}
-                                                graph_id="ScatterChart"
-                                                width="100%"
-                                                height="400px"
-                                                legend_toggle
-                                            />
-                                        </div>
-                                    </Tab>
-
-                                    <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                                        <div>
-                                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                                    <TableRow>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody displayRowCheckbox={false}>
-                                                    {tableRows}
-                                                </TableBody>
-                                            </Table>
-                                        </div>
-                                    </Tab>
-                                </Tabs>
-                     {
-                         (this.state.showFilter)?
-                          <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Departamento:"
-                                    value={this.state.departamento}
-                                    onChange={(event, index, value)=>{this.handleChangeSelect('departamento',event, index, value)}}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        DepartamentoService.getAll({}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Provincia: "
-                                    value={this.state.provincia}
-                                    onChange={(event, index, value)=>{this.handleChangeSelect('provincia',event, index, value)}}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        ProvinciaService.getAll(this.state.departamento,{}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Distrito: "
-                                    value={this.state.distrito}
-                                    onChange={(event, index, value)=>{this.handleChangeSelect('distrito',event, index, value)}}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        DistritoService.getAll(this.state.provincia,{}).map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Estación: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        estaciones.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Variable: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        variables.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Año: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        anios.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Mes"
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
-                                    {
-                                        meses.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                    }
-                                </SelectField>
-                            </div>
-                            <div className="col-md-12">
-                                <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Variable: "
+                                        value={this.state.value}
+                                        onChange={this.handleChangeSelect}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {
+                                            variables.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        }
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Año: "
+                                        value={this.state.value}
+                                        onChange={this.handleChangeSelect}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {
+                                            anios.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        }
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Mes"
+                                        value={this.state.value}
+                                        onChange={this.handleChangeSelect}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {
+                                            meses.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                        }
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-12">
+                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
+                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    :
-                    null
-                     }
+                        : null
+                    }
 
                     <div className="container-fluid">
                         <div className="row">
