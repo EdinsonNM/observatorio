@@ -84,12 +84,9 @@ export default class Precipitaciones extends React.Component{
     }
 
     handleChangeSelect(key, event, index, value){
-        //let state = {...this.state};
-        //state[key] = value;
-
         switch (key) {
             case 'departamento':
-                let provincias = ProvinciaService.getAll(this.state.departamento, {});
+                let provincias = ProvinciaService.getAll(value, {});
 
                 this.setState({
                     [key]: value,
@@ -97,11 +94,36 @@ export default class Precipitaciones extends React.Component{
                 });
                 break;
             case 'provincia':
-                let distritos = DistritoService.getAll(this.state.provincia,{});
+                let distritos = DistritoService.getAll(value,{});
 
                 this.setState({
                     [key]: value,
                     distritos
+                });
+                break;
+             case 'distrito':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'estacion':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'variable':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'anio':
+             	this.setState({
+                    [key]: value
+                });
+                break;
+             case 'mes':
+             	this.setState({
+                    [key]: value
                 });
                 break;
         }
@@ -162,6 +184,24 @@ export default class Precipitaciones extends React.Component{
         </IconButton>;
         let tableRows = this.buildTableRows(this.state.data);
 
+        let departamento_nombre = '';
+        if (this.state.departamento) {
+        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.id_ubigeo);
+        	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
+        }
+
+        let provincia_nombre = '';
+        if (this.state.provincia) {
+        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.id_ubigeo);
+        	provincia_nombre = obj_provincia ? obj_provincia.nombre_ubigeo : '';
+        }
+
+        let distrito_nombre = '';
+        if (this.state.distrito) {
+        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.id_ubigeo);
+        	distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
+        }
+
         return(
 			<div className="tematica-home">
 				<AppBar
@@ -180,10 +220,13 @@ export default class Precipitaciones extends React.Component{
                                 (!this.state.showFilter)?
                                 <div className="text-filter" style={style.wrapper}>
 
-                                    <Chip style={style.chip}>Departamento</Chip>
-                                    <Chip style={style.chip}>Provincia</Chip>
-                                    <Chip style={style.chip}>Distrito</Chip>
-                                    <Chip style={style.chip}>Diaria</Chip>
+                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
+                                    {this.state.provincia ? <Chip style={style.chip}>{provincia_nombre}</Chip> : null}
+                                    {this.state.distrito ? <Chip style={style.chip}>{distrito_nombre}</Chip> : null}
+                                    {this.state.estacion ? <Chip style={style.chip}>{this.state.estacion}</Chip> : null}
+                                    {this.state.anio ? <Chip style={style.chip}>{this.state.anio}</Chip> : null}
+                                    {this.state.mes ? <Chip style={style.chip}>{this.state.mes}</Chip> : null}
+
                                     <span>
                                         <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
                                             <FontIcon className="material-icons" color="white">filter_list</FontIcon>
@@ -234,7 +277,7 @@ export default class Precipitaciones extends React.Component{
                                         fullWidth
                                         floatingLabelText="Departamento:"
                                         value={this.state.departamento}
-                                        onChange={(event, index, value)=>{this.handleChangeSelect('departamento',event, index, value)}}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('departamentos')}
@@ -245,7 +288,7 @@ export default class Precipitaciones extends React.Component{
                                         fullWidth
                                         floatingLabelText="Provincia: "
                                         value={this.state.provincia}
-                                        onChange={(event, index, value)=>{this.handleChangeSelect('provincia',event, index, value)}}
+                                        onChange={this.handleChangeSelect.bind(this, 'provincia')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('provincias')}
@@ -256,7 +299,7 @@ export default class Precipitaciones extends React.Component{
                                         fullWidth
                                         floatingLabelText="Distrito: "
                                         value={this.state.distrito}
-                                        onChange={(event, index, value)=>{this.handleChangeSelect('distrito',event, index, value)}}
+                                        onChange={this.handleChangeSelect.bind(this, 'distrito')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('distritos')}
