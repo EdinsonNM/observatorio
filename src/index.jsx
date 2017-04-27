@@ -49,7 +49,8 @@ export default class Index extends React.Component{
 			selectedBaseMap:1,
 			showbasemaps:false,
             openInfo:true,
-            urlsInfo:[]
+            urlsInfo:[],
+            openInfo:false
 		}
 	}
 	loadData(){
