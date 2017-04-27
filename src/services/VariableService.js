@@ -5,13 +5,16 @@ let SERVICIOS = [
 ];
 
 import _ from 'underscore';
+
 export default class ProvinciaService{
+
     static getAll(params){
-        let data =_.where(params) ;
+        let data =_.where(SERVICIOS, params) ;
         return data;
     }
+
     static get(id){
-        let data = _.findWhere({id:id});
+        let data = _.findWhere(SERVICIOS, {id:id});
         return data;
     }
 }
