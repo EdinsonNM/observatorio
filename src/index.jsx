@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -46,7 +47,9 @@ export default class Index extends React.Component{
 			showclear:false,
 			searchText:'',
 			selectedBaseMap:1,
-			showbasemaps:false
+			showbasemaps:false,
+            openInfo:true,
+            urlsInfo:[]
 		}
 	}
 	loadData(){
@@ -155,9 +158,10 @@ export default class Index extends React.Component{
 		//this.map.createControlMousePosition();
 		var mylayers = BaseMaps.getLayers(this.map.getMap());
 		this.setState({layers:mylayers});
-		this.map.GetInfo((error,url)=>{
+		this.map.GetInfo((error,urls)=>{
 			if(!error){
-				console.log(url);
+				console.log(urls);
+                this.setState({openInfo:!this.state.openInfo,urlsInfo:urls})
 			}
 		});
 
@@ -346,6 +350,28 @@ export default class Index extends React.Component{
 								</List>
 							</div>
 						</div>
+
+
+					</Drawer>
+
+                    <Drawer open={this.state.openInfo} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({openInfo:open})} width={500} containerStyle={{display:'flex',flexDirection:'column'}}>
+						<AppBar
+						title="Capas seleccionadas"
+						iconClassNameRight="menu"
+
+						/>
+                        <Tabs initialSelectedIndex={0}>
+                            {
+                                this.state.urlsInfo.map((url)=>{
+                                    return (<Tab icon={<FontIcon className="material-icons">layers</FontIcon>} >
+                                                <h3 className="layer-tab-title">{url.title}</h3>
+                                                <iframe src={url.url} width="100%" height="600"></iframe>
+                                            </Tab>);
+                                })
+                            }
+                        </Tabs>
+
+
 
 
 					</Drawer>

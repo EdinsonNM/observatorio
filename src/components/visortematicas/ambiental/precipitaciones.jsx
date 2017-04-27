@@ -101,31 +101,10 @@ export default class Precipitaciones extends React.Component{
                     distritos
                 });
                 break;
-             case 'distrito':
-             	this.setState({
+            default:
+                this.setState({
                     [key]: value
                 });
-                break;
-             case 'estacion':
-             	this.setState({
-                    [key]: value
-                });
-                break;
-             case 'variable':
-             	this.setState({
-                    [key]: value
-                });
-                break;
-             case 'anio':
-             	this.setState({
-                    [key]: value
-                });
-                break;
-             case 'mes':
-             	this.setState({
-                    [key]: value
-                });
-                break;
         }
     }
 
