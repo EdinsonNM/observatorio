@@ -36,7 +36,7 @@ export default  class BaseMaps{
                             key: 'epeyI2lnXZsP8VlOj5wu~pW2MHRLLmE0qvVGv3D-tvA~AlDhjDeLeqsqxFWATpjiZi4vk4AohioprrIm5afbzanKlPfFbd3V-NZ68sSYh3IZ'
                             })
                       }),
-                      
+
                     ]
               }),
               new ol.layer.Group({
@@ -58,7 +58,7 @@ export default  class BaseMaps{
 
               target: self._container,
               view:self._view
-         });  
+         });
         return this._map
   }
 
@@ -71,47 +71,42 @@ export default  class BaseMaps{
     }
 
     GetInfo(next){
-        let self=this;
-       this._map.on('click', function(evt) {
-            var layers=BaseMaps.getLayers(self._map);
-            var layer = self.getLayerSelected()
-            if(layer){
-              var wmsSource=layer.getSource();
+       this._map.on('click', (evt) =>{
+            let urls=[];
+            var layers= this.getLayersSelected();
+            if(layers.length>0){
+              layers.forEach((layer)=>{
+                let wmsSource=layer.ref.getSource();
+                let viewResolution =  (this._view.getResolution());
+                let url = wmsSource.getGetFeatureInfoUrl(evt.coordinate, viewResolution, 'EPSG:3857',{'INFO_FORMAT': 'text/html'});
+                urls.push({title:layer.title,url:url});
+              });
 
-              var viewResolution =  (self._view.getResolution());
-              var url = wmsSource.getGetFeatureInfoUrl(
-                  evt.coordinate, viewResolution, 'EPSG:3857',
-                  {'INFO_FORMAT': 'text/plain'});
-              if (url) {
-				  $.get(url,{
-					  	jsonp: "callback",
-						dataType: "jsonp",
-				  },(data)=>{
-					next(null,data);
-				  })
-                  
-              }else{
-                    next("no data");
-              } 
             }
-           
-          
+            if(urls.length>0){
+              next(null,urls);
+            }else{
+              next("No data");
+            }
+
       });
     }
 
 
-    getLayerSelected(){
-      let self=this;
-      let layerSelected=null;
-      let layers=BaseMaps.getLayers(self._map);
-      console.log(layers[0].items);
-      layers[0].items.forEach((layer)=>{
-          if(layer.visible){
-            
-              layerSelected=layer.ref;
-          }
+    getLayersSelected(){
+      let layers=BaseMaps.getLayers(this._map);
+      let layersSelected = [];
+      layers.forEach((group,indexGroup)=>{
+        if(group.type=='services'){
+          group.items.forEach((layer,index)=>{
+            if(layer.visible){
+              layersSelected.push(layer);
+            }
+          });
+        }
       });
-      return layerSelected;
+
+      return layersSelected;
     }
 
     createControlMousePosition(){
@@ -135,7 +130,7 @@ export default  class BaseMaps{
           l = lyrs[i];
           if (l.get('title')) {
               data.push(this.getLayer(l, i))
-              
+
           }
       }
       return data;
@@ -149,7 +144,7 @@ export default  class BaseMaps{
         type: lyr.get('type')||'custom',
 		expanded: lyr.get('expanded')||false
       }
-     
+
       if (lyr.getLayers && !lyr.get('combine')) {
 
           data.group = true;
@@ -164,12 +159,12 @@ export default  class BaseMaps{
                if (typeof(lyr.getSource().getUrls)=='function'){
                    data.legend =lyr.getSource().getUrls()[0] +'REQUEST=GetLegendGraphic&SERVICE=WMS&VERSION=1.0.0&STYLE=default&TRANSPARENT=true&FORMAT=image/png&layer='+lyr.getSource().getParams().LAYERS;
                     if(lyr.get('legend')){
-                      data.legend =lyr.get('legend');                      
+                      data.legend =lyr.get('legend');
                     }
                }
-            
+
           }
-         
+
 
       }
 
@@ -186,7 +181,7 @@ export default  class BaseMaps{
       }catch(e){
           next(e);
       }
-      
+
     });
      self._map.renderSync();
 
