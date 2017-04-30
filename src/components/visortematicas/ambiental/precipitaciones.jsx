@@ -24,6 +24,7 @@ import Chip from 'material-ui/Chip';
 import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
+import VariableService from '../../../services/VariableService';
 
 const style={
   appbar: {
@@ -80,7 +81,11 @@ export default class Precipitaciones extends React.Component{
 
     componentDidMount() {
         let departamentos = DepartamentoService.getAll({});
-        this.setState({departamentos});
+        let variables = VariableService.getAll({});
+        this.setState({
+        	departamentos,
+        	variables
+        });
     }
 
     handleChangeSelect(key, event, index, value){
@@ -301,12 +306,12 @@ export default class Precipitaciones extends React.Component{
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Variable: "
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
+                                        value={this.state.variable}
+                                        onChange={this.handleChangeSelect.bind(this, 'variable')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            variables.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            variables.map(obj => <MenuItem value={obj.id} primaryText={obj.nombre} />)
                                         }
                                     </SelectField>
                                 </div>
