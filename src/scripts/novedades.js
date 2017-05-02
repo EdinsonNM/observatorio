@@ -1,7 +1,7 @@
 //aqui la lógica para el archivo index.html
-import DocumentoService from '../services/DocumentoService';
-let service = new DocumentoService();
-import tpl from '../tpl/partials/documentos.njk';
+import NovedadService from '../services/NovedadService';
+let service = new NovedadService();
+import tpl from '../tpl/partials/novedades.njk';
 let documentos=[];
 let page = 0;
 let length = 10;
@@ -27,7 +27,7 @@ let getDataByPage = function(nroPage){
   let end = start + length;
   data = documentos.slice(start,end);
  	let html = tpl.render({ items:data });
-  document.querySelector('#documentos-container').innerHTML = html;
+  document.querySelector('#novedades-container').innerHTML = html;
   document.querySelector(`#page-${page}`).classList.add("active");
 
 };

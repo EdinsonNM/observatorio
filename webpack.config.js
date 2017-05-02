@@ -21,7 +21,10 @@ module.exports = {
 	entry: {
     tpl: './src/tpl.js',
 		app: './src/main.jsx',
-		pageIndex: './src/page-index.js',
+		index: './src/scripts/index.js',
+    documentos: './src/scripts/documentos.js',
+    novedades: './src/scripts/novedades.js',
+    normas: './src/scripts/normas.js'
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),

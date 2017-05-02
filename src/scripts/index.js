@@ -1,7 +1,7 @@
 //aqui la lógica para el archivo index.html
-import NovedadService from './services/NovedadService';
+import NovedadService from '../services/NovedadService';
 let service = new NovedadService();
-import tpl from './tpl/partials/last_news.njk';
+import tpl from '../tpl/partials/last_news.njk';
 
 service.getAll({
 	draw:1,

@@ -2,8 +2,8 @@ import ApiService from './ApiService';
 const serviceName = 'novedades/xml';
 import {to_json} from'xmljson';
 import moment from 'moment';
-import Novedad from '../models/Novedad';
-export default class NovedadService extends ApiService{
+import Novedad from '../models/Norma';
+export default class NormaService extends ApiService{
 
   constructor(){
     super(serviceName);
@@ -16,7 +16,7 @@ export default class NovedadService extends ApiService{
       			let items=[]
 
             for(let key in Object.keys(data.nodes.node)){
-        				let item = new Novedad(data.nodes.node[key]);
+        				let item = new Norma(data.nodes.node[key]);
         				items.push(item);
       			}
       			next(error,items)
