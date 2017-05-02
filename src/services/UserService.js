@@ -1,10 +1,11 @@
 import User from '../models/User';
+import Service from './Service';
 let userInstance;
 let selectedUser = null;
 let route="usuarios";
 let database = firebase.database();
 let originApp ="";
-export default class Users{
+export default class UserService extends Service{
   static get(uid,next){
       database.ref(`/${route}/${user.uid}`).once('value').then(function(snapshot) {
         var username = snapshot.val();
@@ -28,6 +29,6 @@ export default class Users{
 	originApp = origin;
   }
 
- 
+
 
 }

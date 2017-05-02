@@ -19,6 +19,7 @@ import Precipitaciones from './components/visortematicas/ambiental/precipitacion
 import Investigadores from './components/visortematicas/ambiental/investigadores';
 import Denuncias from './components/visortematicas/ambiental/denuncias';
 import Legajos from './components/visortematicas/ambiental/legajos';
+import Usuarios from './components/usuarios/usuarios';
 
 export default (
 
@@ -74,6 +75,10 @@ export default (
 			<Route
 				path="main"
 				component={ MainLayout }
+			/>
+            <Route
+				path="usuarios"
+				component={ Usuarios }
 			/>
 			<Route
 				path="tematicas"

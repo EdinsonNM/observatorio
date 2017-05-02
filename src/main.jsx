@@ -7,7 +7,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Auth from './services/Auth';
 import nativeToast from 'native-toast'
-import UserService from './services/Users';
+import UserService from './services/UserService';
 import TematicaService from './services/TematicaService';
 import {cyan500, cyan800, amber500} from 'material-ui/styles/colors';
 

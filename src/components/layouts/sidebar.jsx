@@ -14,7 +14,7 @@ import FontIcon from 'material-ui/FontIcon';
 import Subheader from 'material-ui/Subheader';
 
 import Auth from '../../services/Auth';
-import Users from '../../services/Users';
+import Users from '../../services/UserService';
 const style={
   appbar:{
     backgroundColor:'var(--paper-cyan-900)'
@@ -30,7 +30,7 @@ export default class Sidebar extends React.Component {
   handleDrawerToggle(){
     console.log("show/hide drawer...")
     this.setState({open: !this.state.open});
-  } 
+  }
 
   componentDidMount(){
 
@@ -39,7 +39,7 @@ export default class Sidebar extends React.Component {
     Auth.logout();
   }
   render(){
-    
+
     const iconButtonElement = (
         <IconButton
         touch={true}
@@ -71,13 +71,12 @@ export default class Sidebar extends React.Component {
             <ListItem
             leftAvatar={<Avatar src="visor/images/user00.jpg" />}
             rightIconButton={rightIconMenu}
-            primaryText={`${user.nombres} ${user.apellidos}`}  
+            primaryText={`${user.nombres} ${user.apellidos}`}
 
             />
             <Subheader>Opciones</Subheader>
             <MenuItem href="#/dashboard/main">Inicio</MenuItem>
-            <MenuItem href="#/dashboard/tematicas">Temáticas</MenuItem>
-            <MenuItem href="#/dashboard/servicios">Mapas</MenuItem>
+            <MenuItem href="#/dashboard/usuarios">Usuarios</MenuItem>
 
         </Drawer>
     );

@@ -37,7 +37,7 @@ export default class Admin extends React.Component {
   handleDrawerToggle(){
     this.refs.sidebar.handleDrawerToggle();
     //this.setState({open: !this.state.open});
-  } 
+  }
 
   componentDidMount(){
 
@@ -48,7 +48,7 @@ export default class Admin extends React.Component {
        	<AppBar
 						title="Visor de Mapas de la Cuenca Chancay-Lambayeque"
 						style={style.appbar}
-					
+
 						titleStyle={style.title}
 						onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
 						iconElementLeft={<IconButton  iconStyle={{fill:'#c6c6c6'}}><Menu/></IconButton>}

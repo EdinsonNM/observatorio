@@ -43,10 +43,10 @@ export default class Admin extends React.Component {
   onWidthChange(containerWidth, margin , cols, containerPadding){
     //console.log('onWidthChange',containerWidth, margin , cols, containerPadding)
 
-    
+
   }
   componentDidMount(){
-   
+
   }
 
     componentWillUnmount(){
@@ -55,20 +55,24 @@ export default class Admin extends React.Component {
 	 handleDrawerToggle(){
     this.refs.sidebar.handleDrawerToggle();
     //this.setState({open: !this.state.open});
-  } 
+  }
   handleChangeTematica(id){
 	  console.log(id);
 	  this.setState({tematicaId:id});
   }
 
+  showServices(){
+
+  }
+
   render(){
-    
+
     return (
-          
+
 		     <div className="window-container">
 
 				<Paper className="tematica-container" zDepth={2}>
-					
+
 					<TematicasUI onChange={this.handleChangeTematica.bind(this)}/>
 				</Paper>
 				<Paper style={{backgroundColor:'var(--paper-teal-700)'}} className="servicios-container visible-sm-inline-block visible-md-inline-block visible-lg-inline-block" zDepth={1}>
@@ -78,10 +82,10 @@ export default class Admin extends React.Component {
 						:
 						null
 					}
-					
+
 				</Paper>
 			</div>
-      
+
     );
   }
 }

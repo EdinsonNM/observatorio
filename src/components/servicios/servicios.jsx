@@ -39,14 +39,14 @@ export default class Mapas extends React.Component {
 	  data:[]
     };
   }
-  
+
   componentWillMount(){
     this.loadData();
   }
   componentDidMount(){
     this.loadData();
   }
- 
+
   componentWillReceiveProps(nextProps, nextState){
 	   this.setState({tematicaId:nextProps.tematicaId},()=>{
 		this.loadData();
@@ -61,7 +61,7 @@ export default class Mapas extends React.Component {
   }
   remove(id){
 	service.delete(id,()=>{
-		
+
 	},this.props.tematicaId)
 	this.loadData();
   }
@@ -71,7 +71,7 @@ export default class Mapas extends React.Component {
 
 
   render(){
-    
+
     const iconButtonElement = (
         <IconButton
         touch={true}
@@ -81,7 +81,7 @@ export default class Mapas extends React.Component {
         <MoreVertIcon color={grey400} />
         </IconButton>
         );
-    
+
     let items=[];
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
@@ -91,9 +91,35 @@ export default class Mapas extends React.Component {
             </IconMenu>
             );
             items.push(
+
+              <div className="card" key={index}>
+                <div className="card-block">
+
+                  <p className="card-text">
+                    <small className="text-muted">
+                        <strong>{item.title}</strong>
+                        <br/>
+                        type:{item.serverType}
+                        <br/>
+                        layer:{item.layer}
+                        </small>
+                  </p>
+                   <p className="card-text">
+                        <button type="button" className="btn  btn-outline-secondary btn-sm" onClick={this.edit.bind(this,item)} style={{margin:5}}>
+                          <span className="material-icons">mode_edit</span>
+                        </button>
+                        <button type="button" className="btn btn-outline-secondary btn-sm" onClick={this.remove.bind(this,item.id)}  style={{margin:5}}>
+                          <span className="material-icons">delete</span>
+                        </button>
+                    </p>
+                </div>
+              </div>
+
+            );
+            /*items.push(
 					<div className="col-lg-3 col-md-4 col-sm-6" key={index} style={{paddingBottom:'10px'}}>
 						<Card>
-					
+
 								<CardMedia overlay={
 									<div>
 								<IconButton touch={true} >
@@ -111,10 +137,10 @@ export default class Mapas extends React.Component {
 								</CardMedia>
 								<CardTitle subtitle={item.title} />
 
-							
+
 							</Card>
 						</div>
-                    );
+                    );*/
 
     });
      const style = {
@@ -127,20 +153,16 @@ export default class Mapas extends React.Component {
     return (
       <div>
             <CardHeader
-            title={ this.state.tematicas[this.props.tematicaId].titulo } 
+            title={ this.state.tematicas[this.props.tematicaId].titulo }
             subtitle="Listados de Servicios de Mapa por temática"
              avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
 			 titleColor="#FFF"
 			 subtitleColor="#FFF"
             />
 
-            <CardText >
-
-			<div className="row">
-				{items}
-			</div>
-            </CardText>
-
+            <div className="card-columns">
+                {items}
+            </div>
         </div>
     );
   }

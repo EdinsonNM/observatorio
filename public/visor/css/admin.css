@@ -38,7 +38,7 @@
 }
 .btn-servicio-new{
   right: 20px;
-  position:absolute;
+  position:fixed;
   bottom: 20px;
   z-index:1000;
 }
@@ -46,7 +46,7 @@
   .tematica-container{
     width: 100%;
     max-width: 100%;
-    
+
   }
   .btn-tematica-new{
     margin-right: 20px;
@@ -57,6 +57,7 @@
 .servicios-container{
   flex: 1 1;
   background-color: var(--paper-teal-700);
+  overflow: auto;
 }
 
 .title-white-bar{

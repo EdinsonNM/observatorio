@@ -1,5 +1,5 @@
 import Auth from './services/Auth.js';
-import UserService from './services/Users.js';
+import UserService from './services/UserService';
 import AuthToken from './libs/AuthToken';
 import nativeToast from 'native-toast';
 
@@ -30,7 +30,7 @@ export default class RouteUtil{
 
 			Auth.me( (error, data)=>{
 				if (error) {
-					
+
 					nativeToast({
 					message: error.message,
 					position: 'top',
@@ -57,7 +57,7 @@ export default class RouteUtil{
 	static validateAuth( nextState, replace ) {
 		if(Auth.loggedIn()){
 			let user = UserService.me();
-			return replace({ pathname: '/dashboard/main'});			
+			return replace({ pathname: '/dashboard/main'});
 		}
 	}
 }

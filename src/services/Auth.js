@@ -7,7 +7,7 @@
 
 import AuthToken from '../libs/AuthToken.js';
 import nativeToast from 'native-toast'
-import Users from './Users';
+import Users from './UserService';
 const serviceName = 'login';
 window.loadeduser=false;
 export default class Auth{
@@ -43,7 +43,7 @@ export default class Auth{
       window.loadeduser=true;
       console.log('loaded info user...');
       if (user) {
-		  Auth.redirectAdmin(user,next);                
+		  Auth.redirectAdmin(user,next);
       } else {
         console.log("no user... :(");
         return next("no user... :(");
@@ -59,7 +59,7 @@ export default class Auth{
       return next(error);
     });
   }
-  
+
   static loginAnonymous(model, next){
 	firebase.auth().signInAnonymously().catch(function(error) {
 		var errorCode = error.code;
@@ -69,7 +69,7 @@ export default class Auth{
 	});
   }
 
-  
+
   // me[GET]
   static me(next){
     var user = firebase.auth().currentUser;
@@ -82,13 +82,13 @@ export default class Auth{
     } else {
       return next({message:"No user is signed in."});
     }
-    
+
   }
 
 
   static loggedIn(){
     return !!AuthToken.getToken();
-    
+
   }
 
   static logout( noRedirect ){

@@ -1,5 +1,5 @@
 import Cache from './Cache';
-import Users from './Users';
+//import Users from './UserService';
 let database = firebase.database();
 export default class Service {
 	get database() {
@@ -81,7 +81,7 @@ export default class Service {
 		database.ref(url).off();
 	}
 
-	static getAll(route, next, caching = false) {
+	/*static getAll(route, next, caching = false) {
 		database.ref(Users.origin() + '/' + route).once('value', (snapshot) => {
 			let data = [];
 			if (caching) {
@@ -97,7 +97,7 @@ export default class Service {
 			});
 			return next(null, data);
 		});
-	}
+	}*/
 
 
 
