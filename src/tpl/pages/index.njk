@@ -1,3 +1,4 @@
+{% set cuenca_title = "Quilca - Chili" %}
 <!DOCTYPE html>
 <html>
 	{% include '../partials/head.njk' %}
@@ -16,7 +17,7 @@
 						<div class="row">
 							<div class="col-md-8">
 								<p>
-									Bienvenidos al observatorio de la cuenca <em>Chancay - Lambayeque</em>
+									Bienvenidos al observatorio de la cuenca <em>{{cuenca_title}}</em>
 									<span>Navega sobre nuestra portal y mira todo lo nuevo que tenemos para ti.</span>
 								</p>
 							</div>
@@ -35,7 +36,7 @@
 					<div class="row center">
 						<div class="col-md-12">
 							<h1 class="word-rotator-title mb-sm">
-								En el Observatorio de la Cuenta Chancay-Lambayeque podemos
+								En el Observatorio de la Cuenta {{cuenca_title}} podemos
 								<strong class="inverted">
 									<span class="word-rotate" data-plugin-options='{"delay": 2000}'>
 										<span class="word-rotate-items">
