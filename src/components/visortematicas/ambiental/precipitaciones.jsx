@@ -25,6 +25,7 @@ import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
 import VariableService from '../../../services/VariableService';
+import EstacionService from '../../../services/EstacionService';
 
 const style={
   appbar: {
@@ -91,7 +92,8 @@ export default class Precipitaciones extends React.Component{
     handleChangeSelect(key, event, index, value){
         switch (key) {
             case 'departamento':
-                let provincias = ProvinciaService.getAll(value, {});
+            debugger;
+                let provincias = ProvinciaService.getAll(DepartamentoService.get(value).id_ubigeo, {});
 
                 this.setState({
                     [key]: value,
@@ -99,12 +101,24 @@ export default class Precipitaciones extends React.Component{
                 });
                 break;
             case 'provincia':
-                let distritos = DistritoService.getAll(value,{});
+                let distritos = DistritoService.getAll(ProvinciaService.get(value).id_ubigeo,{});
 
                 this.setState({
                     [key]: value,
                     distritos
                 });
+                break;
+             case 'distrito':
+                let estacionService=new EstacionService();
+                this.setState({[key]: value});
+                let estaciones = estacionService.getAll({},(error,data)=>{
+                    this.setState({
+                        [key]: value,
+                        estaciones:data
+                    });
+                });
+
+
                 break;
             default:
                 this.setState({
@@ -143,17 +157,17 @@ export default class Precipitaciones extends React.Component{
         switch (type) {
             case "departamentos":
                 options = this.state.departamentos.map((obj, idx) => {
-                    return <MenuItem key={`mi-dep-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 })
                 break;
             case "provincias":
                 options = this.state.provincias.map((obj, idx) => {
-                    return <MenuItem key={`mi-prov-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-prov-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 });
                 break;
             case 'distritos':
                 options = this.state.distritos.map((obj, idx) => {
-                    return <MenuItem key={`mi-dist-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-dist-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 });
                 break;
         }
@@ -170,19 +184,19 @@ export default class Precipitaciones extends React.Component{
 
         let departamento_nombre = '';
         if (this.state.departamento) {
-        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.id_ubigeo);
+        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
         	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
         }
 
         let provincia_nombre = '';
         if (this.state.provincia) {
-        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.id_ubigeo);
+        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.codigo_ubigeo);
         	provincia_nombre = obj_provincia ? obj_provincia.nombre_ubigeo : '';
         }
 
         let distrito_nombre = '';
         if (this.state.distrito) {
-        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.id_ubigeo);
+        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.codigo_ubigeo);
         	distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
         }
 
@@ -298,7 +312,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            estaciones.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            estaciones.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -324,7 +338,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            anios.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            anios.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -337,7 +351,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            meses.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
                                         }
                                     </SelectField>
                                 </div>

@@ -7,7 +7,7 @@ export default class DepartamentoService{
         return data;
     }
     static get(id){
-        let data = _.findWhere(DEPARTAMENTOS, {id_ubigeo:id});
+        let data = _.findWhere(DEPARTAMENTOS, {codigo_ubigeo:id});
         return data;
     }
 
