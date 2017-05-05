@@ -39,10 +39,18 @@
 
                             <div class="row">
                                 <div class="col-md-8 col-md-offset-2">
-                                    <table class="table table-bordered table-condensed table-striped">
+                                    <style>
+                                        .tabla-hidrograficas tbody tr td{
+                                            text-align: right;
+                                        }
+                                        .tabla-hidrograficas tbody tr td:nth-child(2){
+                                            text-align: left;
+                                        }
+                                    </style>
+                                    <table class="table table-bordered table-condensed table-striped  tabla-hidrograficas">
                                         <thead>
                                             <tr>
-                                                <th colspan="4" rowspan="1">Unidades Hidrográficas</th>
+                                                <th colspan="4" rowspan="1" class="text-center">Unidades Hidrográficas</th>
                                             </tr>
                                             <tr>
                                                 <th>Código</th>
@@ -94,16 +102,21 @@
                                                 <td>328,31</td>
                                                 <td>1,10</td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="2" rowspan="1">Total</td>
-                                                <td>29 852,88</td>
-                                                <td>100,00</td>
-                                            </tr>
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="2" rowspan="1">Total</th>
+                                                <th class="text-right">29 852,88</th>
+                                                <th class="text-right">100,00</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
-                                    <br/>
-                                    <p><small>Fuente: DS 006-2010-AG</small></p>
                                 </div>
+
+                                <div class="col-md-12">
+                                    <p class="text-center"><small>Fuente: DS 006-2010-AG</small></p>
+                                </div>
+
                             </div>
 
                             <div class="row">
@@ -113,6 +126,9 @@
                             </div>
 
                             <div class="row">
+                                <div class="col-md-12">
+                                    <p class="text-center"><small>Figura N° 24. Ámbito de la Cuenca Chira-Piura</small></p>
+                                </div>
                                 <div class="col-md-6 col-md-offset-3">
                                     <div class="" style="margin-right: 20px">
                                         <a class="img-thumbnail lightbox" href="web/img/caracterizacion/figura24.jpg" data-plugin-options='{"type":"image"}'>
@@ -122,8 +138,10 @@
                                             </span>
                                         </a>
                                     </div>
-                                    <p><small>Fuente: DS 006-2010-AG</small></p>
-                                    <p><small>Figura N° 24. Ámbito de la Cuenca Chira-Piura</small></p>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <p class="text-center"><small>Fuente: DS 006-2010-AG</small></p>
                                 </div>
                             </div>
 
@@ -159,9 +177,13 @@
 
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p><small>Cuadro N°21. Tipos Climáticos en el ámbito de Chira-Piura, según la clasificación de Thornthwaite</small></p>
-                                    <br/>
+                                    <p class="text-center"><small>Cuadro N°21. Tipos Climáticos en el ámbito de Chira-Piura, según la clasificación de Thornthwaite</small></p>
                                     <table class="table table-bordered table-condensed table-striped">
+                                        <colgroup>
+                                            <col width="20%">
+                                            <col width="">
+                                            <col width="20%">
+                                        </colgroup>
                                         <thead>
                                             <tr>
                                                 <th>TIPO DE CLIMA</th>
@@ -202,10 +224,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <br/>
-                                    <p><small>Fuente: Estudio climático Consorcio ATA-UNP-UNL: UNIGEC, Ecuador-Perú, 2003</small></p>
+                                    <p class="text-center"><small>Fuente: Estudio climático Consorcio ATA-UNP-UNL: UNIGEC, Ecuador-Perú, 2003</small></p>
                                 </div>
                             </div>
+                            <br/>
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -281,7 +303,7 @@
                                     <p class="text-center"><small>Cuadro N°22. Pisos Altitudinales en la zona continental de la Región de Piura</small></p>
                                 </div>
 
-                                <div class="col-md-6 col-offset-md-3">
+                                <div class="col-md-6 col-md-offset-3">
                                     <table class="table table-bordered table-condensed table-striped">
                                         <thead>
                                             <tr>
@@ -323,7 +345,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <p>
-                                        Debido a la enorme cantidad de especies florísticas y faunísticas que se pueden encontrar en el territorio peruano y a la variedad de Zonas de Vida indicadas anteriormente, se considera que Perú en uno de los 5 países con mayor biodiversidad del planeta. Por la importancia de conservar esta biodiversidad se redactó la Ley Nº 26 864 – Ley de Áreas Naturales Protegidas del Perú, del 4 de Julio 1997, norma nacional más importante para la gestión y conservación de las áreas naturales protegidas. En el ámbito de estudio que nos compete encontramos que existen 3 Zonas Naturales Protegidas a nivel Nacional:
+                                        Debido a la enorme cantidad de especies florísticas y faunísticas que se pueden encontrar en el territorio peruano y a la variedad de Zonas de Vida indicadas anteriormente, se considera que Perú en uno de los 5 países con mayor biodiversidad del planeta. Por la importancia de conservar esta biodiversidad se redactó la Ley Nº 26 864 – Ley de Áreas Naturales Protegidas del Perú, del 4 de Julio 1997, norma nacional más importante para la gestión y conservación de las áreas naturales protegidas.
+                                    </p>
+                                    <p>
+                                        En el ámbito de estudio que nos compete encontramos que existen 3 Zonas Naturales Protegidas a nivel Nacional:
                                     </p>
 
                                     <ul class="list list-icons list-primary">
@@ -331,6 +356,8 @@
                                         <li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="300"><i class="fa fa-check"></i> Coto de Caza El Angolo. Aprobado por Resolución Suprema N° 0264-75-AG. Declarada Reserva de la Biósfera por la UNESCO en 1997.</li>
                                         <li class="appear-animation" data-appear-animation="fadeInUp" data-appear-animation-delay="600"><i class="fa fa-check"></i> Zona Reservada Illescas. Aprobado por Resolución Ministerial Nº 251-2010-MINAM.</li>
                                     </ul>
+
+                                    <br/>
 
                                     <p>Un Espacio Natural Protegida a nivel Regional:</p>
 
@@ -351,6 +378,8 @@
                                         <li>Bosque de Manga Manga.</li>
                                         <li>Laguna Los Patos.</li>
                                     </ul>
+
+                                    <br/>
 
                                     <p>En el Ámbito Marino, tenemos</p>
 
@@ -375,13 +404,13 @@
                                     </p>
 
                                     <p>
-                                        El primero, corresponde la zona baja entre las curvas de nivel 0,0 y 80 msnm cubriendo precipitaciones del orden de 10 a 80 mm anuales, que se concentran en el período de Enero – Abril, y siendo seco en los meses restantes del año. Las lluvias en esta zona son muy irregulares, y parecen estar fuertemente relacionadas por la ocurrencia aleatoria de fenómenos meteorológicos intensos ocasionados por el Fenómeno El Niño (FEN), que hacen producir lluvias de gran intensidad, llegando a superar en 20 veces los valores normales.
+                                        <strong>El primero</strong>, corresponde la zona baja entre las curvas de nivel 0,0 y 80 msnm cubriendo precipitaciones del orden de 10 a 80 mm anuales, que se concentran en el período de Enero – Abril, y siendo seco en los meses restantes del año. Las lluvias en esta zona son muy irregulares, y parecen estar fuertemente relacionadas por la ocurrencia aleatoria de fenómenos meteorológicos intensos ocasionados por el Fenómeno El Niño (FEN), que hacen producir lluvias de gran intensidad, llegando a superar en 20 veces los valores normales.
                                     </p>
                                     <p>
-                                        El segundo tipo, corresponde a la franja ubicada entre los 80 y 500 msnm, donde las lluvias registradas son del orden de los 100 y 600 mm. Su período de ocurrencia es generalmente de Diciembre - Mayo con características de variabilidad menor que el primer grupo, y siendo en el resto del año significativamente baja llegando inclusive en algunos años a cero.
+                                        <strong>El segundo tipo</strong>, corresponde a la franja ubicada entre los 80 y 500 msnm, donde las lluvias registradas son del orden de los 100 y 600 mm. Su período de ocurrencia es generalmente de Diciembre - Mayo con características de variabilidad menor que el primer grupo, y siendo en el resto del año significativamente baja llegando inclusive en algunos años a cero.
                                     </p>
                                     <p>
-                                        El tercer tipo corresponde a la franja ubicada desde los 500 msnm hasta la línea divisoria de aguas de las 2 cuencas, esta zona alta obedece a un régimen pluvial amazónico caracterizado por baja variabilidad de lluvias promedios anuales que varían entre 700 y 1100 mm, las máximas precipitaciones se registran en los meses de Enero - Mayo siendo en el resto del año de baja intensidad, pero no llegando sus registros a cero. Se puede observar en esta zona, que la incidencia de Fenómenos intensos de El Niño (ocurrencia aleatoria) es casi nula.
+                                        <strong>El tercer tipo</strong> corresponde a la franja ubicada desde los 500 msnm hasta la línea divisoria de aguas de las 2 cuencas, esta zona alta obedece a un régimen pluvial amazónico caracterizado por baja variabilidad de lluvias promedios anuales que varían entre 700 y 1100 mm, las máximas precipitaciones se registran en los meses de Enero - Mayo siendo en el resto del año de baja intensidad, pero no llegando sus registros a cero. Se puede observar en esta zona, que la incidencia de Fenómenos intensos de El Niño (ocurrencia aleatoria) es casi nula.
                                     </p>
                                 </div>
 
@@ -390,7 +419,7 @@
                                         <p class="text-center"><small>Figura N° 25. Precipitaciones (mm). Estación de Miraflores (Zona baja): Periodo 1972-2000</small></p>
                                     </div>
                                     <div class="col-md-6 col-md-offset-3">
-                                        <div class="" style="margin-right: 20px">
+                                        <div>
                                             <a class="img-thumbnail lightbox" href="web/img/caracterizacion/figura25.jpg" data-plugin-options='{"type":"image"}'>
                                                 <img class="img-responsive" src="web/img/caracterizacion/figura25.jpg" alt="Precipitaciones (mm). Estación de Miraflores (Zona baja): Periodo 1972-2000">
                                                 <span class="zoom">
@@ -416,8 +445,14 @@
                                 <div class="col-md-12">
                                     <p class="text-center"><small>Cuadro N°23. Estimación de los recursos de agua subterránea en los principales acuíferos de las cuencas del río Chira y Piura</small></p>
                                 </div>
-                                <div class="col-md-8 col-md-offset-2">
+                                <div class="col-md-12">
                                     <table class="table table-bordered table-condensed table-striped">
+                                        <colgroup>
+                                            <col width="20%">
+                                            <col width="15%">
+                                            <col width="35%">
+                                            <col width="30%">
+                                        </colgroup>
                                         <thead>
                                             <tr>
                                                 <th>Acuífero</th>
