@@ -1,0 +1,24 @@
+.login-container{
+    margin: 20px;
+    max-width: 300px;
+    font-family: 'Roboto';
+    color:white;
+
+}
+.login-container h1{
+    font-size: 24px;
+    margin: 10px;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    font-weight: 100;
+
+}
+
+.login-container h3{
+    font-size: 16px;
+    margin: 10px;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+}

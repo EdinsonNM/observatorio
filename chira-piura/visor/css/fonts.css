@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url(../fonts/Roboto-Regular.ttf) format('truetype'),
+         url(../fonts/Roboto-Thin.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: 'AdventPro';
+    src: url(../fonts/AdventPro-Regular.ttf);
+}
+
+@font-face {
+    font-family: 'Baloo';
+    src: url(../fonts/Baloo-Regular.ttf);
+}
+
+@font-face {
+	font-family: 'Material Icons';
+	font-style: normal;
+	font-weight: 400;
+	src: 
+		local('Material Icons'), 
+		local('MaterialIcons-Regular'), 
+		url(../fonts/MaterialIcons-Regular.woff2) format('woff2');
+}
