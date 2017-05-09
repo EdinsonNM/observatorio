@@ -195,6 +195,27 @@ export default class Precipitaciones extends React.Component{
         return options;
     }
 
+    getData(){
+        let service = new DataService();
+        let periodo = this.state.mes.split('-');
+        service.getAll({
+            idEstacion:this.state.estacion,
+            anio:periodo[0],
+            mes : periodo[1],
+            param : this.state.variable
+        },(error,data)=>{
+            this.toggleFilter();
+            let dataR=[ ['unidad', 'Por Dia']];
+            data.forEach((item)=>{
+                dataR.push([moment(item.D_FEC_PARA).date() ,parseFloat(item.VALOR)||0]);
+            });
+            console.log(dataR);
+            this.setState({data:dataR});
+
+
+        });
+    }
+
     render (){
         let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
@@ -364,13 +385,13 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem value={parseInt(obj.MES)} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
+                                            meses.map(obj => <MenuItem value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
                                         }
                                     </SelectField>
                                 </div>
                                 <div className="col-md-12">
                                     <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
+                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
                                 </div>
                             </div>
                         </div>
