@@ -356,7 +356,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            estaciones.map(obj => <MenuItem value={obj.C_COD_ESTA} primaryText={obj.V_NOM_ESTA} />)
+                                            estaciones.map(obj => <MenuItem key={`mi-est-${obj.C_COD_ESTA}`} value={obj.C_COD_ESTA} primaryText={obj.V_NOM_ESTA} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -369,7 +369,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            variables.map(obj => <MenuItem value={obj.C_COD_PARAG+'||'+obj.C_COD_CORRP} primaryText={obj.V_NOM_PARA} />)
+                                            variables.map(obj => <MenuItem key={`mi-var-${obj.C_COD_PARAG}-${obj.C_COD_CORRP}`} value={obj.C_COD_PARAG+'||'+obj.C_COD_CORRP} primaryText={obj.V_NOM_PARA} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -382,7 +382,7 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
+                                            meses.map(obj => <MenuItem key={`mi-mes-${obj.MES}-${obj.ANIO}`} value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
                                         }
                                     </SelectField>
                                 </div>

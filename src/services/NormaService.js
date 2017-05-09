@@ -1,8 +1,9 @@
 import ApiService from './ApiService';
-const serviceName = 'novedades/xml';
+const serviceName = 'normas/xml';
 import {to_json} from'xmljson';
 import moment from 'moment';
-import Novedad from '../models/Norma';
+import Norma from '../models/Norma';
+
 export default class NormaService extends ApiService{
 
   constructor(){
