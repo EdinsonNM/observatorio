@@ -3,11 +3,10 @@ import Service from './Service';
 let userInstance;
 let selectedUser = null;
 let route="usuarios";
-let database = firebase.database();
 let originApp ="";
 export default class UserService extends Service{
   static get(uid,next){
-      database.ref(`/${route}/${user.uid}`).once('value').then(function(snapshot) {
+      Service.database.ref(`/${route}/${user.uid}`).once('value').then(function(snapshot) {
         var username = snapshot.val();
         username.uid=uid;
         return next(null,new User(username));

@@ -33,6 +33,8 @@ const style={
 	backgroundColor:'var(--paper-cyan-900)'
   }
 }
+
+
 export default class Index extends React.Component{
 	constructor(props) {
 		super(props);
@@ -48,9 +50,8 @@ export default class Index extends React.Component{
 			searchText:'',
 			selectedBaseMap:1,
 			showbasemaps:false,
-            openInfo:true,
-            urlsInfo:[],
-            openInfo:false
+            openInfo:false,
+            urlsInfo:[]
 		}
 	}
 	loadData(){
@@ -356,21 +357,26 @@ export default class Index extends React.Component{
 					</Drawer>
 
                     <Drawer open={this.state.openInfo} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({openInfo:open})} width={500} containerStyle={{display:'flex',flexDirection:'column'}}>
-						<AppBar
-						title="Capas seleccionadas"
-						iconClassNameRight="menu"
 
-						/>
-                        <Tabs initialSelectedIndex={0}>
-                            {
-                                this.state.urlsInfo.map((url)=>{
-                                    return (<Tab icon={<FontIcon className="material-icons">layers</FontIcon>} >
-                                                <h3 className="layer-tab-title">{url.title}</h3>
-                                                <iframe src={url.url} width="100%" height="600"></iframe>
-                                            </Tab>);
-                                })
-                            }
-                        </Tabs>
+                        <div style={{display:'flex',flexDirection:'column',position:'relative',height:'100%',overflow:'hidden'}}>
+                            <AppBar
+                            title="Capas seleccionadas"
+                            iconClassNameRight="menu"
+                            style={{height:'600px'}}
+
+                            />
+                            <Tabs initialSelectedIndex={0} style={{height:'calc( 100% - 64px)'}} contentContainerStyle={{height:'100%',overflow:'auto'}}>
+                                {
+                                    this.state.urlsInfo.map((url,index)=>{
+                                        return (<Tab key={index} icon={<FontIcon className="material-icons" style={{overflow:'auto'}}>layers</FontIcon>} >
+                                                    <h3 className="layer-tab-title">{url.title}</h3>
+                                                    <iframe src={url.url} width="100%" height="600"></iframe>
+                                                </Tab>);
+                                    })
+                                }
+                            </Tabs>
+                        </div>
+
 
 
 

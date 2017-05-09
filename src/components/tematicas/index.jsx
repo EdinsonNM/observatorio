@@ -32,24 +32,24 @@ export default class TematicaIndex extends React.Component {
   toggleEdit(data){
 	  this.setState({isEdit:!this.state.isEdit,data:data});
   }
-  
+
   render(){
   	let component;
-  
+
 	switch(true){
 		case this.state.isNew:
 			component = <Tematica back={this.toggleNew.bind(this)} />;
 			break;
 		case this.state.isEdit:
-			component = <Tematica back={this.toggleEdit.bind(this)} data={this.state.data} edit={true}/>
+			component = <Tematica back={this.toggleEdit.bind(this)} data={this.state.data} edit={true}/>;
 			break;
 		default:
 			component = <Tematicas onChange={this.props.onChange} edit={this.toggleEdit.bind(this)}/>
 	}
 
 	return(
-		<div style={{width:'100%',height:'calc(100% - 64px)',position:'relative'}}>
-			
+		<div style={{width:'100%',height:'100%',position:'relative',overflow:'auto'}}>
+
 			{
 				(!this.state.isNew)?
 				<Toolbar style={{backgroundColor:'white'}}>
@@ -67,7 +67,7 @@ export default class TematicaIndex extends React.Component {
 			}
 			{component}
 
-			
+
 		</div>
 	);
   }

@@ -24,8 +24,12 @@ import Chip from 'material-ui/Chip';
 import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
-import VariableService from '../../../services/VariableService';
+import VariableService from '../../../services/VariableEstacionService';
+import DataService from '../../../services/DataEstacionService';
 import EstacionService from '../../../services/EstacionService';
+import PeriodoService from '../../../services/PeriodoEstacionService';
+import moment from 'moment';
+moment.locale('es');
 
 const style={
   appbar: {
@@ -82,17 +86,21 @@ export default class Precipitaciones extends React.Component{
 
     componentDidMount() {
         let departamentos = DepartamentoService.getAll({});
-        let variables = VariableService.getAll({});
+        //let variables = VariableService.getAll({});
         this.setState({
-        	departamentos,
-        	variables
+        	departamentos
+        });
+        this.loadEstaciones();
+    }
+    loadEstaciones(){
+        let estacionService=new EstacionService();
+        let estaciones = estacionService.getAll({},(error,data)=>{
         });
     }
 
     handleChangeSelect(key, event, index, value){
         switch (key) {
             case 'departamento':
-            debugger;
                 let provincias = ProvinciaService.getAll(DepartamentoService.get(value).id_ubigeo, {});
 
                 this.setState({
@@ -101,7 +109,7 @@ export default class Precipitaciones extends React.Component{
                 });
                 break;
             case 'provincia':
-                let distritos = DistritoService.getAll(ProvinciaService.get(value).id_ubigeo,{});
+                let distritos = DistritoService.getAll(ProvinciaService.get(DepartamentoService.get(this.state.departamento).id_ubigeo,value).id_ubigeo,{});
 
                 this.setState({
                     [key]: value,
@@ -109,17 +117,29 @@ export default class Precipitaciones extends React.Component{
                 });
                 break;
              case 'distrito':
+                let distrito = "051"+this.state.departamento+this.state.provincia+value;
                 let estacionService=new EstacionService();
-                this.setState({[key]: value});
-                let estaciones = estacionService.getAll({},(error,data)=>{
-                    this.setState({
-                        [key]: value,
-                        estaciones:data
-                    });
+                let estaciones = estacionService.getByDistrito(distrito);
+                this.setState({
+                    [key]: value,
+                    estaciones
                 });
-
+                console.log(distrito);
 
                 break;
+            case 'estacion':
+                this.setState({ [key]: value  });
+                let serviceParam = new VariableService();
+                let servicePeriodo = new PeriodoService();
+                serviceParam.getAll({idEstacion:value},(error,params)=>{
+                    if(error) return console.log(error);
+                    servicePeriodo.getAll({idEstacion:value},(error,periodos)=>{
+                        if(error) return console.log(error);
+                        this.setState({ variables:params, meses:periodos });
+                    });
+                });
+                break;
+
             default:
                 this.setState({
                     [key]: value
@@ -198,6 +218,12 @@ export default class Precipitaciones extends React.Component{
         if (this.state.distrito) {
         	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.codigo_ubigeo);
         	distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
+        }
+
+        let estacion_nombre = '';
+        if (this.state.estacion) {
+        	let obj_estacion = this.state.estaciones.find(obj => this.state.distrito == obj.codigo_ubigeo);
+        	estacion_nombre = obj_estacion ? obj_estacion.V_NOM_ESTA : '';
         }
 
         return(
@@ -307,12 +333,12 @@ export default class Precipitaciones extends React.Component{
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Estación: "
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
+                                        value={this.state.estacion}
+                                        onChange={this.handleChangeSelect.bind(this, 'estacion')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            estaciones.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            estaciones.map(obj => <MenuItem value={obj.C_COD_ESTA} primaryText={obj.V_NOM_ESTA} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -325,33 +351,20 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            variables.map(obj => <MenuItem value={obj.id} primaryText={obj.nombre} />)
+                                            variables.map(obj => <MenuItem value={obj.C_COD_PARAG+'||'+obj.C_COD_CORRP} primaryText={obj.V_NOM_PARA} />)
                                         }
                                     </SelectField>
                                 </div>
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Año: "
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {
-                                            anios.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                        }
-                                    </SelectField>
-                                </div>
-                                <div className="col-md-4">
+                               <div className="col-md-4">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Mes"
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
+                                        value={this.state.mes}
+                                        onChange={this.handleChangeSelect.bind(this, 'mes')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            meses.map(obj => <MenuItem value={parseInt(obj.MES)} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
                                         }
                                     </SelectField>
                                 </div>
