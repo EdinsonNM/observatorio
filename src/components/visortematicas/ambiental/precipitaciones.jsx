@@ -159,10 +159,9 @@ export default class Precipitaciones extends React.Component{
             if (idx % 2 === 0) {
                 tableRows.push(
                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{`${data[idx][0]} mm`} </TableRowColumn>
-                        <TableRowColumn>{data[idx][1]}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? `${data[idx+1][0]} mm` : ''}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? data[idx+1][1] : ''}</TableRowColumn>
+                        <TableRowColumn>{` día ${data[idx][0]}`} </TableRowColumn>
+                        <TableRowColumn>{`${data[idx][1]} mm`} </TableRowColumn>
+
                     </TableRow>
                 );
             }
@@ -300,10 +299,8 @@ export default class Precipitaciones extends React.Component{
                                 <Table fixedHeader={true} selectable={false} multiselectable={false}>
                                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                         <TableRow>
+                                            <TableHeaderColumn>Dia.</TableHeaderColumn>
                                             <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
-                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody displayRowCheckbox={false}>
