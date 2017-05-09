@@ -1,20 +1,20 @@
 //aqui la lógica para el archivo index.html
-import DocumentoService from '../services/DocumentoService';
-let service = new DocumentoService();
-import tpl from '../tpl/partials/documentos.njk';
-let documentos=[];
+import NormaService from '../services/NormaService';
+import tpl from '../tpl/partials/normas.njk';
+
+let service = new NormaService();
+let normas=[];
 let page = 0;
 let length = 10;
+
 service.getAll({
 	draw:1,
 	start:0,
 	length:10
 }, (error, data)=>{
-  documentos = data;
+  normas = data;
   createPagination();
 	getDataByPage(page);
-
-
 });
 
 let getDataByPage = function(nroPage){
@@ -25,14 +25,14 @@ let getDataByPage = function(nroPage){
   let data=[];
   let start= (page)*length;
   let end = start + length;
-  data = documentos.slice(start,end);
+  data = normas.slice(start,end);
  	let html = tpl.render({ items:data });
-  document.querySelector('#documentos-container').innerHTML = html;
+  document.querySelector('#normas-container').innerHTML = html;
   document.querySelector(`#page-${page}`).classList.add("active");
-
 };
+
 let createPagination = function(){
-  let totalPages = Math.ceil(documentos.length/length);
+  let totalPages = Math.ceil(normas.length/length);
   let paginationContainer = document.querySelector('#pagination');
 
   let firstPage = createPage("«",0,false);
@@ -43,7 +43,6 @@ let createPagination = function(){
   }
   let lastPage = createPage("»",totalPages-1,false);
   paginationContainer.appendChild(lastPage);
-
 };
 
 let createPage = function(title,page,includeId){

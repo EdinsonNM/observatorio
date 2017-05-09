@@ -1,0 +1,19 @@
+{% for item in items %}
+
+<article class="post">
+
+    <div class="post-content">
+
+        <h3 style="margin-bottom: 0;">{{item.tipo_norma}}  N° {{item.numero_norma}}</h3>
+        <h4><a href="{{ item.url_documento }}" target="blank">{{ item.title }}</a></h4>
+        <p>{{ item.cuerpo | safe }} </p>
+
+        <div class="post-meta">
+            <span><i class="fa fa-user"></i> By <a href="#">{{ item.elaborado_por }}</a> </span>
+
+            <a href="{{ item.url_documento }}"  target="blank" class="btn btn-xs btn-primary pull-right">Leer más...</a>
+        </div>
+
+    </div>
+</article>
+{% endfor %}

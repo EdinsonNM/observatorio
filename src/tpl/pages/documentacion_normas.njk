@@ -1,25 +1,34 @@
-{% extends '../layouts/tematicas_layout.njk' %}
+{% extends '../layouts/docs_layout.njk' %}
 
 {% block pageHeader %}
-				<section class="page-header">
-					<div class="container">
-						<div class="row">
-							<div class="col-md-12">
-								<ul class="breadcrumb">
-									<li><a href="#">Documentación</a></li>
-									<li class="active">Normas</li>
-								</ul>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<h1>Normas</h1>
-							</div>
-						</div>
-					</div>
-				</section>
-                <script src="normas.js"></script>
+                <section class="page-header">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul class="breadcrumb">
+                                    <li><a href="#">Documentación</a></li>
+                                    <li class="active">Normas</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1>Normas</h1>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 {% endblock %}
 
 {% block content %}
+
+                <div class="blog-posts">
+                    <div  id="normas-container">
+                    </div>
+
+                    <ul id="pagination" class="pagination pagination-lg pull-right">
+                    </ul>
+                </div>
+                 <script src="normas.js"></script>
 {% endblock %}
+
