@@ -21,6 +21,7 @@
 	flex-direction:column;
 }
 .tematica-home-container{
+  padding-top: 20px;
 	flex:1;
 	overflow-y:auto;
 }
