@@ -15,10 +15,16 @@ import Servicios from './components/servicios/servicios';
 import Servicio from './components/servicios/servicio';
 import VisorTematica from './components/visortematicas';
 import VisorTematicaHome from './components/visortematicas/home';
-import Precipitaciones from './components/visortematicas/ambiental/precipitaciones';
-import Investigadores from './components/visortematicas/ambiental/investigadores';
-import Denuncias from './components/visortematicas/ambiental/denuncias';
-import Legajos from './components/visortematicas/ambiental/legajos';
+
+import Precipitaciones  from './components/visortematicas/ambiental/precipitaciones';
+import Investigadores   from './components/visortematicas/ambiental/investigadores';
+import Denuncias        from './components/visortematicas/ambiental/denuncias';
+import Legajos          from './components/visortematicas/ambiental/legajos';
+
+import Gastos   from './components/visortematicas/economico/gastos';
+import Pbi      from './components/visortematicas/economico/pbi';
+import Indice   from './components/visortematicas/economico/indice';
+
 import Usuarios from './components/usuarios/usuarios';
 
 export default (
@@ -49,6 +55,18 @@ export default (
 				path="legajos"
 				component={Legajos}
 			/>
+            <Route
+                path="gastos"
+                component={Gastos}
+            />
+            <Route
+                path="pbi"
+                component={Pbi}
+            />
+            <Route
+                path="indice"
+                component={Indice}
+            />
 		</Route>
 		<Route
 			path="/login"

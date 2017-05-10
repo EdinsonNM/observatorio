@@ -41,7 +41,11 @@ export default class Model{
 
 			},
 			(error)=>{
-				return next(error.response.data.data);
+        try {
+				  return next(error.response.data.data);
+        } catch (e) {
+          return next('Url not found');
+        }
 			}
 		)
   }
