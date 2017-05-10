@@ -43157,7 +43157,7 @@ var BaseMaps = function () {
             var wmsSource = layer.ref.getSource();
             var viewResolution = _this._view.getResolution();
             var url = wmsSource.getGetFeatureInfoUrl(evt.coordinate, viewResolution, 'EPSG:3857', { 'INFO_FORMAT': 'text/html' });
-            urls.push({ title: layer.title, url: url });
+            urls.push({ title: layer.title, url: url, legend: layer.legend });
           });
         }
         if (urls.length > 0) {
@@ -43166,6 +43166,16 @@ var BaseMaps = function () {
           next("No data");
         }
       });
+    }
+  }, {
+    key: 'getLegends',
+    value: function getLegends() {
+      var urls = [];
+      var layers = this.getLayersSelected();
+      layers.forEach(function (layer) {
+        urls.push({ title: layer.title, legend: layer.legend });
+      });
+      return urls;
     }
   }, {
     key: 'getLayersSelected',
@@ -61886,6 +61896,8 @@ var Index = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Index.__proto__ || Object.getPrototypeOf(Index)).call(this, props));
 
 		_this.state = {
+			legends: [],
+			openLegend: false,
 			tematica: { titulo: '' },
 			tematicas: [],
 			mapas: [],
@@ -62061,11 +62073,12 @@ var Index = function (_React$Component) {
 	}, {
 		key: 'handleService',
 		value: function handleService(item, itemIndex, groupIndex) {
+			var urls = this.map.getLegends();
 			item.ref.setVisible(!item.visible);
 			console.log(item, itemIndex, groupIndex);
 			var layers = this.state.layers;
 			layers[groupIndex].items[itemIndex].visible = !item.visible;
-			this.setState({ layers: layers });
+			this.setState({ layers: layers, legends: urls });
 			//$(".services-list").mCustomScrollbar("scrollTo");
 		}
 	}, {
@@ -62079,6 +62092,12 @@ var Index = function (_React$Component) {
 		key: 'handleBaseMaps',
 		value: function handleBaseMaps() {
 			this.setState({ showbasemaps: !this.state.showbasemaps });
+		}
+	}, {
+		key: 'handleLegends',
+		value: function handleLegends() {
+			var urls = this.map.getLegends();
+			this.setState({ openLegend: !this.state.openLegend, legends: urls });
 		}
 	}, {
 		key: 'handleExpandedTematica',
@@ -62210,6 +62229,15 @@ var Index = function (_React$Component) {
 										_react2.default.createElement(
 											_FontIcon2.default,
 											{ className: 'material-icons', color: this.state.showbasemaps ? "#00BCD4" : "#c3c3c3" },
+											'layers'
+										)
+									),
+									_react2.default.createElement(
+										_IconButton2.default,
+										{ tooltip: 'Ver Leyenda', onTouchTap: this.handleLegends.bind(this) },
+										_react2.default.createElement(
+											_FontIcon2.default,
+											{ className: 'material-icons', color: this.state.openLegend ? "#00BCD4" : "#c3c3c3" },
 											'maps'
 										)
 									)
@@ -62231,6 +62259,30 @@ var Index = function (_React$Component) {
 						),
 						_react2.default.createElement('div', { className: 'col-md-4' })
 					)
+				),
+				_react2.default.createElement(
+					_Drawer2.default,
+					{ open: this.state.openLegend, width: 300 },
+					this.state.legends.map(function (url, index) {
+						return _react2.default.createElement(
+							'div',
+							{ style: { textAlign: 'center' } },
+							_react2.default.createElement(
+								_Subheader2.default,
+								null,
+								url.title
+							),
+							_react2.default.createElement(
+								'object',
+								{ data: url.legend, type: 'image/png' },
+								_react2.default.createElement(
+									'small',
+									null,
+									'Legenda no encontrada'
+								)
+							)
+						);
+					})
 				),
 				_react2.default.createElement(
 					_Drawer2.default,
