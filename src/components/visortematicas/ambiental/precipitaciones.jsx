@@ -24,7 +24,12 @@ import Chip from 'material-ui/Chip';
 import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
-import VariableService from '../../../services/VariableService';
+import VariableService from '../../../services/VariableEstacionService';
+import DataService from '../../../services/DataEstacionService';
+import EstacionService from '../../../services/EstacionService';
+import PeriodoService from '../../../services/PeriodoEstacionService';
+import moment from 'moment';
+moment.locale('es');
 
 const style={
   appbar: {
@@ -81,17 +86,22 @@ export default class Precipitaciones extends React.Component{
 
     componentDidMount() {
         let departamentos = DepartamentoService.getAll({});
-        let variables = VariableService.getAll({});
+        //let variables = VariableService.getAll({});
         this.setState({
-        	departamentos,
-        	variables
+        	departamentos
+        });
+        this.loadEstaciones();
+    }
+    loadEstaciones(){
+        let estacionService=new EstacionService();
+        let estaciones = estacionService.getAll({},(error,data)=>{
         });
     }
 
     handleChangeSelect(key, event, index, value){
         switch (key) {
             case 'departamento':
-                let provincias = ProvinciaService.getAll(value, {});
+                let provincias = ProvinciaService.getAll(DepartamentoService.get(value).id_ubigeo, {});
 
                 this.setState({
                     [key]: value,
@@ -99,13 +109,37 @@ export default class Precipitaciones extends React.Component{
                 });
                 break;
             case 'provincia':
-                let distritos = DistritoService.getAll(value,{});
+                let distritos = DistritoService.getAll(ProvinciaService.get(DepartamentoService.get(this.state.departamento).id_ubigeo,value).id_ubigeo,{});
 
                 this.setState({
                     [key]: value,
                     distritos
                 });
                 break;
+             case 'distrito':
+                let distrito = "051"+this.state.departamento+this.state.provincia+value;
+                let estacionService=new EstacionService();
+                let estaciones = estacionService.getByDistrito(distrito);
+                this.setState({
+                    [key]: value,
+                    estaciones
+                });
+                console.log(distrito);
+
+                break;
+            case 'estacion':
+                this.setState({ [key]: value  });
+                let serviceParam = new VariableService();
+                let servicePeriodo = new PeriodoService();
+                serviceParam.getAll({idEstacion:value},(error,params)=>{
+                    if(error) return console.log(error);
+                    servicePeriodo.getAll({idEstacion:value},(error,periodos)=>{
+                        if(error) return console.log(error);
+                        this.setState({ variables:params, meses:periodos });
+                    });
+                });
+                break;
+
             default:
                 this.setState({
                     [key]: value
@@ -125,10 +159,9 @@ export default class Precipitaciones extends React.Component{
             if (idx % 2 === 0) {
                 tableRows.push(
                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{`${data[idx][0]} mm`} </TableRowColumn>
-                        <TableRowColumn>{data[idx][1]}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? `${data[idx+1][0]} mm` : ''}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? data[idx+1][1] : ''}</TableRowColumn>
+                        <TableRowColumn>{` día ${data[idx][0]}`} </TableRowColumn>
+                        <TableRowColumn>{`${data[idx][1]} mm`} </TableRowColumn>
+
                     </TableRow>
                 );
             }
@@ -143,22 +176,43 @@ export default class Precipitaciones extends React.Component{
         switch (type) {
             case "departamentos":
                 options = this.state.departamentos.map((obj, idx) => {
-                    return <MenuItem key={`mi-dep-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 })
                 break;
             case "provincias":
                 options = this.state.provincias.map((obj, idx) => {
-                    return <MenuItem key={`mi-prov-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-prov-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 });
                 break;
             case 'distritos':
                 options = this.state.distritos.map((obj, idx) => {
-                    return <MenuItem key={`mi-dist-${idx}`} value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                    return <MenuItem key={`mi-dist-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 });
                 break;
         }
 
         return options;
+    }
+
+    getData(){
+        let service = new DataService();
+        let periodo = this.state.mes.split('-');
+        service.getAll({
+            idEstacion:this.state.estacion,
+            anio:periodo[0],
+            mes : periodo[1],
+            param : this.state.variable
+        },(error,data)=>{
+            this.toggleFilter();
+            let dataR=[ ['unidad', 'Por Dia']];
+            data.forEach((item)=>{
+                dataR.push([moment(item.D_FEC_PARA).date() ,parseFloat(item.VALOR)||0]);
+            });
+            console.log(dataR);
+            this.setState({data:dataR});
+
+
+        });
     }
 
     render (){
@@ -170,20 +224,26 @@ export default class Precipitaciones extends React.Component{
 
         let departamento_nombre = '';
         if (this.state.departamento) {
-        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.id_ubigeo);
+        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
         	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
         }
 
         let provincia_nombre = '';
         if (this.state.provincia) {
-        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.id_ubigeo);
+        	let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.codigo_ubigeo);
         	provincia_nombre = obj_provincia ? obj_provincia.nombre_ubigeo : '';
         }
 
         let distrito_nombre = '';
         if (this.state.distrito) {
-        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.id_ubigeo);
+        	let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.codigo_ubigeo);
         	distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
+        }
+
+        let estacion_nombre = '';
+        if (this.state.estacion) {
+        	let obj_estacion = this.state.estaciones.find(obj => this.state.distrito == obj.codigo_ubigeo);
+        	estacion_nombre = obj_estacion ? obj_estacion.V_NOM_ESTA : '';
         }
 
         return(
@@ -239,10 +299,8 @@ export default class Precipitaciones extends React.Component{
                                 <Table fixedHeader={true} selectable={false} multiselectable={false}>
                                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                         <TableRow>
+                                            <TableHeaderColumn>Dia.</TableHeaderColumn>
                                             <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
-                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody displayRowCheckbox={false}>
@@ -293,12 +351,12 @@ export default class Precipitaciones extends React.Component{
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Estación: "
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
+                                        value={this.state.estacion}
+                                        onChange={this.handleChangeSelect.bind(this, 'estacion')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            estaciones.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            estaciones.map(obj => <MenuItem key={`mi-est-${obj.C_COD_ESTA}`} value={obj.C_COD_ESTA} primaryText={obj.V_NOM_ESTA} />)
                                         }
                                     </SelectField>
                                 </div>
@@ -311,39 +369,26 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            variables.map(obj => <MenuItem value={obj.id} primaryText={obj.nombre} />)
+                                            variables.map(obj => <MenuItem key={`mi-var-${obj.C_COD_PARAG}-${obj.C_COD_CORRP}`} value={obj.C_COD_PARAG+'||'+obj.C_COD_CORRP} primaryText={obj.V_NOM_PARA} />)
                                         }
                                     </SelectField>
                                 </div>
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Año: "
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {
-                                            anios.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
-                                        }
-                                    </SelectField>
-                                </div>
-                                <div className="col-md-4">
+                               <div className="col-md-4">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Mes"
-                                        value={this.state.value}
-                                        onChange={this.handleChangeSelect}
+                                        value={this.state.mes}
+                                        onChange={this.handleChangeSelect.bind(this, 'mes')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem value={obj.id_ubigeo} primaryText={obj.nombre_ubigeo} />)
+                                            meses.map(obj => <MenuItem key={`mi-mes-${obj.MES}-${obj.ANIO}`} value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
                                         }
                                     </SelectField>
                                 </div>
                                 <div className="col-md-12">
                                     <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true}/>
+                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
                                 </div>
                             </div>
                         </div>

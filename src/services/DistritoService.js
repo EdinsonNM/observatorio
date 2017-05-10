@@ -8,7 +8,7 @@ export default class DistritoService{
         return data;
     }
     static get(provincia,id){
-        let data = _.findWhere(DISTRITOS[provincia], {id_ubigeo:id});
+        let data = _.findWhere(DISTRITOS[provincia], {codigo_ubigeo:id});
         return data;
     }
 }

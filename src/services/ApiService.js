@@ -44,7 +44,7 @@ export default class Model{
 				return next(error.response.data.data);
 			});
 	}
-	
+
 	update(id,data,next){
 			var service = api.one(this.modelName,id);
 			service.put(data).then((response) => {

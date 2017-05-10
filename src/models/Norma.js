@@ -20,11 +20,11 @@ const attrs = [
 ]
 
 export default class Norma extends Model{
+
 		constructor(data){
 				super();
-				this.copy(this.convertToObject(data,attrs),this);
+				this.copy(this.convertToObject(data,attrs), this);
         this.fecha_norma = moment(this.fecha_norma);
-
 		}
 
 }

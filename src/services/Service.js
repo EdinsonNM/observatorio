@@ -1,8 +1,22 @@
 import Cache from './Cache';
-//import Users from './UserService';
+import * as firebase from 'firebase';
+console.log("process.env",process.env);
+var config = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    databaseURL: process.env.databaseURL,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId
+};
+
+firebase.initializeApp(config);
 let database = firebase.database();
 export default class Service {
-	get database() {
+  static get firebase(){
+    return firebase;
+  }
+	static get database() {
 		return database;
 	}
 	constructor(route) {
