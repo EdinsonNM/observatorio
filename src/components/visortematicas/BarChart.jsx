@@ -19,6 +19,13 @@ export default class BarChart extends React.Component {
 			maxValue
 		};
 	}
+    componentWillReceiveProps(nextProps){
+        let total = nextProps.data.length ? nextProps.data.map(obj => obj.cantidad).reduce((total, elem) => total + elem) : 0;
+		let data = this.prepareData(nextProps.data, total);
+		let maxValue = data && data.length ? data[0].cantidad : 0;
+        this.setState({data:data,total:total,maxValue:maxValue});
+
+    }
 
 	prepareData (originalData, total) {
 		if (originalData && originalData.length) {

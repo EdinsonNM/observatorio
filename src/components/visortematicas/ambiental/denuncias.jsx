@@ -18,59 +18,62 @@ import Avatar from 'material-ui/Avatar';
 import Subheader from 'material-ui/Subheader';
 // import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
-
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Chip from 'material-ui/Chip';
+import _ from 'underscore';
 import SelectField from 'material-ui/SelectField';
+import DepartamentoService from '../../../services/DepartamentoService';
+import DenunciaAmbientalService from  '../../../services/DenunciaAmbientalService';
+import moment from 'moment';
+moment.locale('es');
 
 const style={
   appbar: {
-    backgroundColor:'var(--paper-cyan-900)'
+    backgroundColor:'white'
+  },
+  chip: {
+      margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    padding:10
   }
 };
-
 
 export default class Denuncias extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
+            departamentos:DepartamentoService.getAll({}),
+            anios:[
+                {id:2014,nombre:2014},
+                {id:2015,nombre:2015},
+                {id:2016,nombre:2016},
+            ],
             title: 'Denuncias Ambientales',
             tabIndex: 0,
-			data:[
-                ['unidad', 'Por Dia'],
-                [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-                [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
-                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-                [66, 70], [67, 72], [68, 75], [69, 80]
-            ]
+			data1:[['unidad', 'Por Dia']],
+            data2:[]
 		};
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
 	}
 
-    handleChangeSelect(key, event) {
-		this.setState({[key]: event.target.value});
-	}
-
-    handleChangeSelect2(key, event, index, value) {
-		let state = this.state;
-		state[key] = value;
-		this.setState(state);
-		if (key == 'tematica') {
-			this.loadData(value);
-		}
-	}
+    handleChangeSelect(key, event, index, value){
+        this.setState({
+            [key]: value
+        });
+    }
 
     handleChangeTab (value) {
         this.setState({tabIndex: value});
     }
+    toggleFilter(){
+        this.setState({showFilter:!this.state.showFilter});
+    }
+
 
     buildTableRows (data) {
     	let tableRows = [];
@@ -78,11 +81,9 @@ export default class Denuncias extends React.Component{
     	for (let idx=1; idx<data.length; idx++) {
             if (idx % 2 === 0) {
                 tableRows.push(
-                    <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{`${data[idx][0]} mm`} </TableRowColumn>
-                        <TableRowColumn>{data[idx][1]}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? `${data[idx+1][0]} mm` : ''}</TableRowColumn>
-                        <TableRowColumn>{data[idx+1] ? data[idx+1][1] : ''}</TableRowColumn>
+                     <TableRow key={`tr-${idx}`}>
+                        <TableRowColumn>{moment().month(parseInt(data[idx][0])-1).format('MMMM') } </TableRowColumn>
+                        <TableRowColumn>{`${data[idx][1]} denuncias`} </TableRowColumn>
                     </TableRow>
                 );
             }
@@ -91,12 +92,70 @@ export default class Denuncias extends React.Component{
         return tableRows;
     }
 
+     buildSelectOptions (type) {
+        let options = [];
+
+        switch (type) {
+            case "departamentos":
+                options = this.state.departamentos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                })
+                break;
+            case "anios":
+                options = this.state.anios.map((obj, idx) => {
+                    return <MenuItem key={`mi-prov-${idx}`} value={obj.id} primaryText={obj.nombre} />;
+                });
+                break;
+
+        }
+
+        return options;
+    }
+
+    getData(){
+        let service = new DenunciaAmbientalService();
+        service.getAll(this.state.anio,this.state.departamento,(error,data) => {
+
+            this.toggleFilter();
+            let dataR1=[ ['unidad', 'Por Dia']];
+
+            let result1 = _.countBy(data, function(item) {
+                let date = item.fechaDenuncia.split('/')
+                return date[1];
+            });
+            for(let key in result1){
+                dataR1.push([parseInt(key),result1[key]]);
+            }
+            dataR1 = _.sortBy(dataR1, function(item){ return item[0]; });
+
+            let dataR2=[ ['Tipo', 'Valor'],];
+            let agua =  _.filter(data, function(item) { return parseInt(item.agua) == 1;});
+            let suelo = _.filter(data, function(item) { return parseInt(item.suelo) == 1;});
+            let aire = _.filter(data, function(item) { return parseInt(item.aire) == 1;});
+            dataR2.push(['agua',agua.length]);
+            dataR2.push(['suelo',suelo.length]);
+            dataR2.push(['aire',aire.length]);
+            this.setState({data1:dataR1,data2:dataR2});
+        });
+    }
+
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon  className="material-icons" >arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
-        let tableRows = this.buildTableRows(this.state.data);
+        let tableRows = this.buildTableRows(this.state.data1);
+        let departamento_nombre = '';
+        if (this.state.departamento) {
+        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
+        	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
+        }
+
+        let anio_nombre = '';
+        if (this.state.anio) {
+        	let obj_anio = this.state.anios.find(obj => this.state.anio == obj.id);
+        	anio_nombre = obj_anio ? obj_anio.id : '';
+        }
 
         return(
 			<div className="tematica-home">
@@ -104,145 +163,115 @@ export default class Denuncias extends React.Component{
     				title={this.state.title}
     				iconElementLeft={iconButton}
     				style={style.appbar}
-                    iconElementRight={buttonFilter}
+                    titleStyle={{color:'black'}}
 				/>
+
                 <div className="col-md-12" className="tematica-home-container">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Departamento:"
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={0} primaryText="Selecciona" />
-                                    <MenuItem value={1} primaryText="Lambayeque" />
-                                    <MenuItem value={2} primaryText="Cajamarca" />
-                                </SelectField>
+                    <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
+                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                            <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
+
+                            {
+                                (!this.state.showFilter)?
+                                <div className="text-filter" style={style.wrapper}>
+
+                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
+                                    {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
+
+                                    <span>
+                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
+                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
+                                        </FloatingActionButton>
+                                    </span>
+
+                                </div>
+                                :null
+                            }
+                            {
+                                (this.state.data1.length>1)?
+
+                            <div className={'my-pretty-chart-container'}>
+                                <h3>Registro de Denuncias Ambientales</h3>
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.state.data1}
+                                    options={{}}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                                <h3>Denuncias por Medio afectado</h3>
+                                <Chart
+                                    chartType="PieChart"
+                                    data={this.state.data2}
+                                    options={{}}
+                                    graph_id="ScatterChart2"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
                             </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Provincia: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
+                            :null
+                            }
+                        </Tab>
+
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Mes</TableHeaderColumn>
+                                            <TableHeaderColumn>Denuncias.</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
                             </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Distrito: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Estación: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Variable: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Año: "
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
-                            </div>
-                            <div className="col-md-4">
-                                <SelectField
-                                    fullWidth
-                                    floatingLabelText="Mes"
-                                    value={this.state.value}
-                                    onChange={this.handleChangeSelect}
-                                >
-                                    <MenuItem value={1} primaryText="Never" />
-                                    <MenuItem value={2} primaryText="Every Night" />
-                                    <MenuItem value={3} primaryText="Weeknights" />
-                                    <MenuItem value={4} primaryText="Weekends" />
-                                    <MenuItem value={5} primaryText="Weekly" />
-                                </SelectField>
+                        </Tab>
+                    </Tabs>
+                    {
+                        this.state.showFilter
+                        ? <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Año: "
+                                        value={this.state.anio}
+                                        onChange={this.handleChangeSelect.bind(this, 'anio')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('anios')}
+                                    </SelectField>
+                                </div>
+
+                                <div className="col-md-12">
+                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
+                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        : null
+                    }
 
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-12">
-                                <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                                    <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                                        <div className={'my-pretty-chart-container'}>
-                                            <Chart
-                                                chartType="LineChart"
-                                                data={this.state.data}
-                                                options={{}}
-                                                graph_id="ScatterChart"
-                                                width="100%"
-                                                height="400px"
-                                                legend_toggle
-                                            />
-                                        </div>
-                                    </Tab>
-                                    <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                                        <div>
-                                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                                    <TableRow>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                        <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                                        <TableHeaderColumn>Dia</TableHeaderColumn>
-                                                    </TableRow>
-                                                </TableHeader>
-                                                <TableBody displayRowCheckbox={false}>
-                                                    {tableRows}
-                                                </TableBody>
-                                            </Table>
-                                        </div>
-                                    </Tab>
-                                </Tabs>
+
                             </div>
                         </div>
                     </div>
