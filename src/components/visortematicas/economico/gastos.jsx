@@ -103,9 +103,9 @@ export default class Gastos extends React.Component{
         let options = [];
 
         switch (type) {
-            case "departamentos":
-                options = this.state.departamentos.map((obj, idx) => {
-                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
+            case "municipalidades":
+                options = this.state.municipalidades.map((obj, idx) => {
+                    return <MenuItem key={`mi-muni-${idx}`} value={obj.ANIO} primaryText={obj.MUNICIPALIDAD} />;
                 })
                 break;
             case "anios":
@@ -124,7 +124,6 @@ export default class Gastos extends React.Component{
         service.getAll(this.state.anio, this.state.municipalidad, (error,data) => {
 
             this.toggleFilter();
-            let dataR=[ ['unidad', 'Por Dia']];
             data.forEach((item)=>{
                 dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
             });
@@ -166,14 +165,24 @@ export default class Gastos extends React.Component{
                     <Table fixedHeader={true} selectable={false} multiselectable={false}>
                         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                             <TableRow>
-                                <TableHeaderColumn>Actividad Económica</TableHeaderColumn>
-                                <TableHeaderColumn>PBI</TableHeaderColumn>
+                                <TableHeaderColumn>Cod. Ubigeo</TableHeaderColumn>
+                                <TableHeaderColumn>Municipalidad</TableHeaderColumn>
+                                <TableHeaderColumn>Monto Devengado</TableHeaderColumn>
+                                <TableHeaderColumn>Monto Certificado</TableHeaderColumn>
                             </TableRow>
                         </TableHeader>
                         <TableBody displayRowCheckbox={false}>
                             {tableRows}
                         </TableBody>
                     </Table>
+
+                    <br/>
+
+                    <ul>
+                    <li><u>Monto Devengado</u>: Valor monetario pagado</li>
+                    <li><u>Monto Certificado</u>: Valor monetario comprometido o planificado</li>
+                    <li><u>Fuente</u>: Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA</li>
+                    </ul>
 
                     {
                         this.state.showFilter
