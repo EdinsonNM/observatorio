@@ -24,7 +24,6 @@ import Chip from 'material-ui/Chip';
 import SelectField from 'material-ui/SelectField';
 import DepartamentoService from '../../../services/DepartamentoService';
 import MunicipalidadService from  '../../../services/MunicipalidadService';
-import GastoService from  '../../../services/GastoService';
 import moment from 'moment';
 moment.locale('es');
 
@@ -46,7 +45,8 @@ export default class Gastos extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            departamentos:DepartamentoService.getAll({}),
+            // departamentos:DepartamentoService.getAll({}),
+            title: 'Gasto Público',
             anios:[
                 {id:2013,nombre:2013},
                 {id:2014,nombre:2014},
@@ -54,47 +54,45 @@ export default class Gastos extends React.Component{
                 {id:2016,nombre:2016},
                 {id:2017,nombre:2017}
             ],
-            title: 'Gasto Público',
+            municipalidades: [],
             municipalidad: null,
             tabIndex: 0,
             data:[]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
-        this.handleChangeTab = this.handleChangeTab.bind(this);
     }
 
      handleChangeSelect(key, event, index, value){
-        let munis = [];
         if (key === 'anio') {
-            let service = new MunicipalidadService();
-            munis = service.getByYear(value);
+            let munis = [];
+            munis = MunicipalidadService.getByYear(value);
+            this.setState({
+                [key]: value,
+                municipalidades: munis
+            });
+        }else if (key === 'municipalidad') {
+            this.setState({
+                [key]: value
+            });
         }
-
-        this.setState({
-            [key]: value,
-            municipalidades: munis
-        });
     }
 
     toggleFilter(){
         this.setState({showFilter:!this.state.showFilter});
     }
 
-
     buildTableRows (data) {
-        let tableRows = [];
-
-        for (let idx=1; idx<data.length; idx++) {
-            if (idx % 2 === 0) {
-                tableRows.push(
-                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
-                        <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
-                    </TableRow>
-                );
-            }
-        }
+        const tableRows = data.map((obj, idx) => {
+            return (
+                 <TableRow key={`tr-${idx}`}>
+                    <TableRowColumn>{obj.ID_UBIGEO} </TableRowColumn>
+                    <TableRowColumn>{obj.MUNICIPALIDAD} </TableRowColumn>
+                    <TableRowColumn>{obj.MON_DEVENGADO} </TableRowColumn>
+                    <TableRowColumn>{obj.MON_CERTIFICADO} </TableRowColumn>
+                </TableRow>
+            );
+        });
 
         return tableRows;
     }
@@ -105,7 +103,7 @@ export default class Gastos extends React.Component{
         switch (type) {
             case "municipalidades":
                 options = this.state.municipalidades.map((obj, idx) => {
-                    return <MenuItem key={`mi-muni-${idx}`} value={obj.ANIO} primaryText={obj.MUNICIPALIDAD} />;
+                    return <MenuItem key={`mi-muni-${idx}`} value={obj.MUNICIPALIDAD} primaryText={obj.MUNICIPALIDAD} />;
                 })
                 break;
             case "anios":
@@ -120,18 +118,11 @@ export default class Gastos extends React.Component{
     }
 
     getData(){
-        let service = new GastoService();
-        service.getAll(this.state.anio, this.state.municipalidad, (error,data) => {
-
+        if (this.state.municipalidad) {
+            let data = new MunicipalidadService.getGastos(this.state.municipalidad);
+            this.setState({data});
             this.toggleFilter();
-            data.forEach((item)=>{
-                dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
-            });
-
-            console.log(dataR);
-            this.setState({data:dataR});
-
-        });
+        }
     }
 
     render (){
@@ -140,11 +131,6 @@ export default class Gastos extends React.Component{
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
-        let departamento_nombre = '';
-        if (this.state.departamento) {
-            let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
-            departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
-        }
 
         let anio_nombre = '';
         if (this.state.anio) {
@@ -162,6 +148,23 @@ export default class Gastos extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
+                    {
+                        (!this.state.showFilter)?
+                        <div className="text-filter" style={style.wrapper}>
+
+                            {this.state.municipalidad ? <Chip style={style.chip}>{this.state.municipalidad}</Chip> : null}
+                            {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
+
+                            <span>
+                                <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
+                                    <FontIcon className="material-icons" color="white">filter_list</FontIcon>
+                                </FloatingActionButton>
+                            </span>
+
+                            <br/>
+                        </div>
+                        :null
+                    }
                     <Table fixedHeader={true} selectable={false} multiselectable={false}>
                         <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                             <TableRow>
@@ -201,7 +204,7 @@ export default class Gastos extends React.Component{
                                     </SelectField>
                                 </div>
 
-                                <div className="col-md-4">
+                                <div className="col-md-8">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Municipalidad:"
