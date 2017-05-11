@@ -92,6 +92,7 @@ export default class Precipitaciones extends React.Component{
         });
         this.loadEstaciones();
     }
+
     loadEstaciones(){
         let estacionService=new EstacionService();
         let estaciones = estacionService.getAll({},(error,data)=>{
