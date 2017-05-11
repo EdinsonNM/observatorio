@@ -1,5 +1,5 @@
-import api from '../libs/api.js'
-
+import api from '../libs/api.js';
+import _ from 'underscore';
 export default class Model{
 	getApi(){
 		return api;
@@ -24,8 +24,31 @@ export default class Model{
 			(error)=>{
 				return next(error.response.data.data);
 			}
-		)
+		);
 	}
+
+  getAll2(params,next,headers={}){
+    var service = api.all(this.modelName);
+		service.getAll(params,headers).then(
+			(response)=>{
+        let result = [];
+        let data = response.body();
+        data.forEach((item)=>{
+          let obj = item.data();
+          result.push(obj);
+        });
+ 				next(null,result);
+
+			},
+			(error)=>{
+        try {
+				  return next(error.response.data.data);
+        } catch (e) {
+          return next('Url not found');
+        }
+			}
+		)
+  }
 	get(id,next){
 		var service = api.one(this.modelName, id)
 		service.get().then((result)=>{

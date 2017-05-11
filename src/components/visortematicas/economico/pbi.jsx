@@ -20,10 +20,10 @@ import Subheader from 'material-ui/Subheader';
 import {CardHeader} from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Chip from 'material-ui/Chip';
-import _ from 'underscore';
+
 import SelectField from 'material-ui/SelectField';
 import DepartamentoService from '../../../services/DepartamentoService';
-import DenunciaAmbientalService from  '../../../services/DenunciaAmbientalService';
+import PBIService from  '../../../services/PBIService';
 import moment from 'moment';
 moment.locale('es');
 
@@ -41,25 +41,42 @@ const style={
   }
 };
 
-export default class Denuncias extends React.Component{
-	constructor(props){
-		super(props);
-		this.state={
+export default class Pbi extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
             departamentos:DepartamentoService.getAll({}),
             anios:[
+                {id:2010,nombre:2010},
+                {id:2011,nombre:2011},
+                {id:2012,nombre:2012},
+                {id:2013,nombre:2013},
                 {id:2014,nombre:2014},
                 {id:2015,nombre:2015},
                 {id:2016,nombre:2016},
             ],
-            title: 'Denuncias Ambientales',
+            title: 'PBI Por Actividades Económicas',
             tabIndex: 0,
-			data1:[['unidad', 'Por Dia']],
-            data2:[]
-		};
+            data:[
+                ['unidad', 'Por Dia'],
+                [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
+                [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
+                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+                [66, 70], [67, 72], [68, 75], [69, 80]
+            ]
+        };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
-	}
+    }
 
     handleChangeSelect(key, event, index, value){
         this.setState({
@@ -76,9 +93,9 @@ export default class Denuncias extends React.Component{
 
 
     buildTableRows (data) {
-    	let tableRows = [];
+        let tableRows = [];
 
-    	for (let idx=1; idx<data.length; idx++) {
+        for (let idx=1; idx<data.length; idx++) {
             if (idx % 2 === 0) {
                 tableRows.push(
                      <TableRow key={`tr-${idx}`}>
@@ -113,29 +130,22 @@ export default class Denuncias extends React.Component{
     }
 
     getData(){
-        let service = new DenunciaAmbientalService();
+        let service = new PBIService();
         service.getAll(this.state.anio,this.state.departamento,(error,data) => {
 
             this.toggleFilter();
-            let dataR1=[ ['unidad', 'Por Dia']];
-
-            let result1 = _.countBy(data, function(item) {
-                let date = item.fechaDenuncia.split('/')
-                return date[1];
+            let dataR=[ ['unidad', 'Por Dia']];
+            data.forEach((item)=>{
+                dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
             });
-            for(let key in result1){
-                dataR1.push([parseInt(key),result1[key]]);
-            }
-            dataR1 = _.sortBy(dataR1, function(item){ return item[0]; });
 
-            let dataR2=[ ['Tipo', 'Valor'],];
-            let agua =  _.filter(data, function(item) { return parseInt(item.agua) == 1;});
-            let suelo = _.filter(data, function(item) { return parseInt(item.suelo) == 1;});
-            let aire = _.filter(data, function(item) { return parseInt(item.aire) == 1;});
-            dataR2.push(['agua',agua.length]);
-            dataR2.push(['suelo',suelo.length]);
-            dataR2.push(['aire',aire.length]);
-            this.setState({data1:dataR1,data2:dataR2});
+            const transData = service.transformData(data);
+
+            console.log(dataR);
+            console.log(transData);
+            this.setState({data:transData});
+
+
         });
     }
 
@@ -144,38 +154,38 @@ export default class Denuncias extends React.Component{
             <FontIcon  className="material-icons" >arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
-        let tableRows = this.buildTableRows(this.state.data1);
+        let tableRows = this.buildTableRows(this.state.data);
         let departamento_nombre = '';
         if (this.state.departamento) {
-        	let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
-        	departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
+            let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
+            departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
         }
 
         let anio_nombre = '';
         if (this.state.anio) {
-        	let obj_anio = this.state.anios.find(obj => this.state.anio == obj.id);
-        	anio_nombre = obj_anio ? obj_anio.id : '';
+            let obj_anio = this.state.anios.find(obj => this.state.anio == obj.id);
+            anio_nombre = obj_anio ? obj_anio.id : '';
         }
 
         return(
-			<div className="tematica-home">
-				<AppBar
-    				title={this.state.title}
-    				iconElementLeft={iconButton}
-    				style={style.appbar}
+            <div className="tematica-home">
+                <AppBar
+                    title={this.state.title}
+                    iconElementLeft={iconButton}
+                    style={style.appbar}
                     titleStyle={{color:'black'}}
-				/>
+                />
 
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                            <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
+                            <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
 
                             {
                                 (!this.state.showFilter)?
                                 <div className="text-filter" style={style.wrapper}>
 
-                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
+                                    {this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
                                     {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
 
                                     <span>
@@ -187,33 +197,32 @@ export default class Denuncias extends React.Component{
                                 </div>
                                 :null
                             }
-                            {
-                                (this.state.data1.length>1)?
 
                             <div className={'my-pretty-chart-container'}>
-                                <h3>Registro de Denuncias Ambientales</h3>
                                 <Chart
                                     chartType="LineChart"
-                                    data={this.state.data1}
+                                    data={this.state.data}
                                     options={{}}
-                                    graph_id="ScatterChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                                <h3>Denuncias por Medio afectado</h3>
-                                <Chart
-                                    chartType="PieChart"
-                                    data={this.state.data2}
-                                    options={{}}
-                                    graph_id="ScatterChart2"
+                                    graph_id="LineChart"
                                     width="100%"
                                     height="400px"
                                     legend_toggle
                                 />
                             </div>
-                            :null
-                            }
+
+                            <br/>
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="PieChart"
+                                    data={this.state.data}
+                                    options={{}}
+                                    graph_id="PieChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
                         </Tab>
 
                         <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
@@ -276,8 +285,8 @@ export default class Denuncias extends React.Component{
                         </div>
                     </div>
 
-				</div>
-			</div>
-		);
-	}
+                </div>
+            </div>
+        );
+    }
 }

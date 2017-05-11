@@ -51,7 +51,7 @@ const INVESTIGADORES = [
 	{'investigador': 'Vulnerabilidad y adaptación al Cambio Climático', 'cantidad': 190}
 ];
 
-
+/*
 import _ from 'underscore';
 export default class InvestigadorService{
 
@@ -59,5 +59,20 @@ export default class InvestigadorService{
         let data =_.where(INVESTIGADORES, params) ;
         return data;
     }
+
+}
+*/
+import ApiService from './ApiService';
+const serviceName = 'sites/default/files/json/dina/investigadores-dina.json';
+import moment from 'moment';
+
+export default class InvestigadorService extends ApiService{
+
+  constructor(){
+    super(serviceName);
+  }
+  getAll(params,next){
+    return next(null,INVESTIGADORES);
+  }
 
 }
