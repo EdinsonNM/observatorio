@@ -1,17 +1,4 @@
 import React from 'react';
-
-export default class Indice extends React.Component{
-    constructor(props){
-        super(props);
-    }
-
-    render () {
-        return <div>indice</div>;
-    }
-}
-
-
-import React from 'react';
 import { render } from 'react-dom';
 import { Chart } from 'react-google-charts';
 
@@ -54,7 +41,7 @@ const style={
   }
 };
 
-export default class Pbi extends React.Component{
+export default class Indice extends React.Component{
     constructor(props){
         super(props);
         this.state={
