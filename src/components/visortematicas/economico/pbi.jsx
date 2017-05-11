@@ -57,21 +57,7 @@ export default class Pbi extends React.Component{
             ],
             title: 'PBI Por Actividades Económicas',
             tabIndex: 0,
-            data:[
-                ['unidad', 'Por Dia'],
-                [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-                [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
-                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-                [66, 70], [67, 72], [68, 75], [69, 80]
-            ]
+            data:[]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -99,8 +85,8 @@ export default class Pbi extends React.Component{
             if (idx % 2 === 0) {
                 tableRows.push(
                      <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{moment().month(parseInt(data[idx][0])-1).format('MMMM') } </TableRowColumn>
-                        <TableRowColumn>{`${data[idx][1]} denuncias`} </TableRowColumn>
+                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
+                        <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
                     </TableRow>
                 );
             }
@@ -150,7 +136,7 @@ export default class Pbi extends React.Component{
     }
 
     render (){
-        const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
+        const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
             <FontIcon  className="material-icons" >arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
@@ -212,17 +198,21 @@ export default class Pbi extends React.Component{
 
                             <br/>
 
-                            <div className={'my-pretty-chart-container'}>
-                                <Chart
-                                    chartType="PieChart"
-                                    data={this.state.data}
-                                    options={{}}
-                                    graph_id="PieChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                            </div>
+                            {
+                                this.state.data && this.state.data.length
+                                ? <div className={'my-pretty-chart-container'}>
+                                        <Chart
+                                            chartType="PieChart"
+                                            data={this.state.data}
+                                            options={{}}
+                                            graph_id="PieChart"
+                                            width="100%"
+                                            height="400px"
+                                            legend_toggle
+                                        />
+                                    </div>
+                                : null
+                            }
                         </Tab>
 
                         <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
@@ -230,8 +220,8 @@ export default class Pbi extends React.Component{
                                 <Table fixedHeader={true} selectable={false} multiselectable={false}>
                                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                         <TableRow>
-                                            <TableHeaderColumn>Mes</TableHeaderColumn>
-                                            <TableHeaderColumn>Denuncias.</TableHeaderColumn>
+                                            <TableHeaderColumn>Actividad Económica</TableHeaderColumn>
+                                            <TableHeaderColumn>PBI</TableHeaderColumn>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody displayRowCheckbox={false}>
