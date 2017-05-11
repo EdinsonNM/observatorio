@@ -23,7 +23,8 @@ import Chip from 'material-ui/Chip';
 
 import SelectField from 'material-ui/SelectField';
 import DepartamentoService from '../../../services/DepartamentoService';
-import PBIService from  '../../../services/PBIService';
+import MunicipalidadService from  '../../../services/MunicipalidadService';
+import GastoService from  '../../../services/GastoService';
 import moment from 'moment';
 moment.locale('es');
 
@@ -42,21 +43,19 @@ const style={
 };
 
 export default class Gastos extends React.Component{
-
     constructor(props){
         super(props);
         this.state={
             departamentos:DepartamentoService.getAll({}),
             anios:[
-                {id:2010,nombre:2010},
-                {id:2011,nombre:2011},
-                {id:2012,nombre:2012},
                 {id:2013,nombre:2013},
                 {id:2014,nombre:2014},
                 {id:2015,nombre:2015},
                 {id:2016,nombre:2016},
+                {id:2017,nombre:2017}
             ],
-            title: 'PBI Por Actividades Económicas',
+            title: 'Gasto Público',
+            municipalidad: null,
             tabIndex: 0,
             data:[]
         };
@@ -65,15 +64,19 @@ export default class Gastos extends React.Component{
         this.handleChangeTab = this.handleChangeTab.bind(this);
     }
 
-    handleChangeSelect(key, event, index, value){
+     handleChangeSelect(key, event, index, value){
+        let munis = [];
+        if (key === 'anio') {
+            let service = new MunicipalidadService();
+            munis = service.getByYear(value);
+        }
+
         this.setState({
-            [key]: value
+            [key]: value,
+            municipalidades: munis
         });
     }
 
-    handleChangeTab (value) {
-        this.setState({tabIndex: value});
-    }
     toggleFilter(){
         this.setState({showFilter:!this.state.showFilter});
     }
@@ -117,8 +120,8 @@ export default class Gastos extends React.Component{
     }
 
     getData(){
-        let service = new PBIService();
-        service.getAll(this.state.anio,this.state.departamento,(error,data) => {
+        let service = new GastoService();
+        service.getAll(this.state.anio, this.state.municipalidad, (error,data) => {
 
             this.toggleFilter();
             let dataR=[ ['unidad', 'Por Dia']];
@@ -126,12 +129,8 @@ export default class Gastos extends React.Component{
                 dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
             });
 
-            const transData = service.transformData(data);
-
             console.log(dataR);
-            console.log(transData);
-            this.setState({data:transData});
-
+            this.setState({data:dataR});
 
         });
     }
@@ -164,89 +163,23 @@ export default class Gastos extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
-                    <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                            <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
+                    <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                            <TableRow>
+                                <TableHeaderColumn>Actividad Económica</TableHeaderColumn>
+                                <TableHeaderColumn>PBI</TableHeaderColumn>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody displayRowCheckbox={false}>
+                            {tableRows}
+                        </TableBody>
+                    </Table>
 
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                    {this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
-                                </div>
-                                :null
-                            }
-
-                            <div className={'my-pretty-chart-container'}>
-                                <Chart
-                                    chartType="LineChart"
-                                    data={this.state.data}
-                                    options={{}}
-                                    graph_id="LineChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                            </div>
-
-                            <br/>
-
-                            {
-                                this.state.data && this.state.data.length
-                                ? <div className={'my-pretty-chart-container'}>
-                                        <Chart
-                                            chartType="PieChart"
-                                            data={this.state.data}
-                                            options={{}}
-                                            graph_id="PieChart"
-                                            width="100%"
-                                            height="400px"
-                                            legend_toggle
-                                        />
-                                    </div>
-                                : null
-                            }
-                        </Tab>
-
-                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn>Actividad Económica</TableHeaderColumn>
-                                            <TableHeaderColumn>PBI</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
-                                        {tableRows}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </Tab>
-                    </Tabs>
                     {
                         this.state.showFilter
                         ? <div className="container-fluid">
                             <div className="row">
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Departamento:"
-                                        value={this.state.departamento}
-                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('departamentos')}
-                                    </SelectField>
-                                </div>
+
                                 <div className="col-md-4">
                                     <SelectField
                                         fullWidth
@@ -256,6 +189,18 @@ export default class Gastos extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('anios')}
+                                    </SelectField>
+                                </div>
+
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Municipalidad:"
+                                        value={this.state.municipalidad}
+                                        onChange={this.handleChangeSelect.bind(this, 'municipalidad')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('municipalidades')}
                                     </SelectField>
                                 </div>
 
