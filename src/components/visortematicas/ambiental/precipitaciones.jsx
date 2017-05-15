@@ -13,7 +13,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import {grey400, darkBlack, lightBlack,pink500,teal500,cyan800,cyan100} from 'material-ui/styles/colors';
-import {List, ListItem} from 'material-ui/List';
+import {List, ListItem,makeSelectable} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Subheader from 'material-ui/Subheader';
 import {CardHeader} from 'material-ui/Card';
@@ -29,6 +29,9 @@ import DataService from '../../../services/DataEstacionService';
 import EstacionService from '../../../services/EstacionService';
 import PeriodoService from '../../../services/PeriodoEstacionService';
 import moment from 'moment';
+
+let SelectableList = makeSelectable(List);
+
 moment.locale('es');
 
 const style={
@@ -50,6 +53,8 @@ export default class Precipitaciones extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
+            listIndex:0,
+            estacionesVisible:[],
 			title: 'Precipitación y Temperatura',
             showFilter:false,
             departamentos: [],
@@ -95,8 +100,98 @@ export default class Precipitaciones extends React.Component{
     loadEstaciones(){
         let estacionService=new EstacionService();
         let estaciones = estacionService.getAll({},(error,data)=>{
+            let markers = [];
+            var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                opacity: 0.75,
+                src: 'visor/images/marker.png'
+                //src: pointerimgsrc
+                }))
+            });
+
+
+            data.forEach((item)=>{
+                let  iconFeature = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.transform([parseFloat(item.LON), parseFloat(item.LAT)], 'EPSG:4326', 'EPSG:3857')),
+                        nombre: item.V_NOM_ESTA,
+                        tipo: item.V_NOM_TIPO,
+                        subtipo: item.V_NOM_STIPO,
+                        lat:parseFloat(item.LAT),
+                        lon:parseFloat(item.LON)
+                    });
+                iconFeature.setStyle(iconStyle);
+                markers.push(iconFeature);
+            });
+
+            var vectorSource = new ol.source.Vector({features: markers });
+            var vectorLayer = new ol.layer.Vector({source: vectorSource});
+            this.props.AddLayer(vectorLayer);
+            this.Layer = vectorLayer;
+            let map = this.props.map.getMap();
+            var size = map.getView().calculateExtent(map.getSize());
+
+
+            var mapExtent = map.getView().calculateExtent(map.getSize());
+            console.log(size,map.getSize());
+            this.vectorLayer = vectorLayer;
+            let getVisibles = ()=>{
+                var size = map.getView().calculateExtent(map.getSize());
+                 var intersectedFeatures = [];
+                 vectorLayer.getSource().forEachFeatureInExtent(size, function(e) {
+                    intersectedFeatures.push(e);
+
+                });
+                this.setState({estacionesVisible:intersectedFeatures});
+            }
+
+            map.getView().on('change:center',getVisibles);
+
+            getVisibles();
+
+
         });
     }
+
+     handleRequestChange (event, index){
+         let feature = this.state.estacionesVisible[index];
+         let estacion = feature.getProperties();
+         console.log(estacion);
+
+	  //this.props.map.getMap().getView().setCenter(ol.proj.transform([estacion.lon, estacion.lat], 'EPSG:4326', 'EPSG:3857'))
+        var iconStyleSelected = new ol.style.Style({
+            image: new ol.style.Icon(({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.75,
+            src: 'visor/images/marker-selected.png'
+            //src: pointerimgsrc
+            }))
+        });
+        var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+                anchor: [0.5, 46],
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                opacity: 0.75,
+                src: 'visor/images/marker.png'
+                //src: pointerimgsrc
+                }))
+            });
+         if(this.selectedFeature){
+             this.selectedFeature.setStyle(iconStyle);
+         }
+
+        feature.setStyle(iconStyleSelected);
+        this.selectedFeature = feature;
+      this.setState({
+        listIndex: index,
+      });
+    }
+
 
     handleChangeSelect(key, event, index, value){
         switch (key) {
@@ -215,6 +310,11 @@ export default class Precipitaciones extends React.Component{
         });
     }
 
+    componentWillUnmount(){
+        console.log("bye component...");
+        this.props.map.RemoveLayer(this.Layer);
+    }
+
     render (){
         let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
@@ -245,7 +345,21 @@ export default class Precipitaciones extends React.Component{
         	let obj_estacion = this.state.estaciones.find(obj => this.state.distrito == obj.codigo_ubigeo);
         	estacion_nombre = obj_estacion ? obj_estacion.V_NOM_ESTA : '';
         }
+        const iconButtonElement = (
+            <IconButton
+                touch={true}
+                tooltip="more"
+                tooltipPosition="bottom-left"
+            >
+                 <FontIcon className="material-icons" color="#006064">more_vert</FontIcon>
+            </IconButton>
+            );
+        const rightIconMenu = (
+        <IconMenu iconButtonElement={iconButtonElement}>
+            <MenuItem>Ver reporte</MenuItem>
 
+        </IconMenu>
+        );
         return(
 			<div className="tematica-home">
 				<AppBar
@@ -257,7 +371,26 @@ export default class Precipitaciones extends React.Component{
 
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                        <Tab label="Visibles" value={0} icon={<FontIcon className="material-icons">location_on</FontIcon>}>
+                            	<SelectableList defaultValue={2}  value={this.state.listIndex}  onChange={this.handleRequestChange.bind(this)}>
+                                <Subheader>Listado de Estaciones</Subheader>
+                               {
+                                   this.state.estacionesVisible.map((item,idx)=>{
+                                        let estacion = item.getProperties();
+                                       return(
+                                            <ListItem
+                                            value={idx}
+                                            primaryText={estacion.nombre}
+                                            secondaryText={estacion.subtipo}
+                                            rightIconButton={rightIconMenu}
+                                        />
+                                       )
+                                   })
+                               }
+                                </SelectableList>
+
+                        </Tab>
+                        <Tab label="Gráfica" value={1} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
 
                             {
@@ -294,7 +427,7 @@ export default class Precipitaciones extends React.Component{
                             </div>
                         </Tab>
 
-                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                        <Tab label="Tabla" value={2} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
                             <div>
                                 <Table fixedHeader={true} selectable={false} multiselectable={false}>
                                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -394,7 +527,9 @@ export default class Precipitaciones extends React.Component{
                         </div>
                         : null
                     }
-
+                    <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
+                    </div>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-12">

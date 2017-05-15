@@ -39,6 +39,8 @@ export default class Index extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state ={
+            legends:[],
+            openLegend:false,
 			tematica:{titulo:''},
 			tematicas:[],
 			mapas:[],
@@ -199,11 +201,12 @@ export default class Index extends React.Component{
 		this.setState({tematica:{titulo:''},showclear:false,searchText:''});
 	}
 	handleService(item,itemIndex,groupIndex){
+        let urls= this.map.getLegends();
 		item.ref.setVisible(!item.visible);
 		console.log(item,itemIndex,groupIndex);
 		let layers = this.state.layers;
 		layers[groupIndex].items[itemIndex].visible = !item.visible;
-		this.setState({layers:layers});
+		this.setState({layers:layers,legends:urls});
 		//$(".services-list").mCustomScrollbar("scrollTo");
 	}
 	selectBaseMap(item,index,items){
@@ -213,6 +216,10 @@ export default class Index extends React.Component{
 	}
 	handleBaseMaps(){
 		this.setState({showbasemaps:!this.state.showbasemaps});
+	}
+    handleLegends(){
+        let urls= this.map.getLegends();
+		this.setState({openLegend:!this.state.openLegend,legends:urls});
 	}
 	handleExpandedTematica(group,index){
 		let layers = this.state.layers;
@@ -307,7 +314,10 @@ export default class Index extends React.Component{
 											</IconButton>
 									}
 									<IconButton tooltip="Seleccionar mapa base"  onTouchTap={this.handleBaseMaps.bind(this)}>
-										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>maps</FontIcon>
+										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>layers</FontIcon>
+									</IconButton>
+                                    <IconButton tooltip="Ver Leyenda"  onTouchTap={this.handleLegends.bind(this)}>
+										<FontIcon className="material-icons" color={(this.state.openLegend)?"#00BCD4":"#c3c3c3"}>maps</FontIcon>
 									</IconButton>
 
 								</span>
@@ -323,6 +333,19 @@ export default class Index extends React.Component{
 						</div>
 					</div>
 					</div>
+                      <Drawer open={this.state.openLegend} width={300}>
+                                {
+                                    this.state.legends.map((url,index)=>{
+                                        return (<div style={{textAlign:'center'}}>
+                                                     <Subheader>{url.title}</Subheader>
+
+                                                    <object data={url.legend} type="image/png">
+                                                        <small>Legenda no encontrada</small>
+                                                    </object>
+                                                </div>);
+                                    })
+                                }
+                    </Drawer>
 					 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={350} containerStyle={{display:'flex',flexDirection:'column'}}>
 						<AppBar
 						title="Visor de Mapas"
@@ -382,6 +405,7 @@ export default class Index extends React.Component{
 
 
 					</Drawer>
+
 			</div>
 	  	);
 	}

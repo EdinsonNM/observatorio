@@ -25,6 +25,7 @@ import SelectField from 'material-ui/SelectField';
 import DepartamentoService from '../../../services/DepartamentoService';
 import LegajoService from  '../../../services/LegajoService';
 import moment from 'moment';
+import _ from 'underscore';
 moment.locale('es');
 
 const style={
@@ -45,38 +46,48 @@ export default class Legajos extends React.Component{
 	constructor(props){
 		super(props);
 		this.state={
+            departamento:null,
+            anio:null,
             departamentos:DepartamentoService.getAll({}),
             anios:[
                 {id:2014,nombre:2014},
                 {id:2015,nombre:2015},
                 {id:2016,nombre:2016},
+                 {id:2017,nombre:2017},
             ],
             title: 'Legajos Ambientales',
             tabIndex: 0,
-			data:[
-                ['unidad', 'Por Dia'],
-                [0, 0],   [1, 10],  [2, 23],  [3, 17],  [4, 18],  [5, 9],
-                [6, 11],  [7, 27],  [8, 33],  [9, 40],  [10, 32], [11, 35],
-                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-                [66, 70], [67, 72], [68, 75], [69, 80]
-            ]
+			data:[['unidad', 'Por Dia'] ]
 		};
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
 	}
 
+    componentDidMount(){
+
+
+        setTimeout(()=>{
+            this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
+                this.setState({departamento:data.FIRST_IDDP},()=>{
+                    this.getData();
+                });
+
+            });
+        },2000);
+
+    }
+    componentWillUnmount(){
+        this.props.map.RemoveLayer(this.Layer);
+    }
+
+
     handleChangeSelect(key, event, index, value){
+
         this.setState({
             [key]: value
+        },()=>{
+            this.getData();
         });
     }
 
@@ -92,14 +103,13 @@ export default class Legajos extends React.Component{
     	let tableRows = [];
 
     	for (let idx=1; idx<data.length; idx++) {
-            if (idx % 2 === 0) {
-                tableRows.push(
-                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{moment().month(parseInt(data[idx][0])-1).format('MMMM') } </TableRowColumn>
-                        <TableRowColumn>{`${data[idx][1]} denuncias`} </TableRowColumn>
-                    </TableRow>
-                );
-            }
+            tableRows.push(
+                    <TableRow key={`tr-${idx}`}>
+                    <TableRowColumn>{ data[idx][0] } </TableRowColumn>
+                    <TableRowColumn>{ data[idx][1] } </TableRowColumn>
+                </TableRow>
+            );
+
         }
 
         return tableRows;
@@ -126,24 +136,23 @@ export default class Legajos extends React.Component{
     }
 
     getData(){
-        let service = new LegajoService();
-        service.getAll(this.state.anio,this.state.departamento,(error,data) => {
+        if(this.state.departamento!=null&&this.state.anio!=null){
+            let service = new LegajoService();
+            service.getAll(this.state.anio,this.state.departamento,(error,data) => {
 
-            this.toggleFilter();
-            let dataR=[ ['unidad', 'Por Dia']];
-            data.forEach((item)=>{
-                dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
+                this.toggleFilter();
+                let dataR = service.getReport1(data);
+
+                this.setState({data:dataR});
+
+
             });
-            console.log(dataR);
-            this.setState({data:dataR});
-
-
-        });
+        }
     }
 
     render (){
-        const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+       const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -171,57 +180,9 @@ export default class Legajos extends React.Component{
                 <div className="col-md-12" className="tematica-home-container">
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                            <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
+                            <div className="text-filter">Seleccione un departamento del mapa y el año sobre el cual desea consultar.</div>
 
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
-                                </div>
-                                :null
-                            }
-
-                            <div className={'my-pretty-chart-container'}>
-                                <Chart
-                                    chartType="LineChart"
-                                    data={this.state.data}
-                                    options={{}}
-                                    graph_id="ScatterChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                            </div>
-                        </Tab>
-
-                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn>Mes</TableHeaderColumn>
-                                            <TableHeaderColumn>Denuncias.</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
-                                        {tableRows}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </Tab>
-                    </Tabs>
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
+                           <div className="container-fluid">
                             <div className="row">
                                 <div className="col-md-4">
                                     <SelectField
@@ -246,14 +207,51 @@ export default class Legajos extends React.Component{
                                     </SelectField>
                                 </div>
 
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
                             </div>
                         </div>
-                        : null
-                    }
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.state.data}
+                                    options={{
+                                        title: 'Registro de Legajos Ambientales',
+                                        curveType: 'function',
+                                        legend: { position: 'top' },
+                                        hAxis: {
+                                            title: 'Meses'
+                                        },
+                                        vAxis: {
+                                            title: 'Legajos Ambientales'
+                                        }
+                                    }}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
+                        </Tab>
+
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Mes</TableHeaderColumn>
+                                            <TableHeaderColumn>Total</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
+                    <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA; en base a la información consultada mediante servicio web a la Oficina de Procuraduría del MINAM.
+                    </div>
 
                     <div className="container-fluid">
                         <div className="row">
