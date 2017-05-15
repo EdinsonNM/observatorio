@@ -1,7 +1,7 @@
 import ApiService from './ApiService';
-const serviceName = '/wsprocuraduria/response.php';
 import _ from 'underscore';
 import moment from 'moment';
+const serviceName = '/wsprocuraduria/response.php';
 export default class LegajoService extends ApiService{
 
   constructor(){

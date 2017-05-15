@@ -53,17 +53,29 @@ export default class Denuncias extends React.Component{
             ],
             title: 'Denuncias Ambientales',
             tabIndex: 0,
-			data1:[['unidad', 'Por Dia']],
-            data2:[]
+			data1:[['unidad', 'Por Dia'],[1,1],[1,1]],
+            data2:[['unidad', 'Por Dia'],['data',1],['data',1]]
 		};
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
 	}
+    componentDidMount(){
+         setTimeout(()=>{
+            this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
+                this.setState({departamento:data.FIRST_IDDP},()=>{
+                    this.getData();
+                });
+
+            });
+        },2000);
+    }
 
     handleChangeSelect(key, event, index, value){
         this.setState({
             [key]: value
+        },()=>{
+            this.getData();
         });
     }
 
@@ -113,35 +125,20 @@ export default class Denuncias extends React.Component{
     }
 
     getData(){
-        let service = new DenunciaAmbientalService();
-        service.getAll(this.state.anio,this.state.departamento,(error,data) => {
-
-            this.toggleFilter();
-            let dataR1=[ ['unidad', 'Por Dia']];
-
-            let result1 = _.countBy(data, function(item) {
-                let date = item.fechaDenuncia.split('/')
-                return date[1];
+        if(this.state.departamento!=null&&this.state.anio!=null){
+            let service = new DenunciaAmbientalService();
+            service.getAll(this.state.anio,this.state.departamento,(error,data) => {
+                let dataR1=service.getReport1(data);
+                let dataR2=service.getReport2(data);
+                console.log(dataR2);
+                this.setState({data1:dataR1,data2:dataR2});
             });
-            for(let key in result1){
-                dataR1.push([parseInt(key),result1[key]]);
-            }
-            dataR1 = _.sortBy(dataR1, function(item){ return item[0]; });
-
-            let dataR2=[ ['Tipo', 'Valor'],];
-            let agua =  _.filter(data, function(item) { return parseInt(item.agua) == 1;});
-            let suelo = _.filter(data, function(item) { return parseInt(item.suelo) == 1;});
-            let aire = _.filter(data, function(item) { return parseInt(item.aire) == 1;});
-            dataR2.push(['agua',agua.length]);
-            dataR2.push(['suelo',suelo.length]);
-            dataR2.push(['aire',aire.length]);
-            this.setState({data1:dataR1,data2:dataR2});
-        });
+        }
     }
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data1);
@@ -170,71 +167,7 @@ export default class Denuncias extends React.Component{
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
-
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
-                                </div>
-                                :null
-                            }
-                            {
-                                (this.state.data1.length>1)?
-
-                            <div className={'my-pretty-chart-container'}>
-                                <h3>Registro de Denuncias Ambientales</h3>
-                                <Chart
-                                    chartType="LineChart"
-                                    data={this.state.data1}
-                                    options={{}}
-                                    graph_id="ScatterChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                                <h3>Denuncias por Medio afectado</h3>
-                                <Chart
-                                    chartType="PieChart"
-                                    data={this.state.data2}
-                                    options={{}}
-                                    graph_id="ScatterChart2"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                            </div>
-                            :null
-                            }
-                        </Tab>
-
-                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn>Mes</TableHeaderColumn>
-                                            <TableHeaderColumn>Denuncias.</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
-                                        {tableRows}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </Tab>
-                    </Tabs>
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
+                            <div className="container-fluid">
                             <div className="row">
                                 <div className="col-md-4">
                                     <SelectField
@@ -259,22 +192,68 @@ export default class Denuncias extends React.Component{
                                     </SelectField>
                                 </div>
 
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-12">
 
                             </div>
                         </div>
+
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.state.data1}
+                                     options={{
+                                        title: 'Registro de Denuncias Ambientales',
+                                        curveType: 'function',
+                                        legend: { position: 'top' },
+                                        hAxis: {
+                                            title: 'Meses'
+                                        },
+                                        vAxis: {
+                                            title: 'Denuncias Ambientales'
+                                        }
+                                    }}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                                <Chart
+                                    chartType="PieChart"
+                                    data={this.state.data2}
+                                    options={{
+                                        title: 'Denuncias por Medio Afectado',
+
+                                    }}
+                                    graph_id="ScatterChart2"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
+
+                        </Tab>
+
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Mes</TableHeaderColumn>
+                                            <TableHeaderColumn>Denuncias.</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
+                    <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Servicio Nacional de Denuncias Ambientales-SINADA, Organismo de Evaluación y Fiscalización Ambiental-OEFA.
                     </div>
+
+
 
 				</div>
 			</div>

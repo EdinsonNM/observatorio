@@ -1,7 +1,8 @@
 import ApiService from './ApiService';
-const serviceName = '/wsoefa/oefa.php';
 import _ from 'underscore';
+import moment from 'moment';
 import {to_json} from'xmljson';
+const serviceName = '/wsoefa/oefa.php';
 
 export default class DenunciaAmbientalService extends ApiService{
 
@@ -29,6 +30,30 @@ export default class DenunciaAmbientalService extends ApiService{
       			return next(error,result);
     		});
 	  });
+  }
+
+  getReport1(data){
+      let result=[ ['Mes', 'N° de Denuncias Ambientales']];
+      for(let mes = 0;mes<12;mes++){
+        result.push([moment().month(mes).format('MMM'),0])
+      }
+
+      data.forEach((item)=>{
+        let date = item.fechaDenuncia.split('/')
+        let month = parseInt(date[1]);
+        result[month][1]+=1;
+      });
+      return result;
+  }
+  getReport2(data){
+    let result = [['Tipo','Total']];
+    let agua =  _.filter(data, (item)=> { return parseInt(item.agua) == 1;});
+    let suelo = _.filter(data, (item)=> { return parseInt(item.suelo) == 1;});
+    let aire = _.filter(data, (item)=> { return parseInt(item.aire) == 1;});
+    result.push(['Agua',agua.length]);
+    result.push(['Suelo',suelo.length]);
+    result.push(['Aire',aire.length]);
+    return result;
   }
 
 }

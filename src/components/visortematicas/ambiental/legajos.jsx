@@ -57,7 +57,7 @@ export default class Legajos extends React.Component{
             ],
             title: 'Legajos Ambientales',
             tabIndex: 0,
-			data:[['unidad', 'Por Dia'] ]
+			data:[['Mes', 'N° de Legajos Ambientales'],[1, 1],   [1, 1] ]
 		};
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
