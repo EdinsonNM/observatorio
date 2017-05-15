@@ -21,9 +21,14 @@
 	flex-direction:column;
 }
 .tematica-home-container{
-  padding-top: 20px;
+  padding-top: 0;
 	flex:1;
 	overflow-y:auto;
+}
+.ol-zoom {
+    bottom: 10px;
+    left: .5em;
+    top: auto!important;
 }
 @media (max-width:640px){
 	.layout.visor-tematica-container{
