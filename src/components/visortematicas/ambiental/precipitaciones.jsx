@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Chart } from 'react-google-charts';
+import {Line} from 'react-chartjs';
 
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';

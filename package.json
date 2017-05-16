@@ -50,6 +50,7 @@
     "native-toast": "^1.1.0",
     "openlayers": "^4.0.1",
     "react": "^15.5.4",
+    "react-chartjs": "^0.8.0",
     "react-dom": "^15.4.2",
     "react-google-charts": "^1.5.4-alpha.1",
     "react-highcharts": "^12.0.0",
