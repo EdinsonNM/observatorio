@@ -529,10 +529,14 @@ export default class Precipitaciones extends React.Component{
                         </div>
                         : null
                     }
-                    <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
-                    </div>
                     <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="alert alert-info" role="alert">
+                                    <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
+                                </div>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-md-12">
 
