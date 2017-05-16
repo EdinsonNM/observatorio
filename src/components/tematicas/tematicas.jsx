@@ -72,7 +72,8 @@ export default class Tematicas extends React.Component {
       this.setState({
         selectedIndex: index,
       });
-    };
+    }
+
   render(){
 
     const iconButtonElement = (

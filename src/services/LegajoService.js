@@ -1,6 +1,7 @@
 import ApiService from './ApiService';
-const serviceName = '/wsprocuraduria/response.php';
 import _ from 'underscore';
+import moment from 'moment';
+const serviceName = '/wsprocuraduria/response.php';
 export default class LegajoService extends ApiService{
 
   constructor(){
@@ -22,6 +23,19 @@ export default class LegajoService extends ApiService{
       });
       return next(null,result);
     });
+  }
+
+  getReport1(data){
+      console.log(data);
+      let result=[ ['Mes', 'N° de Legajos Ambientales']];
+      for(let mes = 0;mes<12;mes++){
+        result.push([moment().month(mes).format('MMM'),0])
+      }
+
+      data.forEach((item)=>{
+        result[parseInt(item.mes)][1]+=parseFloat(item.nr);
+      });
+      return result;
   }
 
 }

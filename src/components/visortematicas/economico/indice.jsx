@@ -23,7 +23,10 @@ import Chip from 'material-ui/Chip';
 
 import SelectField from 'material-ui/SelectField';
 import DepartamentoService from '../../../services/DepartamentoService';
-import PBIService from  '../../../services/PBIService';
+import ProvinciaService from '../../../services/ProvinciaService';
+import DistritoService from '../../../services/DistritoService';
+import IDHService from '../../../services/IDHService';
+
 import moment from 'moment';
 moment.locale('es');
 
@@ -45,17 +48,11 @@ export default class Indice extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            departamentos:DepartamentoService.getAll({}),
-            anios:[
-                {id:2010,nombre:2010},
-                {id:2011,nombre:2011},
-                {id:2012,nombre:2012},
-                {id:2013,nombre:2013},
-                {id:2014,nombre:2014},
-                {id:2015,nombre:2015},
-                {id:2016,nombre:2016},
-            ],
-            title: 'PBI Por Actividades Económicas',
+            showFilter:false,
+            departamentos: [],
+            provincias: [],
+            distritos: [],
+            title: 'Indice de Desarrollo Humano',
             tabIndex: 0,
             data:[]
         };
@@ -64,38 +61,63 @@ export default class Indice extends React.Component{
         this.handleChangeTab = this.handleChangeTab.bind(this);
     }
 
+    componentDidMount() {
+        let departamentos = DepartamentoService.getAll({});
+        this.setState({departamentos});
+    }
+
     handleChangeSelect(key, event, index, value){
-        this.setState({
-            [key]: value
-        });
+        switch (key) {
+            case 'departamento':
+                let provincias = ProvinciaService.getAll(DepartamentoService.get(value).id_ubigeo, {});
+
+                this.setState({
+                    [key]: value,
+                    provincias
+                });
+                break;
+            case 'provincia':
+                let distritos = DistritoService.getAll(ProvinciaService.get(DepartamentoService.get(this.state.departamento).id_ubigeo,value).id_ubigeo,{});
+
+                this.setState({
+                    [key]: value,
+                    distritos
+                });
+                break;
+            default:
+                this.setState({
+                    [key]: value
+                });
+         }
     }
 
     handleChangeTab (value) {
         this.setState({tabIndex: value});
     }
+
     toggleFilter(){
         this.setState({showFilter:!this.state.showFilter});
     }
 
-
     buildTableRows (data) {
-        let tableRows = [];
+        const tableRows = [];
 
-        for (let idx=1; idx<data.length; idx++) {
-            if (idx % 2 === 0) {
+        data.forEach((obj, idx) => {
+            if (idx > 0) {
                 tableRows.push(
-                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
-                        <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
+                    <TableRow key={`tr-${idx}`}>
+                        <TableRowColumn>{obj[0]} </TableRowColumn>
+                        <TableRowColumn>{obj[1]} </TableRowColumn>
                     </TableRow>
                 );
+
             }
-        }
+        });
 
         return tableRows;
     }
 
-     buildSelectOptions (type) {
+    buildSelectOptions (type) {
         let options = [];
 
         switch (type) {
@@ -104,36 +126,39 @@ export default class Indice extends React.Component{
                     return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 })
                 break;
-            case "anios":
-                options = this.state.anios.map((obj, idx) => {
-                    return <MenuItem key={`mi-prov-${idx}`} value={obj.id} primaryText={obj.nombre} />;
+            case "provincias":
+                options = this.state.provincias.map((obj, idx) => {
+                    return <MenuItem key={`mi-prov-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
                 });
                 break;
-
+            case 'distritos':
+                options = this.state.distritos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dist-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                });
+                break;
         }
 
         return options;
     }
 
     getData(){
-        let service = new PBIService();
-        service.getAll(this.state.anio,this.state.departamento,(error,data) => {
+        let service = new IDHService();
+        let ubigeo = `${this.state.departamento}${this.state.provincia}${this.state.distrito}`;
+
+        service.getAll(ubigeo, (error, data) => {
 
             this.toggleFilter();
-            let dataR=[ ['unidad', 'Por Dia']];
-            data.forEach((item)=>{
-                dataR.push([parseInt(item.mes) ,parseFloat(item.nr)||0]);
+            let dataR=[ ['Año', 'Indice']];
+            data.forEach((item) => {
+                dataR.push([item.ID_ANIO*1, item.IDH*1]);
             });
 
-            const transData = service.transformData(data);
-
             console.log(dataR);
-            console.log(transData);
-            this.setState({data:transData});
-
-
+            this.setState({data:dataR});
         });
     }
+
+
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
@@ -141,16 +166,23 @@ export default class Indice extends React.Component{
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
+
         let departamento_nombre = '';
         if (this.state.departamento) {
             let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
             departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
         }
 
-        let anio_nombre = '';
-        if (this.state.anio) {
-            let obj_anio = this.state.anios.find(obj => this.state.anio == obj.id);
-            anio_nombre = obj_anio ? obj_anio.id : '';
+        let provincia_nombre = '';
+        if (this.state.provincia) {
+            let obj_provincia = this.state.provincias.find(obj => this.state.provincia == obj.codigo_ubigeo);
+            provincia_nombre = obj_provincia ? obj_provincia.nombre_ubigeo : '';
+        }
+
+        let distrito_nombre = '';
+        if (this.state.distrito) {
+            let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.codigo_ubigeo);
+            distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
         }
 
         return(
@@ -163,22 +195,75 @@ export default class Indice extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                    <TableRow>
-                                        <TableHeaderColumn>Actividad Económica</TableHeaderColumn>
-                                        <TableHeaderColumn>PBI</TableHeaderColumn>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody displayRowCheckbox={false}>
-                                    {tableRows}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    </div>
+                    <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
+                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
+                            <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
 
+                            {
+                                (!this.state.showFilter)?
+                                <div className="text-filter" style={style.wrapper}>
+
+                                    {this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
+                                    {this.state.provincia ? <Chip style={style.chip}>{provincia_nombre}</Chip> : null}
+                                    {this.state.distrito ? <Chip style={style.chip}>{distrito_nombre}</Chip> : null}
+
+                                    <span>
+                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
+                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
+                                        </FloatingActionButton>
+                                    </span>
+
+                                </div>
+                                :null
+                            }
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="AreaChart"
+                                    data={this.state.data}
+                                    options={{}}
+                                    graph_id="AreaChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
+
+                            <br/>
+
+                            {
+                                this.state.data && this.state.data.length
+                                ? <div className={'my-pretty-chart-container'}>
+                                        <Chart
+                                            chartType="PieChart"
+                                            data={this.state.data}
+                                            options={{}}
+                                            graph_id="PieChart"
+                                            width="100%"
+                                            height="400px"
+                                            legend_toggle
+                                        />
+                                    </div>
+                                : null
+                            }
+                        </Tab>
+
+                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Año</TableHeaderColumn>
+                                            <TableHeaderColumn>Índice</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
                     {
                         this.state.showFilter
                         ? <div className="container-fluid">
@@ -197,12 +282,23 @@ export default class Indice extends React.Component{
                                 <div className="col-md-4">
                                     <SelectField
                                         fullWidth
-                                        floatingLabelText="Año: "
-                                        value={this.state.anio}
-                                        onChange={this.handleChangeSelect.bind(this, 'anio')}
+                                        floatingLabelText="Provincia: "
+                                        value={this.state.provincia}
+                                        onChange={this.handleChangeSelect.bind(this, 'provincia')}
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('anios')}
+                                        {this.buildSelectOptions('provincias')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Distrito: "
+                                        value={this.state.distrito}
+                                        onChange={this.handleChangeSelect.bind(this, 'distrito')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('distritos')}
                                     </SelectField>
                                 </div>
 
