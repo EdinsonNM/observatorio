@@ -121,7 +121,9 @@ export default class Precipitaciones extends React.Component{
                         tipo: item.V_NOM_TIPO,
                         subtipo: item.V_NOM_STIPO,
                         lat:parseFloat(item.LAT),
-                        lon:parseFloat(item.LON)
+                        lon:parseFloat(item.LON),
+                        distrito:item.C_COD_DIST,
+                        estacion:item.C_COD_ESTA
                     });
                 iconFeature.setStyle(iconStyle);
                 markers.push(iconFeature);
@@ -235,6 +237,14 @@ export default class Precipitaciones extends React.Component{
                     });
                 });
                 break;
+            case 'variable':
+            case 'mes':
+                this.setState({
+                    [key]: value
+                },()=>{
+                    this.getData();
+                });
+                break;
 
             default:
                 this.setState({
@@ -291,6 +301,8 @@ export default class Precipitaciones extends React.Component{
     }
 
     getData(){
+        if(!this.state.variable&&!this.state.mes)
+            return;
         let service = new DataService();
         let periodo = this.state.mes.split('-');
         service.getAll({
@@ -314,6 +326,32 @@ export default class Precipitaciones extends React.Component{
     componentWillUnmount(){
         console.log("bye component...");
         this.props.map.RemoveLayer(this.Layer);
+    }
+
+    viewReport(item){
+        console.log(item);
+        let distrito = item.distrito.substring(7,9);
+        let provincia = item.distrito.substring(5,7);
+        let departamento= item.distrito.substring(3,5);
+        console.log(departamento,provincia,distrito);
+        let provincias = ProvinciaService.getAll(DepartamentoService.get(departamento).id_ubigeo, {});
+        let distritos = DistritoService.getAll(ProvinciaService.get(DepartamentoService.get(departamento).id_ubigeo,provincia).id_ubigeo,{});
+
+        let estacionService=new EstacionService();
+        let estaciones = estacionService.getByDistrito(item.distrito);
+        let estacion = item.estacion;
+        let tabIndex = 1;
+        this.setState({departamento,provincia,distrito,provincias,distritos,estaciones,estacion,tabIndex});
+
+         let serviceParam = new VariableService();
+        let servicePeriodo = new PeriodoService();
+        serviceParam.getAll({idEstacion:estacion},(error,params)=>{
+            if(error) return console.log(error);
+            servicePeriodo.getAll({idEstacion:estacion},(error,periodos)=>{
+                if(error) return console.log(error);
+                this.setState({ variables:params, meses:periodos });
+            });
+        });
     }
 
     render (){
@@ -343,8 +381,13 @@ export default class Precipitaciones extends React.Component{
 
         let estacion_nombre = '';
         if (this.state.estacion) {
-        	let obj_estacion = this.state.estaciones.find(obj => this.state.distrito == obj.codigo_ubigeo);
+        	let obj_estacion = this.state.estaciones.find(obj => this.state.estacion == obj.C_COD_ESTA);
         	estacion_nombre = obj_estacion ? obj_estacion.V_NOM_ESTA : '';
+        }
+         let variable_nombre = '';
+        if (this.state.variable) {
+        	let obj_variable = this.state.variables.find(obj => this.state.variable.substring(0,2) == obj.C_COD_PARAG);
+        	variable_nombre = obj_variable ? obj_variable.V_NOM_PARA : '';
         }
         const iconButtonElement = (
             <IconButton
@@ -355,12 +398,7 @@ export default class Precipitaciones extends React.Component{
                  <FontIcon className="material-icons" color="#006064">more_vert</FontIcon>
             </IconButton>
             );
-        const rightIconMenu = (
-        <IconMenu iconButtonElement={iconButtonElement}>
-            <MenuItem>Ver reporte</MenuItem>
 
-        </IconMenu>
-        );
         return(
 			<div className="tematica-home">
 				<AppBar
@@ -380,10 +418,15 @@ export default class Precipitaciones extends React.Component{
                                         let estacion = item.getProperties();
                                        return(
                                             <ListItem
+                                            key={idx}
                                             value={idx}
                                             primaryText={estacion.nombre}
                                             secondaryText={estacion.subtipo}
-                                            rightIconButton={rightIconMenu}
+                                            rightIconButton={
+                                                <IconMenu iconButtonElement={iconButtonElement}>
+                                                <MenuItem onTouchTap={this.viewReport.bind(this,estacion)}>Ver reporte</MenuItem>
+                                                </IconMenu>
+                                            }
                                         />
                                        )
                                    })
@@ -394,59 +437,7 @@ export default class Precipitaciones extends React.Component{
                         <Tab label="Gráfica" value={1} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Realize busquedas de precipitaciones teniendo en cuenta uno o mas criterios.</div>
 
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                	{this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.provincia ? <Chip style={style.chip}>{provincia_nombre}</Chip> : null}
-                                    {this.state.distrito ? <Chip style={style.chip}>{distrito_nombre}</Chip> : null}
-                                    {this.state.estacion ? <Chip style={style.chip}>{this.state.estacion}</Chip> : null}
-                                    {this.state.anio ? <Chip style={style.chip}>{this.state.anio}</Chip> : null}
-                                    {this.state.mes ? <Chip style={style.chip}>{this.state.mes}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
-                                </div>
-                                :null
-                            }
-
-                            <div className={'my-pretty-chart-container'}>
-                                <Chart
-                                    chartType="LineChart"
-                                    data={this.state.data}
-                                    options={{}}
-                                    graph_id="ScatterChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
-                            </div>
-                        </Tab>
-
-                        <Tab label="Tabla" value={2} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn>Dia.</TableHeaderColumn>
-                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
-                                        {tableRows}
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </Tab>
-                    </Tabs>
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
+                           <div className="container-fluid">
                             <div className="row">
                                 <div className="col-md-4">
                                     <SelectField
@@ -455,7 +446,7 @@ export default class Precipitaciones extends React.Component{
                                         value={this.state.departamento}
                                         onChange={this.handleChangeSelect.bind(this, 'departamento')}
                                     >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        <MenuItem key={0} value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('departamentos')}
                                     </SelectField>
                                 </div>
@@ -466,7 +457,7 @@ export default class Precipitaciones extends React.Component{
                                         value={this.state.provincia}
                                         onChange={this.handleChangeSelect.bind(this, 'provincia')}
                                     >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        <MenuItem key={0} value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('provincias')}
                                     </SelectField>
                                 </div>
@@ -516,18 +507,55 @@ export default class Precipitaciones extends React.Component{
                                     >
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {
-                                            meses.map(obj => <MenuItem key={`mi-mes-${obj.MES}-${obj.ANIO}`} value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
+                                            meses.map((obj,idx) => <MenuItem key={`mes-${idx}`} value={obj.ANIO+'-'+obj.MES} primaryText={obj.ANIO+'-'+moment().month(parseInt(obj.MES)-1).format('MMMM')} />)
                                         }
                                     </SelectField>
                                 </div>
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
+
                             </div>
                         </div>
-                        : null
-                    }
+                            <h3 className="text-center">{estacion_nombre} (<small>{this.state.mes}</small>)</h3>
+
+                            <div className={'my-pretty-chart-container'}>
+                                <Chart
+                                    chartType="LineChart"
+                                    data={this.state.data}
+                                    options={{
+                                        title: variable_nombre,
+                                        curveType: 'function',
+                                        legend: { position: 'top' },
+                                        hAxis: {
+                                            title: 'Dia'
+                                        },
+                                        vAxis: {
+                                            title: 'Total'
+                                        }
+                                    }}
+                                    graph_id="ScatterChart"
+                                    width="100%"
+                                    height="400px"
+                                    legend_toggle
+                                />
+                            </div>
+                        </Tab>
+
+                        <Tab label="Tabla" value={2} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
+                            <div>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn>Dia.</TableHeaderColumn>
+                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </Tab>
+                    </Tabs>
+
                     <div className="alert alert-info" role="alert">
                     <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
                     </div>
