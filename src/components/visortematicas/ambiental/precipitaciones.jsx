@@ -320,7 +320,6 @@ export default class Precipitaciones extends React.Component{
     }
 
     drawChart () {
-        // let data = Object.assign({}, this.state.data);
         let chartData = {
             labels: ["January", "February", "March", "April", "May", "June", "July"],
             datasets: [
@@ -471,10 +470,6 @@ export default class Precipitaciones extends React.Component{
                                     height="400px"
                                     legend_toggle
                                 />
-                            </div>
-                            <br/>
-                            <div>
-                            {this.drawChart()}
                             </div>
                         </Tab>
 
