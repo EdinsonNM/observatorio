@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Chart } from 'react-google-charts';
-import {Line} from 'react-chartjs';
 
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
@@ -319,8 +318,6 @@ export default class Precipitaciones extends React.Component{
             });
             console.log(dataR);
             this.setState({data:dataR});
-
-
         });
     }
 
@@ -559,20 +556,12 @@ export default class Precipitaciones extends React.Component{
                         </Tab>
                     </Tabs>
 
-                    <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
-                    </div>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="alert alert-info" role="alert">
                                     <strong>Fuente:</strong>  Servicio Nacional de Meteorología e Hidrología del Perú-SENAMHI.
                                 </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md-12">
-
                             </div>
                         </div>
                     </div>

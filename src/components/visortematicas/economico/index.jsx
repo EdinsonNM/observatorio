@@ -17,7 +17,7 @@ export default class IndexEconomico extends React.Component{
 	}
 	render(){
 		return(
-			<div className="tematica-home">
+			<div className="tematica-home"  style={{overflow:'hidden'}}>
 				<CardHeader
 						textStyle={{paddingRight:0}}
 						style={{backgroundColor: '#006064'}}
@@ -35,7 +35,7 @@ export default class IndexEconomico extends React.Component{
 						/>
 
 
-				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
+				<div className="col-md-12 tematica-home-container"  style={{flex:'1',overflowY:'auto'}}>
 					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
 								<i className="fa fa-usd"></i>
