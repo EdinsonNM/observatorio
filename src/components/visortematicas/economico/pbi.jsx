@@ -57,16 +57,33 @@ export default class Pbi extends React.Component{
             ],
             title: 'PBI Por Actividades Económicas',
             tabIndex: 0,
-            data:[]
+            data:[['data','data'],['value',1]]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
     }
 
+     componentDidMount(){
+         setTimeout(()=>{
+            this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
+                this.setState({departamento:data.FIRST_IDDP},()=>{
+                    this.getData();
+                });
+
+            });
+        },2000);
+    }
+
+     componentWillUnmount(){
+        this.props.map.RemoveLayer(this.Layer);
+    }
+
     handleChangeSelect(key, event, index, value){
         this.setState({
             [key]: value
+        },()=>{
+            this.getData();
         });
     }
 
@@ -82,14 +99,13 @@ export default class Pbi extends React.Component{
         let tableRows = [];
 
         for (let idx=1; idx<data.length; idx++) {
-            if (idx % 2 === 0) {
                 tableRows.push(
                      <TableRow key={`tr-${idx}`}>
                         <TableRowColumn>{data[idx][0]} </TableRowColumn>
                         <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
                     </TableRow>
                 );
-            }
+
         }
 
         return tableRows;
@@ -137,7 +153,7 @@ export default class Pbi extends React.Component{
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -163,32 +179,54 @@ export default class Pbi extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
+
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
-
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                    {this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
+                            <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
                                 </div>
-                                :null
-                            }
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Año: "
+                                        value={this.state.anio}
+                                        onChange={this.handleChangeSelect.bind(this, 'anio')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('anios')}
+                                    </SelectField>
+                                </div>
+
+
+                            </div>
+                        </div>
 
                             <div className={'my-pretty-chart-container'}>
                                 <Chart
                                     chartType="LineChart"
                                     data={this.state.data}
-                                    options={{}}
+                                     options={{
+                                        title: 'PBI por actividades económicas',
+                                        curveType: 'function',
+                                        legend: { position: 'top' },
+                                        hAxis: {
+                                            title: 'Sector'
+                                        },
+                                        vAxis: {
+                                            title: 'PBI'
+                                        }
+                                    }}
                                     graph_id="LineChart"
                                     width="100%"
                                     height="400px"
@@ -204,7 +242,9 @@ export default class Pbi extends React.Component{
                                         <Chart
                                             chartType="PieChart"
                                             data={this.state.data}
-                                            options={{}}
+                                            options={{
+                                                title: 'PBI por actividades económicas',
+                                            }}
                                             graph_id="PieChart"
                                             width="100%"
                                             height="400px"
@@ -231,49 +271,10 @@ export default class Pbi extends React.Component{
                             </div>
                         </Tab>
                     </Tabs>
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Departamento:"
-                                        value={this.state.departamento}
-                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('departamentos')}
-                                    </SelectField>
-                                </div>
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Año: "
-                                        value={this.state.anio}
-                                        onChange={this.handleChangeSelect.bind(this, 'anio')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('anios')}
-                                    </SelectField>
-                                </div>
-
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-12">
-
-                            </div>
-                        </div>
+                    <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
                     </div>
+
 
                 </div>
             </div>

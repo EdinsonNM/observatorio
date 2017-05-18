@@ -71,6 +71,10 @@ export default class Denuncias extends React.Component{
         },2000);
     }
 
+     componentWillUnmount(){
+        this.props.map.RemoveLayer(this.Layer);
+    }
+
     handleChangeSelect(key, event, index, value){
         this.setState({
             [key]: value
