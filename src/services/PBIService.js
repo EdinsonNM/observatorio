@@ -47,10 +47,10 @@ export default class PBIService extends ApiService{
         }
       });
 
-      let resultRpt = [['nombre','valor']];
+      let resultRpt = [['Sector','PBI por sector']];
 
       for(let key in results){
-        resultRpt.push([key, results[key]]);
+        resultRpt.push([key.substr(3), results[key]]);
       }
 
       return resultRpt;

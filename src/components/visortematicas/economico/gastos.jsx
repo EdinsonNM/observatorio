@@ -74,6 +74,8 @@ export default class Gastos extends React.Component{
         }else if (key === 'municipalidad') {
             this.setState({
                 [key]: value
+            },()=>{
+                this.getData();
             });
         }
     }
@@ -119,7 +121,7 @@ export default class Gastos extends React.Component{
 
     getData(){
         if (this.state.municipalidad) {
-            let data = new MunicipalidadService.getGastos(this.state.municipalidad);
+            let data = new MunicipalidadService.getGastos(this.state.anio,this.state.municipalidad);
             this.setState({data});
             this.toggleFilter();
         }
@@ -127,7 +129,7 @@ export default class Gastos extends React.Component{
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -148,48 +150,8 @@ export default class Gastos extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
-                    {
-                        (!this.state.showFilter)?
-                        <div className="text-filter" style={style.wrapper}>
 
-                            {this.state.municipalidad ? <Chip style={style.chip}>{this.state.municipalidad}</Chip> : null}
-                            {this.state.anio ? <Chip style={style.chip}>{anio_nombre}</Chip> : null}
-
-                            <span>
-                                <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                    <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                </FloatingActionButton>
-                            </span>
-
-                            <br/>
-                        </div>
-                        :null
-                    }
-                    <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                            <TableRow>
-                                <TableHeaderColumn>Cod. Ubigeo</TableHeaderColumn>
-                                <TableHeaderColumn>Municipalidad</TableHeaderColumn>
-                                <TableHeaderColumn>Monto Devengado</TableHeaderColumn>
-                                <TableHeaderColumn>Monto Certificado</TableHeaderColumn>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody displayRowCheckbox={false}>
-                            {tableRows}
-                        </TableBody>
-                    </Table>
-
-                    <br/>
-
-                    <ul>
-                    <li><u>Monto Devengado</u>: Valor monetario pagado</li>
-                    <li><u>Monto Certificado</u>: Valor monetario comprometido o planificado</li>
-                    <li><u>Fuente</u>: Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA</li>
-                    </ul>
-
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
+                    <div className="container-fluid">
                             <div className="row">
 
                                 <div className="col-md-4">
@@ -216,14 +178,33 @@ export default class Gastos extends React.Component{
                                     </SelectField>
                                 </div>
 
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
+
                             </div>
                         </div>
-                        : null
-                    }
+                    <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                            <TableRow>
+                                <TableHeaderColumn>Cod. Ubigeo</TableHeaderColumn>
+                                <TableHeaderColumn>Municipalidad</TableHeaderColumn>
+                                <TableHeaderColumn>Monto Devengado</TableHeaderColumn>
+                                <TableHeaderColumn>Monto Certificado</TableHeaderColumn>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody displayRowCheckbox={false}>
+                            {tableRows}
+                        </TableBody>
+                    </Table>
+
+                    <br/>
+
+                    <ul>
+                    <li><u>Monto Devengado</u>: Valor monetario pagado</li>
+                    <li><u>Monto Certificado</u>: Valor monetario comprometido o planificado</li>
+                    </ul>
+
+                    <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
+                    </div>
 
                     <div className="container-fluid">
                         <div className="row">

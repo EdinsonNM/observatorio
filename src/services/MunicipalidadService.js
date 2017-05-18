@@ -14,8 +14,8 @@ export default class MunicipalidadService{
         return MUNICIPALIDADES.data.filter(obj => obj.ANIO == year);
     }
 
-    static getGastos (muni) {
-        return MUNICIPALIDADES.data.filter(obj => obj.MUNICIPALIDAD == muni);
+    static getGastos (year,muni) {
+        return MUNICIPALIDADES.data.filter(obj => obj.MUNICIPALIDAD == muni && obj.ANIO == year);
     }
 
 }

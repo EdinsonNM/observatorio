@@ -26,7 +26,7 @@ import DepartamentoService from '../../../services/DepartamentoService';
 import ProvinciaService from '../../../services/ProvinciaService';
 import DistritoService from '../../../services/DistritoService';
 import IDHService from '../../../services/IDHService';
-
+import _ from 'underscore';
 import moment from 'moment';
 moment.locale('es');
 
@@ -54,7 +54,7 @@ export default class Indice extends React.Component{
             distritos: [],
             title: 'Indice de Desarrollo Humano',
             tabIndex: 0,
-            data:[]
+            data:[['Año','Indice por AÑo'],['value',1]]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -87,6 +87,8 @@ export default class Indice extends React.Component{
             default:
                 this.setState({
                     [key]: value
+                },()=>{
+                    this.getData();
                 });
          }
     }
@@ -148,9 +150,10 @@ export default class Indice extends React.Component{
         service.getAll(ubigeo, (error, data) => {
 
             this.toggleFilter();
-            let dataR=[ ['Año', 'Indice']];
+            let dataR=[ ['Año', 'Indice por Año']];
+            data = _.sortBy(data, function(item){ return item.ID_ANIO; });
             data.forEach((item) => {
-                dataR.push([item.ID_ANIO*1, item.IDH*1]);
+                dataR.push([item.ID_ANIO, item.IDH*1]);
             });
 
             console.log(dataR);
@@ -162,7 +165,7 @@ export default class Indice extends React.Component{
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
-            <FontIcon  className="material-icons" >arrow_back</FontIcon>
+            <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -198,30 +201,60 @@ export default class Indice extends React.Component{
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
-
-                            {
-                                (!this.state.showFilter)?
-                                <div className="text-filter" style={style.wrapper}>
-
-                                    {this.state.departamento ? <Chip style={style.chip}>{departamento_nombre}</Chip> : null}
-                                    {this.state.provincia ? <Chip style={style.chip}>{provincia_nombre}</Chip> : null}
-                                    {this.state.distrito ? <Chip style={style.chip}>{distrito_nombre}</Chip> : null}
-
-                                    <span>
-                                        <FloatingActionButton mini={true} secondary={true} onTouchTap={this.toggleFilter.bind(this)} zDepth={0}>
-                                            <FontIcon className="material-icons" color="white">filter_list</FontIcon>
-                                        </FloatingActionButton>
-                                    </span>
-
+<div className="container-fluid">
+                            <div className="row">
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
                                 </div>
-                                :null
-                            }
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Provincia: "
+                                        value={this.state.provincia}
+                                        onChange={this.handleChangeSelect.bind(this, 'provincia')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('provincias')}
+                                    </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Distrito: "
+                                        value={this.state.distrito}
+                                        onChange={this.handleChangeSelect.bind(this, 'distrito')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('distritos')}
+                                    </SelectField>
+                                </div>
+
+                            </div>
+                        </div>
 
                             <div className={'my-pretty-chart-container'}>
                                 <Chart
                                     chartType="AreaChart"
                                     data={this.state.data}
-                                    options={{}}
+                                    options={{
+                                        title: 'Indice de Desarrollo Humano',
+                                        curveType: 'function',
+                                        legend: { position: 'top' },
+                                        hAxis: {
+                                            title: 'Año'
+                                        },
+                                        vAxis: {
+                                            title: 'Indice'
+                                        }
+                                    }}
                                     graph_id="AreaChart"
                                     width="100%"
                                     height="400px"
@@ -264,59 +297,9 @@ export default class Indice extends React.Component{
                             </div>
                         </Tab>
                     </Tabs>
-                    {
-                        this.state.showFilter
-                        ? <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Departamento:"
-                                        value={this.state.departamento}
-                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('departamentos')}
-                                    </SelectField>
-                                </div>
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Provincia: "
-                                        value={this.state.provincia}
-                                        onChange={this.handleChangeSelect.bind(this, 'provincia')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('provincias')}
-                                    </SelectField>
-                                </div>
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Distrito: "
-                                        value={this.state.distrito}
-                                        onChange={this.handleChangeSelect.bind(this, 'distrito')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('distritos')}
-                                    </SelectField>
-                                </div>
 
-                                <div className="col-md-12">
-                                    <RaisedButton label="Cancelar" style={{marginTop:20,marginRight:20}} onTouchTap={this.toggleFilter.bind(this)} />
-                                    <RaisedButton label="Filtrar" style={{marginTop:20}} primary={true} onTouchTap={this.getData.bind(this)}/>
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-md-12">
-
-                            </div>
-                        </div>
+                   <div className="alert alert-info" role="alert">
+                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
                     </div>
 
                 </div>
