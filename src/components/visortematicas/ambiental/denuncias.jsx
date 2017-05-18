@@ -253,11 +253,16 @@ export default class Denuncias extends React.Component{
                             </div>
                         </Tab>
                     </Tabs>
-                    <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Servicio Nacional de Denuncias Ambientales-SINADA, Organismo de Evaluación y Fiscalización Ambiental-OEFA.
+
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="alert alert-info" role="alert">
+                                    <strong>Fuente:</strong>  Servicio Nacional de Denuncias Ambientales-SINADA, Organismo de Evaluación y Fiscalización Ambiental-OEFA.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-
 
 				</div>
 			</div>

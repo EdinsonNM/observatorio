@@ -271,10 +271,16 @@ export default class Pbi extends React.Component{
                             </div>
                         </Tab>
                     </Tabs>
-                    <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
-                    </div>
 
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="alert alert-info" role="alert">
+                                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>

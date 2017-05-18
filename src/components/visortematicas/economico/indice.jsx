@@ -201,7 +201,7 @@ export default class Indice extends React.Component{
                     <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
                         <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
                             <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
-<div className="container-fluid">
+                            <div className="container-fluid">
                             <div className="row">
                                 <div className="col-md-4">
                                     <SelectField
@@ -298,10 +298,15 @@ export default class Indice extends React.Component{
                         </Tab>
                     </Tabs>
 
-                   <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
+                    <div className="container-fluid">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="alert alert-info" role="alert">
+                                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA.
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
             </div>
         );

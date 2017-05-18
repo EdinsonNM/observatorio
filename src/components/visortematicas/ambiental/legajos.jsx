@@ -249,14 +249,17 @@ export default class Legajos extends React.Component{
                             </div>
                         </Tab>
                     </Tabs>
-                    <div className="alert alert-info" role="alert">
-                    <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA; en base a la información consultada mediante servicio web a la Oficina de Procuraduría del MINAM.
-                    </div>
 
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-12">
-
+                                <div className="alert alert-info" role="alert">
+                                  <strong>Fuente:</strong>  Este servicio de información ha sido desarrollado por el Ministerio del Ambiente-MINAM, a través de la Dirección General de Investigación e Información Ambiental-DGIIA; en base a la información consultada mediante servicio web a la Oficina de Procuraduría del MINAM.
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-12">
                             </div>
                         </div>
                     </div>
