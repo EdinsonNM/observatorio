@@ -40,6 +40,21 @@ const style={
     padding:10
   }
 };
+const style10 = {
+    width: '12%',
+    paddingLeft: '8px',
+    paddingRight: '8px'
+};
+const style20 = {
+    width: '18%',
+    paddingLeft: '8px',
+    paddingRight: '8px'
+};
+const outterBorder = {
+    margin: '20px',
+    border: '1px solid #e1e1e1',
+    borderRadius: '4px'
+};
 
 export default class Gastos extends React.Component{
     constructor(props){
@@ -85,13 +100,14 @@ export default class Gastos extends React.Component{
     }
 
     buildTableRows (data) {
+
         const tableRows = data.map((obj, idx) => {
             return (
                  <TableRow key={`tr-${idx}`}>
-                    <TableRowColumn>{obj.ID_UBIGEO} </TableRowColumn>
-                    <TableRowColumn>{obj.MUNICIPALIDAD} </TableRowColumn>
-                    <TableRowColumn>{obj.MON_DEVENGADO} </TableRowColumn>
-                    <TableRowColumn>{obj.MON_CERTIFICADO} </TableRowColumn>
+                    <TableRowColumn style={style10}>{obj.ID_UBIGEO} </TableRowColumn>
+                    <TableRowColumn >{obj.MUNICIPALIDAD} </TableRowColumn>
+                    <TableRowColumn style={style20}>{obj.MON_DEVENGADO} </TableRowColumn>
+                    <TableRowColumn style={style20}>{obj.MON_CERTIFICADO} </TableRowColumn>
                 </TableRow>
             );
         });
@@ -152,49 +168,54 @@ export default class Gastos extends React.Component{
                 <div className="col-md-12" className="tematica-home-container">
 
                     <div className="container-fluid">
-                            <div className="row">
+                        <div className="row">
 
-                                <div className="col-md-4">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Año: "
-                                        value={this.state.anio}
-                                        onChange={this.handleChangeSelect.bind(this, 'anio')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('anios')}
-                                    </SelectField>
-                                </div>
+                            <div className="col-md-4">
+                                <SelectField
+                                    fullWidth
+                                    floatingLabelText="Año: "
+                                    value={this.state.anio}
+                                    onChange={this.handleChangeSelect.bind(this, 'anio')}
+                                >
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {this.buildSelectOptions('anios')}
+                                </SelectField>
+                            </div>
 
-                                <div className="col-md-8">
-                                    <SelectField
-                                        fullWidth
-                                        floatingLabelText="Municipalidad:"
-                                        value={this.state.municipalidad}
-                                        onChange={this.handleChangeSelect.bind(this, 'municipalidad')}
-                                    >
-                                        <MenuItem value={0} primaryText="Seleccionar" />
-                                        {this.buildSelectOptions('municipalidades')}
-                                    </SelectField>
-                                </div>
-
-
+                            <div className="col-md-8">
+                                <SelectField
+                                    fullWidth
+                                    floatingLabelText="Municipalidad:"
+                                    value={this.state.municipalidad}
+                                    onChange={this.handleChangeSelect.bind(this, 'municipalidad')}
+                                >
+                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    {this.buildSelectOptions('municipalidades')}
+                                </SelectField>
                             </div>
                         </div>
-                    <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                        <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                            <TableRow>
-                                <TableHeaderColumn>Cod. Ubigeo</TableHeaderColumn>
-                                <TableHeaderColumn>Municipalidad</TableHeaderColumn>
-                                <TableHeaderColumn>Monto Devengado</TableHeaderColumn>
-                                <TableHeaderColumn>Monto Certificado</TableHeaderColumn>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody displayRowCheckbox={false}>
-                            {tableRows}
-                        </TableBody>
-                    </Table>
+                    </div>
 
+                    <br/>
+                    <div className="container">
+                        <div className="row">
+                            <div style={outterBorder}>
+                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                                        <TableRow>
+                                            <TableHeaderColumn style={style10}><abbr title="Código de Ubigeo">Cod. Ub</abbr></TableHeaderColumn>
+                                            <TableHeaderColumn >Municipalidad</TableHeaderColumn>
+                                            <TableHeaderColumn style={style20}><abbr title="Monto Devengado">M. Deveng.</abbr></TableHeaderColumn>
+                                            <TableHeaderColumn style={style20}><abbr title="Monto Certificado">M. Certif.</abbr></TableHeaderColumn>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody displayRowCheckbox={false}>
+                                        {tableRows}
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
+                    </div>
                     <br/>
 
                     <ul>
