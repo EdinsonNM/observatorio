@@ -7,7 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack, pink500, teal500} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
@@ -45,12 +45,12 @@ export default class Tematica extends React.Component {
 
 
   componentDidMount(){
-    let id=this.props.params.id;
+    /*let id=this.props.params.id;
     if(id){
       service.get(id,(error,data)=>{
         this.setState(data);
       });
-    }
+    }*/
   }
   handleChange(key, event){
 		let state = this.state;
@@ -102,41 +102,41 @@ export default class Tematica extends React.Component {
             <CardHeader
             title="Registro de Temáticas"
             subtitle="Visor de Mapas"
-             avatar="images/user0.jpg"
+             avatar={<Avatar icon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>} backgroundColor={teal500}/>}
             />
 
             <CardText >
             Ingrese todos los campos obligatorios y a continuación presione GRABAR para registrar la facultad.
             <div className="row">
                 <div className="col-md-12">
-                    <TextField 
+                    <TextField
                     onChange = {(e)=>{this.handleChange('titulo',e);}}
-                    value = {this.state.titulo} 
-                    floatingLabelText="Título" 
+                    value = {this.state.titulo}
+                    floatingLabelText="Título"
                     required
                     fullWidth/>
                 </div>
 				 <div className="col-md-12">
-                    <TextField 
+                    <TextField
                     onChange = {(e)=>{this.handleChange('subtitulo',e);}}
-                    value = {this.state.subtitulo} 
-                    floatingLabelText="Subtítulo" 
+                    value = {this.state.subtitulo}
+                    floatingLabelText="Subtítulo"
                     required
                     fullWidth/>
                 </div>
                 <div className="col-md-12">
-                    <TextField 
+                    <TextField
                     onChange = {(e)=>{this.handleChange('descripcion',e);}}
-                    value = {this.state.descripcion} 
-                    floatingLabelText="Descripción" 
+                    value = {this.state.descripcion}
+                    floatingLabelText="Descripción"
                     required
                     fullWidth/>
                 </div>
                <div className="col-md-12">
-                    <TextField 
+                    <TextField
                     onChange = {(e)=>{this.handleChange('detalles',e);}}
-                    value = {this.state.detalles} 
-                    floatingLabelText="Detalles" 
+                    value = {this.state.detalles}
+                    floatingLabelText="Detalles"
                     required
                     fullWidth/>
                 </div>
@@ -152,7 +152,7 @@ export default class Tematica extends React.Component {
                   primary={true}
                   onTouchTap={this.handleSave.bind(this)}
                 />
-  
+
             </CardText>
         </div>
     );

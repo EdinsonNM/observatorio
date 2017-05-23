@@ -3,11 +3,22 @@ let DEPARTAMENTOS = [{"id_ubigeo":"2534","nombre_ubigeo":"Amazonas","codigo_ubig
 import _ from 'underscore';
 export default class DepartamentoService{
     static getAll(params){
+      let filter = process.env.DEPARTAMENTOS_CUENCA||'';
+      if(filter!==''){
+        let ids = filter.split(',');
+        let data=[];
+        ids.map((id)=>{
+          data.push(_.find(DEPARTAMENTOS, (dpto)=>{ return dpto.codigo_ubigeo==id; }));
+        });
+        return data;
+      }else{
         let data =_.where(DEPARTAMENTOS, params) ;
         return data;
+      }
+
     }
     static get(id){
-        let data = _.findWhere(DEPARTAMENTOS, {id_ubigeo:id});
+        let data = _.findWhere(DEPARTAMENTOS, {codigo_ubigeo:id});
         return data;
     }
 

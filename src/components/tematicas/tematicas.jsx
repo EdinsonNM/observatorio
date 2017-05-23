@@ -38,7 +38,7 @@ export default class Tematicas extends React.Component {
 	  isNew:false
     };
   }
-  
+
   componentWillMount(){
     this.loadData();
   }
@@ -72,9 +72,10 @@ export default class Tematicas extends React.Component {
       this.setState({
         selectedIndex: index,
       });
-    };
+    }
+
   render(){
-    
+
     const iconButtonElement = (
         <IconButton
         touch={true}
@@ -84,7 +85,7 @@ export default class Tematicas extends React.Component {
         <MoreVertIcon color={grey400} />
         </IconButton>
         );
-    
+
     let items=[];
     this.state.data.forEach((item,index)=>{
           let rightIconMenu = (
@@ -120,7 +121,7 @@ export default class Tematicas extends React.Component {
     };
 
 		return (
-			<div style={{width:'100%',height:'100%',position:'relative',overflowY:'auto'}}>
+			<div style={{width:'100%',height:'calc( 100% - 64px)',position:'relative',overflowY:'auto'}}>
 				<SelectableList defaultValue={2}  value={this.state.selectedIndex}  onChange={this.handleRequestChange.bind(this)}>
 				<Subheader>Listado de Temáticas</Subheader>
 				{items}
@@ -128,6 +129,6 @@ export default class Tematicas extends React.Component {
 			</div>
 			);
 
-		
+
   }
 }

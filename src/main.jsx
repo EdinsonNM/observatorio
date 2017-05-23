@@ -11,6 +11,7 @@ import UserService from './services/UserService';
 import TematicaService from './services/TematicaService';
 import {cyan500, cyan800, amber500} from 'material-ui/styles/colors';
 
+
 const muiTheme = getMuiTheme({
     palette: {
         primary1Color: cyan800,

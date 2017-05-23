@@ -66,17 +66,22 @@ export default class Sidebar extends React.Component {
             onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
             />
             <div className="logo-sidebar layout center-center" style={style.appbar}>
-            <img src="visor/images/logo.svg" />
+            <img src="web/img/logo-observatorio-letras-bn.png" style={{width:"240px"}}/>
             </div>
             <ListItem
-            leftAvatar={<Avatar src="visor/images/user00.jpg" />}
+            leftAvatar={<Avatar icon={<FontIcon  className="material-icons">face</FontIcon>}/>}
             rightIconButton={rightIconMenu}
             primaryText={`${user.nombres} ${user.apellidos}`}
 
             />
             <Subheader>Opciones</Subheader>
             <MenuItem href="#/dashboard/main">Inicio</MenuItem>
-            <MenuItem href="#/dashboard/usuarios">Usuarios</MenuItem>
+            {
+              (user.isAdmin)?
+              <MenuItem href="#/dashboard/usuarios">Usuarios</MenuItem>
+              :null
+            }
+
 
         </Drawer>
     );
