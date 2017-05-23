@@ -1,0 +1,38 @@
+{% for item in items %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="div-bg-img img-thumbnail"  style="background-image: url({{ item.url_imagen }});"></div>
+    </div>
+
+    <div class="col-md-9">
+        <h4 class="heading-primary">{{item.title}} </h4>
+          {{ item.title | safe }}
+
+
+        <p class="mt-xlg">
+
+        <div class="portfolio-info">
+            <div class="row">
+                <div class="col-md-12 center">
+                    <ul>
+
+                        <li>
+                            <i class="fa fa-calendar"></i> {{item.fecha_creacion.format("DD MMMM YY")}}
+                        </li>
+                        <li>
+                            <i class="fa fa-tags"></i> <a href="#">{{ item.elaborado_por }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        </p>
+
+        <a href="{{ item.url_novedad }}" target="blank" class="btn btn-primary btn-icon"><i class="fa fa-external-link"></i>Ir a Novedad</a> <span class="arrow hlb appear-animation" data-appear-animation="rotateInUpLeft" data-appear-animation-delay="800"></span>
+
+    </div>
+</div>
+
+<hr class="tall">
+{% endfor %}

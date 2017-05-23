@@ -34,6 +34,7 @@ export default class Usuarios extends React.Component {
   }
   loadData(){
     service.getAll({},(error,data)=>{
+        console.log(error,data);
         this.setState({data:data});
     },true);
   }
@@ -71,16 +72,16 @@ export default class Usuarios extends React.Component {
             <MenuItem onTouchTap={this.remove.bind(this,item.id)}>Delete</MenuItem>
             </IconMenu>
             );
-        if(item.anio==currentYear){
+            let user = UserService.me();
+        if(item.id==user.id){
             itemsCurrent.push(
                     <ListItem
                         key={index}
                          leftAvatar={<Avatar icon={<FileFolder />} style={{color:'red'}} />}
-                        rightIconButton={rightIconMenu}
-                        primaryText={item.anio+' - '+item.periodo}
+                        primaryText={item.apellidos+', '+item.nombres}
                         secondaryText={
                             <p>
-                             {moment(item.inicio).format('L')+' - '+ moment(item.fin).format('L')}
+                             <strong>{(item.isAdmin)?'Administrador':'Usuario'}</strong> <br/> {item.email}
                             </p>
                         }
                         secondaryTextLines={2}
@@ -90,19 +91,18 @@ export default class Usuarios extends React.Component {
 
         }else{
             items.push(
-                        <ListItem
-                            key={index}
-                             leftAvatar={<Avatar icon={<FileFolder />} />}
-                            rightIconButton={rightIconMenu}
-                            primaryText={item.anio+' - '+item.periodo}
-                            secondaryText={
-                                <p>
-                                <span style={{color: darkBlack}}>Activo</span><br />
-                                {moment(item.inicio).format('L')+' - '+ moment(item.fin).format('L')}
-                                </p>
-                            }
-                            secondaryTextLines={2}
-                            />
+                       <ListItem
+                        key={index}
+                         leftAvatar={<Avatar icon={<FileFolder />} style={{color:'red'}} />}
+                        rightIconButton={rightIconMenu}
+                        primaryText={item.apellidos+', '+item.nombres}
+                        secondaryText={
+                            <p>
+                             <strong>{(item.isAdmin)?'Administrador':'Usuario'}</strong> <br/> {item.email}
+                            </p>
+                        }
+                        secondaryTextLines={2}
+                        />
                     );
             items.push(  <Divider key={'divider'+index} inset={true} />);
 
@@ -131,19 +131,18 @@ export default class Usuarios extends React.Component {
                 />
 
                 <CardText >
-                    Consulte todos los periodos académicos registrados en la institución
-
+                    Listados de usuarios que administran el sistema
                     <List>
-                        <Subheader>Periodos creados en el presente año</Subheader>
+                        <Subheader>Yo</Subheader>
                         {itemsCurrent}
                     </List>
                     <List>
-                        <Subheader>Periodos de años anteriores</Subheader>
+                        <Subheader>Otros Usuarios</Subheader>
                         {items}
                     </List>
                     </CardText>
             </Card>
-            <FloatingActionButton style={style} href="#/dashboard/periodos/new">
+            <FloatingActionButton style={style} href="#/dashboard/usuarios/new">
             <ContentAdd />
             </FloatingActionButton>
         </div>

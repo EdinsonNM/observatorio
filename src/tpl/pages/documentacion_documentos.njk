@@ -1,4 +1,4 @@
-{% extends '../layouts/tematicas_layout.njk' %}
+{% extends '../layouts/docs_layout.njk' %}
 
 {% block pageHeader %}
 				<section class="page-header">
@@ -23,85 +23,11 @@
 {% block content %}
 
 				<div class="blog-posts">
-					<article class="post post-large">
+					<div  id="documentos-container">
+                    </div>
 
-						<div class="post-date">
-							<span class="day">10</span>
-							<span class="month">Jan</span>
-							<span class="year">2017</span>
-						</div>
-
-						<div class="post-content">
-
-							<h3 style="margin-bottom: 0;">Categoria de Documento</h3>
-							<h4><a href="blog-post.html">Class aptent taciti sociosqu ad litora torquent</a></h4>
-							<p>Texto resumen Euismod atras vulputate iltricies etri elit. Class aptent taciti sociosqu ad litora torquent </p>
-
-							<div class="post-meta">
-								<span><i class="fa fa-user"></i> By <a href="#">John Doe</a> </span>
-								<span><i class="fa fa-tag"></i> <a href="#">Duis</a>, <a href="#">News</a> </span>
-								<span><i class="fa fa-comments"></i> <a href="#">12 Comments</a></span>
-								<a href="blog-post.html" class="btn btn-xs btn-primary pull-right">Leer más...</a>
-							</div>
-
-						</div>
-					</article>
-
-
-					<article class="post post-large">
-
-						<div class="post-date">
-							<span class="day">10</span>
-							<span class="month">Jan</span>
-							<span class="year">2017</span>
-						</div>
-
-						<div class="post-content">
-
-							<h3 style="margin-bottom: 0;">Categoria de Documento</h3>
-							<h4><a href="blog-post.html">Class aptent taciti sociosqu ad litora torquent</a></h4>
-							<p>Texto resumen Euismod atras vulputate iltricies etri elit. Class aptent taciti sociosqu ad litora torquent </p>
-
-							<div class="post-meta">
-								<span><i class="fa fa-user"></i> By <a href="#">John Doe</a> </span>
-								<span><i class="fa fa-tag"></i> <a href="#">Duis</a>, <a href="#">News</a> </span>
-								<span><i class="fa fa-comments"></i> <a href="#">12 Comments</a></span>
-								<a href="blog-post.html" class="btn btn-xs btn-primary pull-right">Leer más...</a>
-							</div>
-
-						</div>
-					</article>
-
-					<article class="post post-large">
-
-						<div class="post-date">
-							<span class="day">10</span>
-							<span class="month">Jan</span>
-							<span class="year">2017</span>
-						</div>
-
-						<div class="post-content">
-
-							<h3 style="margin-bottom: 0;">Categoria de Documento</h3>
-							<h4><a href="blog-post.html">Class aptent taciti sociosqu ad litora torquent</a></h4>
-							<p>Texto resumen Euismod atras vulputate iltricies etri elit. Class aptent taciti sociosqu ad litora torquent </p>
-
-							<div class="post-meta">
-								<span><i class="fa fa-user"></i> By <a href="#">John Doe</a> </span>
-								<span><i class="fa fa-tag"></i> <a href="#">Duis</a>, <a href="#">News</a> </span>
-								<span><i class="fa fa-comments"></i> <a href="#">12 Comments</a></span>
-								<a href="blog-post.html" class="btn btn-xs btn-primary pull-right">Leer más...</a>
-							</div>
-
-						</div>
-					</article>
-
-					<ul class="pagination pagination-lg pull-right">
-						<li><a href="#">«</a></li>
-						<li class="active"><a href="#">1</a></li>
-						<li><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">»</a></li>
+					<ul id="pagination" class="pagination pagination-lg pull-right">
 					</ul>
 				</div>
+                 <script src="documentos.js"></script>
 {% endblock %}

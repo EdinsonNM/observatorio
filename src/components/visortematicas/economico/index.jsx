@@ -17,7 +17,7 @@ export default class IndexEconomico extends React.Component{
 	}
 	render(){
 		return(
-			<div className="tematica-home">
+			<div className="tematica-home"  style={{overflow:'hidden'}}>
 				<CardHeader
 						textStyle={{paddingRight:0}}
 						style={{backgroundColor: '#006064'}}
@@ -34,8 +34,8 @@ export default class IndexEconomico extends React.Component{
 						avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
 						/>
 
-	
-				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
+
+				<div className="col-md-12 tematica-home-container"  style={{flex:'1',overflowY:'auto'}}>
 					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
 								<i className="fa fa-usd"></i>
@@ -45,7 +45,7 @@ export default class IndexEconomico extends React.Component{
 								<p className="tall">
 									El presupuesto es la expresión cuantificada, conjunta y sistemática de los gastos programados durante el año fiscal, por cada una de las entidades del sector público, la cual refleja los ingresos que financian dichos gastos. Así, constituye el instrumento de gestión del Estado que permite a las entidades lograr sus objetivos y metas contenidas en sus respectivos Planes Operativos Institucionales (POI)
 									<br/>
-									<a href="visor.htm">Mostrar gráfica</a>
+									<a href="#/tematica/-KhDogAt_wkHk731PHh1/gastos">Mostrar gráfica</a>
 								</p>
 							</div>
 						</div>
@@ -58,7 +58,7 @@ export default class IndexEconomico extends React.Component{
 								<p className="tall">
 									Procesos que tienen lugar para la obtención de productos, bienes y/o servicios destinados a cubrir necesidades y deseos en la sociedad, que contribuirán al progreso económico. Tienen como propósito cubrir las necesidades humanas a partir del trabajo haciendo uso de los recursos disponibles, contemplando un criterio no sólo económico y empresarial, sino también social y ambiental en la toma de decisiones.
 									<br/>
-									<a href="visor.htm">Mostrar gráfica</a>
+									<a href="#/tematica/-KhDogAt_wkHk731PHh1/pbi">Mostrar gráfica</a>
 								</p>
 							</div>
 						</div>
@@ -71,7 +71,7 @@ export default class IndexEconomico extends React.Component{
 								<p className="tall">
 									El PNUD viene trabajando en ámbitos tan variados como los derechos humanos, la generación de ingresos, el fomento de la actividad productiva de los sectores excluidos, la tecnología de información, la sostenibilidad ambiental, el potencial energético, la atención de emergencias climáticas y sociales, entre los principales.
 									<br/>
-									<a href="visor.htm">Mostrar gráfica</a>
+									<a href="#/tematica/-KhDogAt_wkHk731PHh1/indice">Mostrar gráfica</a>
 								</p>
 							</div>
 						</div>

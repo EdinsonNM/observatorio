@@ -1,4 +1,5 @@
 {% set cuenca_title = "Quilca - Chili" %}
+{% set URLMAP = "https://www.google.com/maps/d/embed?mid=1CVH1_-MvF1VMTHcYcE8zcPdP54k&ll=-16.693297345945794%2C-71.82636153475039&z=8" %}
 <!DOCTYPE html>
 <html>
 	{% include '../partials/head.njk' %}
@@ -36,7 +37,7 @@
 					<div class="row center">
 						<div class="col-md-12">
 							<h1 class="word-rotator-title mb-sm">
-								En el Observatorio de la Cuenta {{cuenca_title}} podemos
+								En el Observatorio de la Cuenca {{cuenca_title}} podemos
 								<strong class="inverted">
 									<span class="word-rotate" data-plugin-options='{"delay": 2000}'>
 										<span class="word-rotate-items">
@@ -104,8 +105,7 @@
 							</div>
 							<div class="col-md-6 mt-lg">
 								<div class="embed-responsive embed-responsive-16by9">
-				                    <!--iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="https://www.google.com/maps/d/u/0/viewer?mid=1cjJB3TBkvUCxv8KyjZaWNTEySwI&ll=-16.217389868770944%2C-71.50514434570312&z=9&output=embed"></iframe-->
-				                    <iframe src="https://www.google.com/maps/d/embed?mid=1CVH1_-MvF1VMTHcYcE8zcPdP54k&ll=-16.693297345945794%2C-71.82636153475039&z=8"></iframe>
+				                    <iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="{{URLMAP}}"></iframe>
 				                </div>
 							</div>
 						</div>
@@ -137,6 +137,6 @@
 
 
 		{% include '../partials/scripts.njk' %}
-		<script src="pageIndex.js"></script>
+		<script src="index.js"></script>
 	</body>
 </html>

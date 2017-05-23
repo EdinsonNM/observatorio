@@ -3,8 +3,8 @@ var webpack = require('webpack'),
 	HtmlWebpackPlugin = require('html-webpack-plugin'),
 	NunjucksWebpackPlugin = require('nunjucks-webpack-plugin'),
 	CopyWebpackPlugin = require('copy-webpack-plugin'),
-	fs = require('fs');var controllers = fs.readdirSync(__dirname);
-
+	fs = require('fs');var controllers = fs.readdirSync(__dirname)
+  Dotenv = require('dotenv-webpack');
 
 
 /* babel */
@@ -21,7 +21,10 @@ module.exports = {
 	entry: {
     tpl: './src/tpl.js',
 		app: './src/main.jsx',
-		pageIndex: './src/page-index.js',
+		index: './src/scripts/index.js',
+    documentos: './src/scripts/documentos.js',
+    novedades: './src/scripts/novedades.js',
+    normas: './src/scripts/normas.js'
 	},
 	output: {
 		path: path.resolve(__dirname, 'build'),
@@ -47,14 +50,14 @@ module.exports = {
 			{
                 test: /\.(njk|nunjucks)$/,
                 loader: 'nunjucks-loader'
-            },
-
+            }
 		]
 	},
 	externals: {
 		"jquery": "jQuery"
 	},
 	plugins: [
+
 		new HtmlWebpackPlugin({
 			template: path.resolve(__dirname, 'public/visor.html'),
 			hash: true,
@@ -79,6 +82,10 @@ module.exports = {
             },
 
 		]),
+     new Dotenv({
+          path: './.env',
+          safe: false
+        }),
 
 	],
 	devtool: "source-map"

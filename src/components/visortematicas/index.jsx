@@ -109,7 +109,9 @@ export default class Index extends React.Component{
 
 		this.setState({layers:mylayers,tematicaSource:datasource});
 	}
-
+    AddLayer(layer){
+        this.map.AddLayer(layer);
+    }
 	componentDidMount(){
 		this.loadMap();
 		this.loadData();
@@ -133,11 +135,7 @@ export default class Index extends React.Component{
 		//this.map.createControlMousePosition();
 		var mylayers = BaseMaps.getLayers(this.map.getMap());
 		this.setState({layers:mylayers});
-		this.map.GetInfo((error,url)=>{
-			if(!error){
-				console.log(url);
-			}
-		});
+
 	}
 
 	handleUpdateInput(value){
@@ -214,6 +212,10 @@ export default class Index extends React.Component{
 		let services=[];
 		let basemaps=[];
 		let tematicas=[];
+
+        var childrenWithProps = React.Children.map(this.props.children, (child)=> {
+            return React.cloneElement(child, { map: this.map, AddLayer: this.AddLayer.bind(this) });
+        });
 
 		this.state.layers.map((group,groupIndex)=>{
 			switch(group.type){
@@ -307,7 +309,7 @@ export default class Index extends React.Component{
 				</div>
 
 				<div className="tematica-stats-container">
-					{ this.props.children }
+					{ childrenWithProps }
 				</div>
 
 				 <Drawer open={this.state.open} docked={false}  onRequestChange={(open) => this.setState({open})} width={350} containerStyle={{display:'flex',flexDirection:'column'}}>

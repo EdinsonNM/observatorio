@@ -1,22 +1,32 @@
-import ApiService from './ApiService';
-import {to_json} from'xmljson';
-import moment from 'moment';
+import SenamhiService from './SenamhiService';
 import _ from 'underscore';
+import Cache from './Cache';
 
-const serviceName = 'wssenamhi/response.php?method=station';
-
-export default class EstacionService extends ApiService {
+const CACHE_NAME = "ESTATION";
+export default class EstacionService extends SenamhiService {
 	constructor(){
-		super(serviceName);
+		super();
 	}
+  getAll(params,next){
+    let caching = true;
+    if (caching) Cache.clear(CACHE_NAME);
+    return super.getAll('station',params,(error,data)=>{
+      if (caching) Cache.setData(CACHE_NAME, data);
+      return next(null,data);
+    });
+  }
 
-	static getAll(provincia, params){
-        let data =_.where(DISTRITOS[provincia], params) ;
-        return data;
-    }
+  get(id){
+    let estaciones = Cache.getData(CACHE_NAME);
+    let data = _.findWhere(estaciones, {C_COD_EST:id});
+    return data;
+  }
 
-    static get(provincia,id){
-        let data = _.findWhere(DISTRITOS[provincia], {id_ubigeo:id});
-        return data;
-    }
+  getByDistrito(distrito){
+    let data =[];
+    let estaciones = Cache.getData(CACHE_NAME);
+    data = _.where(estaciones, {C_COD_DIST:distrito});
+    return data;
+  }
+
 }

@@ -45,17 +45,22 @@ export default class Precipitaciones extends React.Component{
         this.state={
             title: 'Investigadores Ambientales',
             tabIndex: 0,
-            investigadores: InvestigadorService.getAll({})
+            investigadores: []
         };
 
         this.handleChangeTab = this.handleChangeTab.bind(this);
     }
 
     componentDidMount() {
-        let investigadores = InvestigadorService.getAll({});
-        this.setState({
-            investigadores
+        let investigadoresService = new InvestigadorService();
+        investigadoresService.getAll({},(error,investigadores)=>{
+            console.log(investigadores);
+            this.setState({
+                investigadores:investigadores
+            });
+
         });
+
     }
 
     handleChangeTab (value) {
@@ -100,31 +105,7 @@ export default class Precipitaciones extends React.Component{
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
-                    <Tabs onChange={this.handleChangeTab} value={this.state.tabIndex}>
-                        <Tab label="Gráfica" value={0} icon={<FontIcon className="material-icons">multiline_chart</FontIcon>}>
-                            <div>
-                                <BarChart data={this.state.investigadores} />
-                            </div>
-                        </Tab>
-
-                        <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
-                                            <TableHeaderColumn>Cant.</TableHeaderColumn>
-                                            <TableHeaderColumn>Dia</TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
-                                    </TableBody>
-                                </Table>
-                            </div>
-                        </Tab>
-                    </Tabs>
-
+                    <BarChart data={this.state.investigadores} />
 
                 </div>
             </div>

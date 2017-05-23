@@ -8,8 +8,14 @@
 import AuthToken from '../libs/AuthToken.js';
 import nativeToast from 'native-toast'
 import Users from './UserService';
+import Service from './Service';
 const serviceName = 'login';
 window.loadeduser=false;
+import * as firebase from 'firebase';
+
+
+//firebase.initializeApp(config);
+//let database = firebase.database();
 export default class Auth{
 	static redirectAdmin(user,next){
 		window.user = user;
@@ -39,7 +45,7 @@ export default class Auth{
 	}
   // login[POST]
   static init(next){
-    firebase.auth().onAuthStateChanged(function(user) {
+    Service.firebase.auth().onAuthStateChanged(function(user) {
       window.loadeduser=true;
       console.log('loaded info user...');
       if (user) {
@@ -72,7 +78,7 @@ export default class Auth{
 
   // me[GET]
   static me(next){
-    var user = firebase.auth().currentUser;
+    var user = Service.firebase.auth().currentUser;
     if (user) {
 		if(!user.isAnonymous){
 			return Users.get(user.uid,next);

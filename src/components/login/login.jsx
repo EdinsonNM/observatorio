@@ -4,8 +4,8 @@ import TextField from 'material-ui/TextField';
 import Auth from '../../services/Auth';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import nativeToast from 'native-toast'
-
+import nativeToast from 'native-toast';
+import UserService from '../../services/UserService';
 const styles = {
   floatingLabelStyle: {
     color: "white",
@@ -51,13 +51,18 @@ export default class Login extends React.Component{
 					timeout: 5000,
 					type: 'warning'
 				});
-			}  			
-			
+			}
+
 		});
 	}
 
 
-	
+	resetMyPassword(){
+        let service = new UserService();
+        service.resetPassword(this.state.email,(error,data)=>{
+            console.log("password sent");
+        });
+    }
 
 	handleChange(key, event){
 		let state = this.state;
@@ -103,12 +108,13 @@ export default class Login extends React.Component{
 							label="¿Olvide mi contraseña?"
 							href={"#/forgot-password"}
 							labelStyle={{color:'#ffffff'}}
+
 							/>
-			
+
 
 					</form>
 					</div>
-					
+
 			</div>
 		);
 	}
