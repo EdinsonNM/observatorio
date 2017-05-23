@@ -13,13 +13,14 @@ const styles = {
 
 };
 
-export default class Login extends React.Component{
+export default class ResetPasword extends React.Component{
 	constructor () {
 		super();
 		this.state = {
 			email:'',
 			password:'',
 			loading:false,
+            sent:false,
 			message:{
 				open:false,
 				message:''
@@ -61,6 +62,7 @@ export default class Login extends React.Component{
         let service = new UserService();
         service.resetPassword(this.state.email,(error,data)=>{
             console.log("password sent");
+            this.setState({sent:true});
         });
     }
 
@@ -74,10 +76,14 @@ export default class Login extends React.Component{
 
 		return (
 			<div className="flex layout vertical center-center center-justified" style={{height:'100%'}} >
-				<div className="login-container layout vertical center-center center-justified">
+            {
+                (!this.state.sent)?
+                <div className="login-container layout vertical center-center center-justified">
 					<img src="visor/images/logo.svg" width="200PX" height="auto"/>
 					<h1>Visor de Mapas</h1>
-					<h3>Cuenca Chancay - Lambayeque</h3>
+					<h3>Recuperar Contraseña</h3>
+                    <p>Ingrese su email para enviar un correo de restablecimiento de contraseña</p>
+
 					<form>
 						<TextField
 							type="email"
@@ -89,31 +95,23 @@ export default class Login extends React.Component{
 							required
 							inputStyle={{color:'white'}}
 							/>
-						<TextField
-							floatingLabelStyle={styles.floatingLabelStyle}
-							type="password"
-							floatingLabelText="Password"
-							value = {this.state.password}
-							onChange = {(e)=>{this.handleChange('password',e);}}
-							fullWidth
-							required
-							inputStyle={{color:'white'}}
-							/>
 
 
-						<RaisedButton label="Entrar" fullWidth disabled={this.state.loading} primary={true} onTouchTap={this.handleLogin.bind(this)} />
-						<FlatButton
-							disableTouchRipple
-							fullWidth
-							label="¿Olvide mi contraseña?"
-							href={"#/forgot-password"}
-							labelStyle={{color:'#ffffff'}}
 
-							/>
-
+						<RaisedButton label="Enviar email" fullWidth disabled={this.state.loading} primary={true} onTouchTap={this.resetMyPassword.bind(this)} />
 
 					</form>
-					</div>
+				</div>
+                :
+                <div className="login-container layout vertical center-center center-justified">
+					<img src="visor/images/logo.svg" width="200PX" height="auto"/>
+					<h1>Visor de Mapas</h1>
+					<h3>Recuperar Contraseña</h3>
+                    <p>Se envió un correo a {this.state.email} para restablecer la contraseña</p>
+                </div>
+
+            }
+
 
 			</div>
 		);

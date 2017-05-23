@@ -26,6 +26,8 @@ import Pbi      from './components/visortematicas/economico/pbi';
 import Indice   from './components/visortematicas/economico/indice';
 
 import Usuarios from './components/usuarios/usuarios';
+import Usuario from './components/usuarios/usuario';
+import ForgotPassword from './components/login/resetPassword';
 
 export default (
 
@@ -73,7 +75,10 @@ export default (
 			component={ Login }
 			onEnter={ RouteUtil.validateAuth }
 		/>
-
+        <Route
+			path="/forgot-password"
+			component={ ForgotPassword }
+		/>
 		<Route
 			path="/logout"
 			component={ Index }
@@ -97,6 +102,10 @@ export default (
             <Route
 				path="usuarios"
 				component={ Usuarios }
+			/>
+             <Route
+				path="usuarios/new"
+				component={ Usuario }
 			/>
 			<Route
 				path="tematicas"

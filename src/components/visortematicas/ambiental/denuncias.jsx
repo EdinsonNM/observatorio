@@ -129,7 +129,8 @@ export default class Denuncias extends React.Component{
     }
 
     getData(){
-        if(this.state.departamento!=null&&this.state.anio!=null){
+        debugger;
+        if(this.state.departamento&&this.state.anio){
             let service = new DenunciaAmbientalService();
             service.getAll(this.state.anio,this.state.departamento,(error,data) => {
                 let dataR1=service.getReport1(data);

@@ -78,6 +78,13 @@ export default class Gastos extends React.Component{
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
     }
 
+    componentDidMount(){
+        let service = new MunicipalidadService();
+        service.getAll({},(error,data)=>{
+            console.log(error,data);
+        });
+    }
+
      handleChangeSelect(key, event, index, value){
         if (key === 'anio') {
             let munis = [];

@@ -11,6 +11,11 @@ import Users from './UserService';
 import Service from './Service';
 const serviceName = 'login';
 window.loadeduser=false;
+import * as firebase from 'firebase';
+
+
+//firebase.initializeApp(config);
+//let database = firebase.database();
 export default class Auth{
 	static redirectAdmin(user,next){
 		window.user = user;

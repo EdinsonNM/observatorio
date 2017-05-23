@@ -49,6 +49,7 @@
     "moment": "^2.18.1",
     "native-toast": "^1.1.0",
     "openlayers": "^4.0.1",
+    "random-password-generator": "0.0.3",
     "react": "^15.5.4",
     "react-dom": "^15.4.2",
     "react-google-charts": "^1.5.4-alpha.1",
