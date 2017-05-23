@@ -1,4 +1,5 @@
 {% set cuenca_title = "Chancay - Lambayeque" %}
+{% set URLMAP = "https://maps.google.com.pe/maps/ms?msid=217558796961593721160.0004b157d25d98c163e51&amp;msa=0&amp;hl=es&amp;ie=UTF8&amp;t=h&amp;ll=-6.653695,-79.367981&amp;spn=0.818418,1.452942&amp;z=9&amp;output=embed" %}
 <!DOCTYPE html>
 <html>
 	{% include '../partials/head.njk' %}
@@ -94,7 +95,7 @@
 					<div class="container">
 						<div class="row">
 							<div class="col-md-6">
-								<h2 class="mt-lg">Observatorio de la Cuenca <br/><strong>Chancay - Lambayeque</strong></h2>
+								<h2 class="mt-lg">Observatorio de la Cuenca <br/><strong>{{cuenca_title}}</strong></h2>
 								<p class="lead">
 									El observatorio de la Cuenca Chancay-Lambayeque se crea con la finalidad de poner a disposición de los usuarios, la
 									información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y
@@ -104,7 +105,7 @@
 							</div>
 							<div class="col-md-6 mt-lg">
 								<div class="embed-responsive embed-responsive-16by9">
-				                    <iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="https://maps.google.com.pe/maps/ms?msid=217558796961593721160.0004b157d25d98c163e51&amp;msa=0&amp;hl=es&amp;ie=UTF8&amp;t=h&amp;ll=-6.653695,-79.367981&amp;spn=0.818418,1.452942&amp;z=9&amp;output=embed"></iframe>
+				                    <iframe frameborder="0" scrolling="no" marginheight="1" marginwidth="1" src="{{URLMAP}}"></iframe>
 				                </div>
 							</div>
 						</div>
