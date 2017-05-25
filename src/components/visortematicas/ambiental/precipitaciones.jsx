@@ -47,6 +47,7 @@ const style={
     padding:10
   }
 };
+// const defaultPeriodo = moment().format('YYYY-MM').split('-');
 
 
 export default class Precipitaciones extends React.Component{
@@ -72,13 +73,7 @@ export default class Precipitaciones extends React.Component{
                 [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
                 [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
                 [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-                [66, 70], [67, 72], [68, 75], [69, 80]
+                [30, 55]
             ]
 		};
 
@@ -301,14 +296,17 @@ export default class Precipitaciones extends React.Component{
     }
 
     getData(){
-        if(!this.state.variable&&!this.state.mes)
+        if(!(this.state.variable && this.state.mes)) {
             return;
+        }
+
         let service = new DataService();
-        let periodo = this.state.mes.split('-');
+        let {anio, mes} = this.state.mes.split('-');
+
         service.getAll({
             idEstacion:this.state.estacion,
-            anio:periodo[0],
-            mes : periodo[1],
+            anio: anio,
+            mes : mes,
             param : this.state.variable
         },(error,data)=>{
             this.toggleFilter();
@@ -392,7 +390,7 @@ export default class Precipitaciones extends React.Component{
         const iconButtonElement = (
             <IconButton
                 touch={true}
-                tooltip="more"
+                tooltip="Opciones"
                 tooltipPosition="bottom-left"
             >
                  <FontIcon className="material-icons" color="#006064">more_vert</FontIcon>
@@ -514,7 +512,14 @@ export default class Precipitaciones extends React.Component{
 
                             </div>
                         </div>
-                            <h3 className="text-center">{estacion_nombre} (<small>{this.state.mes}</small>)</h3>
+
+                        <div className="container-fluid">
+                            <div className="row">
+                                    <div className="col-md-12">
+                                        <h3 className="text-center">{estacion_nombre} (<small>{this.state.mes}</small>)</h3>
+                                    </div>
+                            </div>
+                        </div>
 
                             <div className={'my-pretty-chart-container'}>
                                 <Chart
