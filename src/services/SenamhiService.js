@@ -19,6 +19,6 @@ export default class SenamhiService {
 			(error)=>{
 				return next(error.response.data.data);
 			}
-		)
+		);
   }
 }

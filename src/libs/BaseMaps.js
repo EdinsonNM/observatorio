@@ -135,6 +135,64 @@ export default  class BaseMaps{
       return dptos;
   }
 
+
+  AddDptos(){
+        this._map.getView().setZoom(7);
+        let dptos = new ol.layer.Group({
+            title: 'Departamentos',
+            layers: [
+            new ol.layer.Vector({
+                title: 'Distritos',
+                type:'custom',
+                visible:true,
+                source: new ol.source.Vector({
+                                    format: new ol.format.GeoJSON(),
+                                    projection : 'EPSG:3857',
+                                    url: 'visor/data/peru_departamental_simple.geojson'
+                })
+                })
+            ]
+        });
+
+         var myStyle = new ol.style.Style ({
+          fill: new ol.style.Fill({
+             color: 'rgba(0, 131, 143,0.5)'
+           }),
+            stroke: new ol.style.Stroke({
+                color: 'blue',
+                width: 1
+            })
+        });
+        var defaultStyle = new ol.style.Style ({
+          fill: new ol.style.Fill({
+             color: 'rgba(255,255,255,0)'
+           })
+        });
+        let source = dptos.getLayers().getArray()[0].getSource();
+        let filterDptos = process.env.DEPARTAMENTOS_CUENCA.split(',');
+        var key = source.on('change', (e)=> {
+            if(source.getState()=='ready'){
+               ol.Observable.unByKey(key);
+                if(process.env.DEPARTAMENTOS_CUENCA!==''&&filterDptos.length>0){
+                    source.forEachFeature((feature)=>{
+                       feature.setStyle(defaultStyle);
+
+                        let f = _.find(filterDptos ,(num)=>{return num == feature.getProperties().FIRST_IDDP; });
+                        if(f){
+                            feature.setStyle(myStyle);
+                        }else{
+
+                        }
+                    })
+                }
+            }
+        });
+
+        this._map.addLayer(dptos);
+
+      return dptos;
+  }
+
     AddLayer(layer){
       this._map.addLayer(layer);
     }
