@@ -98,7 +98,7 @@ export default class Denuncias extends React.Component{
             if (idx % 2 === 0) {
                 tableRows.push(
                      <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{moment().month(parseInt(data[idx][0])-1).format('MMMM') } </TableRowColumn>
+                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
                         <TableRowColumn>{`${data[idx][1]} denuncias`} </TableRowColumn>
                     </TableRow>
                 );
@@ -129,7 +129,6 @@ export default class Denuncias extends React.Component{
     }
 
     getData(){
-        debugger;
         if(this.state.departamento&&this.state.anio){
             let service = new DenunciaAmbientalService();
             service.getAll(this.state.anio,this.state.departamento,(error,data) => {

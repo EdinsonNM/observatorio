@@ -47,6 +47,7 @@ const style={
     padding:10
   }
 };
+// const defaultPeriodo = moment().format('YYYY-MM').split('-');
 
 
 export default class Precipitaciones extends React.Component{
@@ -318,6 +319,7 @@ export default class Precipitaciones extends React.Component{
        let periodo = this.state.mes.split('-');
        let anio = periodo[0];
        let mes = periodo[1];
+
         service.getAll({
             idEstacion:this.state.estacion,
             anio: anio,
@@ -537,7 +539,10 @@ export default class Precipitaciones extends React.Component{
                                     </div>
                             </div>
                         </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>>
 
                             <div className={'my-pretty-chart-container'}>
                                 <Chart
