@@ -539,10 +539,6 @@ export default class Precipitaciones extends React.Component{
                                     </div>
                             </div>
                         </div>
-<<<<<<< HEAD
-
-=======
->>>>>>>
 
                             <div className={'my-pretty-chart-container'}>
                                 <Chart
