@@ -29,7 +29,7 @@ import DataService from '../../../services/DataEstacionService';
 import EstacionService from '../../../services/EstacionService';
 import PeriodoService from '../../../services/PeriodoEstacionService';
 import moment from 'moment';
-
+import _ from 'underscore';
 let SelectableList = makeSelectable(List);
 
 moment.locale('es');
@@ -90,12 +90,16 @@ export default class Precipitaciones extends React.Component{
     }
 
     componentDidMount() {
-        let departamentos = DepartamentoService.getAll({});
-        //let variables = VariableService.getAll({});
-        this.setState({
-        	departamentos
-        });
-        this.loadEstaciones();
+         setTimeout(()=>{
+            this.LayerDptos = this.props.map.AddDptos();
+            let departamentos = DepartamentoService.getAll({});
+            this.setState({
+            departamentos
+            });
+            this.loadEstaciones();
+        },2000);
+
+
     }
 
     loadEstaciones(){
@@ -112,9 +116,20 @@ export default class Precipitaciones extends React.Component{
                 //src: pointerimgsrc
                 }))
             });
+            let filterDptos = process.env.DEPARTAMENTOS_CUENCA.split(',');
+            let result = _.filter(data,(item)=>{
+                let existe = false;
+                filterDptos.forEach((dpto)=>{
+                    let indice = item.C_COD_DIST.search(`051${dpto}`);
+                    if(indice>=0)
+                    existe = true;
 
+                });
+                return existe;
+            });
+            result.forEach((item)=>{
+                 let filterDptos = process.env.DEPARTAMENTOS_CUENCA.split(',');
 
-            data.forEach((item)=>{
                 let  iconFeature = new ol.Feature({
                         geometry: new ol.geom.Point(ol.proj.transform([parseFloat(item.LON), parseFloat(item.LAT)], 'EPSG:4326', 'EPSG:3857')),
                         nombre: item.V_NOM_ESTA,
