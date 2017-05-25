@@ -315,8 +315,9 @@ export default class Precipitaciones extends React.Component{
         }
 
         let service = new DataService();
-        let {anio, mes} = this.state.mes.split('-');
-
+       let periodo = this.state.mes.split('-');
+       let anio = periodo[0];
+       let mes = periodo[1];
         service.getAll({
             idEstacion:this.state.estacion,
             anio: anio,
@@ -337,6 +338,8 @@ export default class Precipitaciones extends React.Component{
         console.log("bye component...");
         if (this.props.map) {
             this.props.map.RemoveLayer(this.Layer);
+            this.props.map.RemoveLayer(this.LayerDptos);
+
         }
     }
 
