@@ -2,7 +2,9 @@
 import NovedadService from '../services/NovedadService';
 let service = new NovedadService();
 import tpl from '../tpl/partials/last_news.njk';
-
+let $email = document.querySelector("#email")
+$email.innerHTML = process.env.EMAIL;
+$email.href = process.env.EMAIL;
 service.getAll({
 	draw:1,
 	start:0,

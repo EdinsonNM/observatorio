@@ -13,7 +13,7 @@ export default class PBIService extends ApiService{
   getAll(anio, departamento, next){
     let params={};
 
-    return super.getAll2(params, (error, data)=>{
+    return super.getAll(params, (error, data)=>{
       if(error){
         data = mockData;
       }
