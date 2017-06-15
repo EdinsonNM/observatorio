@@ -31,17 +31,17 @@ import moment from 'moment';
 moment.locale('es');
 
 const style={
-  appbar: {
-    backgroundColor:'white'
-  },
-  chip: {
-      margin: 4,
-  },
-  wrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    padding:10
-  }
+    appbar: {
+        backgroundColor:'white'
+    },
+    chip: {
+        margin: 4,
+    },
+    wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        padding:10
+    }
 };
 
 export default class Indice extends React.Component{
@@ -90,7 +90,7 @@ export default class Indice extends React.Component{
                 },()=>{
                     this.getData();
                 });
-         }
+        }
     }
 
     handleChangeTab (value) {
@@ -261,24 +261,6 @@ export default class Indice extends React.Component{
                                     legend_toggle
                                 />
                             </div>
-
-                            <br/>
-
-                            {
-                                this.state.data && this.state.data.length
-                                ? <div className={'my-pretty-chart-container'}>
-                                        <Chart
-                                            chartType="PieChart"
-                                            data={this.state.data}
-                                            options={{}}
-                                            graph_id="PieChart"
-                                            width="100%"
-                                            height="400px"
-                                            legend_toggle
-                                        />
-                                    </div>
-                                : null
-                            }
                         </Tab>
 
                         <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
