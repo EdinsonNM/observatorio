@@ -1,10 +1,14 @@
 //aqui la lógica para el archivo index.html
 import NovedadService from '../services/NovedadService';
-let service = new NovedadService();
 import tpl from '../tpl/partials/last_news.njk';
+
+let service = new NovedadService();
 let $email = document.querySelector("#email")
 $email.innerHTML = process.env.EMAIL;
 $email.href = process.env.EMAIL;
+let $linkWeap = document.querySelector("#link-weap");
+$linkWeap.href = process.env.URL_WEAP;
+
 service.getAll({
 	draw:1,
 	start:0,
