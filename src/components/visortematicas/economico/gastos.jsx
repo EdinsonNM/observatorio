@@ -63,7 +63,6 @@ export default class Gastos extends React.Component{
             // departamentos:DepartamentoService.getAll({}),
             title: 'Gasto Público',
             anios:[
-                {id:2013,nombre:2013},
                 {id:2014,nombre:2014},
                 {id:2015,nombre:2015},
                 {id:2016,nombre:2016},
@@ -110,12 +109,12 @@ export default class Gastos extends React.Component{
 
         const tableRows = data.map((obj, idx) => {
             return (
-                 <TableRow key={`tr-${idx}`}>
-                    <TableRowColumn style={style10}>{obj.ID_UBIGEO} </TableRowColumn>
-                    <TableRowColumn >{obj.MUNICIPALIDAD} </TableRowColumn>
-                    <TableRowColumn style={style20}>{obj.MON_DEVENGADO} </TableRowColumn>
-                    <TableRowColumn style={style20}>{obj.MON_CERTIFICADO} </TableRowColumn>
-                </TableRow>
+                 <tr key={`tr-${idx}`}>
+                    <td style={style10}>{obj.ID_UBIGEO} </td>
+                    <td >{obj.MUNICIPALIDAD} </td>
+                    <td style={style20}>{obj.MON_DEVENGADO} </td>
+                    <td style={style20}>{obj.MON_CERTIFICADO} </td>
+                </tr>
             );
         });
 
@@ -206,20 +205,20 @@ export default class Gastos extends React.Component{
                     <br/>
                     <div className="container">
                         <div className="row">
-                            <div style={outterBorder}>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
-                                    <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                        <TableRow>
-                                            <TableHeaderColumn style={style10}><abbr title="Código de Ubigeo">Cod. Ub</abbr></TableHeaderColumn>
-                                            <TableHeaderColumn >Municipalidad</TableHeaderColumn>
-                                            <TableHeaderColumn style={style20}><abbr title="Monto Devengado">M. Deveng.</abbr></TableHeaderColumn>
-                                            <TableHeaderColumn style={style20}><abbr title="Monto Certificado">M. Certif.</abbr></TableHeaderColumn>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody displayRowCheckbox={false}>
+                            <div className="col-md-12">
+                                <table className="table table-bordered" style={{width:'100%'}}>
+                                    <thead displaySelectAll={false} adjustForCheckbox={false}>
+                                        <tr>
+                                            <th><abbr title="Código de Ubigeo">Cod. Ub</abbr></th>
+                                            <th>Municipalidad</th>
+                                            <th><abbr title="Monto Devengado">M. Deveng.</abbr></th>
+                                            <th><abbr title="Monto Certificado">M. Certif.</abbr></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody displayRowCheckbox={false}>
                                         {tableRows}
-                                    </TableBody>
-                                </Table>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
