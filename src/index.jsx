@@ -15,7 +15,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack, green400} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
@@ -25,6 +25,7 @@ import MapaService from './services/MapaService';
 import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 import _ from 'underscore';
+import EstacionService from './services/EstacionService';
 let tematicaService=new TematicaService();
 let mapaService=new MapaService();
 
@@ -53,7 +54,8 @@ export default class Index extends React.Component{
 			selectedBaseMap:1,
 			showbasemaps:false,
             openInfo:false,
-            urlsInfo:[]
+            urlsInfo:[],
+			showEstaciones: false
 		}
 	}
 	loadData(){
@@ -226,7 +228,69 @@ export default class Index extends React.Component{
 		layers[index].expanded=!group.expanded;
 		this.setState({layers:layers});
 	}
+	handleEstaciones(e){
+		let showEstaciones = e.target.checked;
+		let service  = new EstacionService();
+		service.getEstacionesFromWebService((error, data) => {
+			let markers = [];
+            let iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+					anchor: [0.5, 46],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					opacity: 0.75,
+					src: 'visor/images/marker.png',
+					cursor:'pointer'
+				}))
+            });
+			var iconStyleSelected = new ol.style.Style({
+				image: new ol.style.Icon(({
+					anchor: [0.5, 46],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					opacity: 0.75,
+					src: 'visor/images/marker-selected.png'
+				}))
+			});
+			data.forEach((item)=>{
+                let  iconFeature = new ol.Feature({
+					geometry: new ol.geom.Point(ol.proj.transform([parseFloat(item.lon), parseFloat(item.lat)], 'EPSG:4326', 'EPSG:3857')),
+					nombre: item.nom,
+					tipo: item.tip,
+					lat:parseFloat(item.lat),
+					lon:parseFloat(item.lon),
+					aut: item.aut,
+					fmin: item.fmin,
+					fmax: item.fmax
+				});
+                iconFeature.setStyle(iconStyle);
+                markers.push(iconFeature);
+            });
+
+            var vectorSource = new ol.source.Vector({features: markers });
+            var vectorLayer = new ol.layer.Vector({source: vectorSource});
+            this.map.AddLayer(vectorLayer);
+            this.Layer = vectorLayer;
+
+			var popup = new ol.Overlay({
+				element: document.querySelector('#popup')
+			});
+			this.map.getMap().addOverlay(popup);
+
+			this.map.getMap().on('singleclick', (evt) => {
+				this.map.getMap().forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+					feature.setStyle(iconStyleSelected);
+					// feature.getProperties(); data de la estacion seleccionada
+					debugger;
+                });
+			});
+		});
+		this.setState({showEstaciones});
+		
+		
+	}
 	render() {
+		const {showEstaciones} = this.state;
 		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
 		let services=[];
@@ -372,6 +436,12 @@ export default class Index extends React.Component{
 							<div id="layers" className="mCustomScrollbar" style={{flex:1,overflow:'hidden',height:'100%'}}>
 								<List>
 								{ tematicas }
+								<ListItem
+									leftIcon={<FontIcon  className="material-icons" color={green400}>my_location</FontIcon>}
+									primaryText={"Estaciones por cuenca"}
+									secondaryText={"Consulte información de las estaciones"}
+									rightToggle={<Toggle toggled={showEstaciones} onToggle={this.handleEstaciones.bind(this)}/>} 
+									/>
 								</List>
 							</div>
 						</div>
@@ -405,7 +475,7 @@ export default class Index extends React.Component{
 
 
 					</Drawer>
-
+				<div id="popup"></div>
 			</div>
 	  	);
 	}
