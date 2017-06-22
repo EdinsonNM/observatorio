@@ -26,6 +26,8 @@ import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 import _ from 'underscore';
 import EstacionService from './services/EstacionService';
+import DatePicker from 'material-ui/DatePicker';
+import moment from 'moment';
 let tematicaService=new TematicaService();
 let mapaService=new MapaService();
 
@@ -55,8 +57,11 @@ export default class Index extends React.Component{
 			showbasemaps:false,
             openInfo:false,
             urlsInfo:[],
-			showEstaciones: false
+			showEstaciones: false,
+			showInfoEstacion: false,
+			dataEstacion:[]
 		}
+		this.renderInfoEstacion = this.renderInfoEstacion.bind(this);
 	}
 	loadData(){
 		tematicaService.getAll({},(error,tematicas)=>{
@@ -228,6 +233,27 @@ export default class Index extends React.Component{
 		layers[index].expanded=!group.expanded;
 		this.setState({layers:layers});
 	}
+
+	loadDataEstacion(){
+		const {fIniEstacion,fFinEstacion,estacion} = this.state;
+		if(typeof fIniEstacion!=='undefined' && typeof fFinEstacion!=='undefined') {
+			let service  = new EstacionService();
+			service.getDataFromWebService(estacion.id,moment(fIniEstacion).format('DD/MM/YYYY'),moment(fFinEstacion).format('DD/MM/YYYY'),(error, data)=>{
+				this.setState({dataEstacion: data})
+			});
+		}
+	}
+
+	handleChangeDateEstacion(key, value){
+		switch(key) {
+			case 'fIniEstacion':
+				this.setState({fIniEstacion:value},this.loadDataEstacion);
+				break;
+			case 'fFinEstacion':
+			this.setState({fFinEstacion:value},this.loadDataEstacion);
+				break;	
+		}
+	}
 	handleEstaciones(e){
 		let showEstaciones = e.target.checked;
 		let service  = new EstacionService();
@@ -255,6 +281,7 @@ export default class Index extends React.Component{
 			data.forEach((item)=>{
                 let  iconFeature = new ol.Feature({
 					geometry: new ol.geom.Point(ol.proj.transform([parseFloat(item.lon), parseFloat(item.lat)], 'EPSG:4326', 'EPSG:3857')),
+					id: item.id,
 					nombre: item.nom,
 					tipo: item.tip,
 					lat:parseFloat(item.lat),
@@ -280,14 +307,78 @@ export default class Index extends React.Component{
 			this.map.getMap().on('singleclick', (evt) => {
 				this.map.getMap().forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
 					feature.setStyle(iconStyleSelected);
-					// feature.getProperties(); data de la estacion seleccionada
-					debugger;
+					const estacion  = feature.getProperties();
+					const showInfoEstacion = true;
+					this.setState({showInfoEstacion,estacion})
                 });
 			});
 		});
 		this.setState({showEstaciones});
 		
 		
+	}
+	renderInfoEstacion(){
+		let {showInfoEstacion, estacion} = this.state;
+			return 	<Drawer open={showInfoEstacion} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({showInfoEstacion:open})} width={400}>
+						{
+						(showInfoEstacion)?
+						<div>
+							
+							<AppBar
+							title={estacion.nombre}
+							iconClassNameRight="menu"
+							style={style.appbar}
+							onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
+							/>
+							<div className="container">
+								<div className="row">
+									<div className="col-sm-12"></div>
+									<div className="col-sm-12">
+										<label htmlFor="">Tipo:</label>
+										<input className="form-control" type="text" placeholder={(estacion.tipo==='E') ? 'Embalse': 'Hidrométrica'} readonly/>
+									</div>
+									<div className="col-sm-12">
+										<DatePicker id="fIniEstacion" floatingLabelText="Fecha mínima" value={this.state.fIniEstacion}
+        onChange={(e,value) => this.handleChangeDateEstacion('fIniEstacion',value)} fullWidth/>
+									</div>
+									<div className="col-sm-12">
+										<DatePicker id="fFinEstacion" floatingLabelText="Fecha máxima" value={this.state.fFinEstacion}
+        onChange={(e,value) => this.handleChangeDateEstacion('fFinEstacion',value)} fullWidth/>
+									</div>
+									<div className="col-sm-12">
+										<table className="table table-bordered">
+											<thead>
+												<tr>
+												<th>#</th>
+												<th>Fecha</th>
+												<th>Valor</th>
+												<th>Unidad</th>
+												</tr>
+											</thead>
+											<tbody>
+												{
+													this.state.dataEstacion.map((item,index) => {
+														return <tr>
+															<th scope="row">{index+1}</th>
+															<td>{item.fec}</td>
+															<td>{item.val}</td>
+															<td>{item.um}</td>
+														</tr>
+													})
+												}
+												
+												
+											</tbody>
+											</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						:
+						null
+						}
+					</Drawer>
+
 	}
 	render() {
 		const {showEstaciones} = this.state;
@@ -302,13 +393,13 @@ export default class Index extends React.Component{
 					services=[];
 					group.items.map((item,index)=>{
 						services.push( <ListItem
-						key={item.id}
+						key={"services-"+item.id}
 						primaryText={item.title}
 						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
 					tematicas.push(
 						<ListItem
-						key={group.id}
+						key={"group-"+groupIndex}
 						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
 						primaryText={group.title}
 						secondaryText={group.subtitle}
@@ -322,6 +413,7 @@ export default class Index extends React.Component{
 				case 'basemaps':
 					group.items.map((item,index)=>{
 						basemaps.push(<BottomNavigationItem
+							key={index}
 							label={item.title}
 							icon={favoritesIcon}
 							onTouchTap={() => this.selectBaseMap(item,index,group.items)}
@@ -437,6 +529,7 @@ export default class Index extends React.Component{
 								<List>
 								{ tematicas }
 								<ListItem
+									key={"item-precipitaciones"}
 									leftIcon={<FontIcon  className="material-icons" color={green400}>my_location</FontIcon>}
 									primaryText={"Estaciones por cuenca"}
 									secondaryText={"Consulte información de las estaciones"}
@@ -475,7 +568,8 @@ export default class Index extends React.Component{
 
 
 					</Drawer>
-				<div id="popup"></div>
+					{this.renderInfoEstacion()}
+				
 			</div>
 	  	);
 	}
