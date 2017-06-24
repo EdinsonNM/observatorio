@@ -85,7 +85,6 @@ export default class EstacionService extends SenamhiService {
       to_json(xml, function (err, data) {
         let dataStr = data['soap:Envelope']['soap:Body'].listarDatosResponse.listarDatosResult;
         const dataResult = JSON.parse(dataStr);
-        debugger;
         return next(null,dataResult)
       });
     })
