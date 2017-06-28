@@ -56,18 +56,25 @@ const outterBorder = {
     borderRadius: '4px'
 };
 
+const generateAnios = () => {
+    let currentYear = new Date().getFullYear();
+    let anios = [];
+    for (let i=currentYear-6; i<=currentYear; i++) {
+        anios.push({
+            id: i,
+            nombre: i
+        });
+    }
+    return anios;
+};
+
 export default class Gastos extends React.Component{
     constructor(props){
         super(props);
         this.state={
             // departamentos:DepartamentoService.getAll({}),
             title: 'Gasto Público',
-            anios:[
-                {id:2014,nombre:2014},
-                {id:2015,nombre:2015},
-                {id:2016,nombre:2016},
-                {id:2017,nombre:2017}
-            ],
+            anios: generateAnios(),
             municipalidades: [],
             municipalidad: null,
             tabIndex: 0,
@@ -79,24 +86,32 @@ export default class Gastos extends React.Component{
 
     componentDidMount(){
         let service = new MunicipalidadService();
-        service.getAll({},(error,data)=>{
+        service.getAll({}, (error, data) => {
             console.log(error,data);
         });
     }
 
      handleChangeSelect(key, event, index, value){
         if (key === 'anio') {
-            let munis = [];
-            munis = MunicipalidadService.getByYear(value);
+            let munis = MunicipalidadService.getByYear(value);
+
             this.setState({
                 [key]: value,
                 municipalidades: munis
             });
-        }else if (key === 'municipalidad') {
+        } else if (key === 'municipalidad') {
+            let data;
+
+            if (value <= -1) {
+                data = [];
+            } else if (value == 0) {
+                data =  MunicipalidadService.getAllGastos(value);
+            } else {
+                data = MunicipalidadService.getGastos(this.state.year, value);
+            }
             this.setState({
-                [key]: value
-            },()=>{
-                this.getData();
+                [key]: value,
+                data
             });
         }
     }
@@ -195,7 +210,8 @@ export default class Gastos extends React.Component{
                                     value={this.state.municipalidad}
                                     onChange={this.handleChangeSelect.bind(this, 'municipalidad')}
                                 >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    <MenuItem value={-1} primaryText="Seleccionar" />
+                                    <MenuItem value={0} primaryText="Todas" />
                                     {this.buildSelectOptions('municipalidades')}
                                 </SelectField>
                             </div>
@@ -206,7 +222,7 @@ export default class Gastos extends React.Component{
                     <div className="container">
                         <div className="row">
                             <div className="col-md-12">
-                                <table className="table table-bordered" style={{width:'100%'}}>
+                                <table className="table table-bordered" style={{width:'100%', fontSize:'12px'}}>
                                     <thead displaySelectAll={false} adjustForCheckbox={false}>
                                         <tr>
                                             <th><abbr title="Código de Ubigeo">Cod. Ub</abbr></th>
