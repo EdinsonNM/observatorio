@@ -1,6 +1,6 @@
 {
-  "name": "admision-cloud",
-  "description": "App de registro de postulantes",
+  "name": "observatorio-cuenca",
+  "description": "App para Observatorio de la Cuenca",
   "version": "1.0.0",
   "main": "main.jsx",
   "scripts": {
