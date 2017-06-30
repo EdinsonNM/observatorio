@@ -9,6 +9,8 @@ import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -59,7 +61,8 @@ export default class Index extends React.Component{
             urlsInfo:[],
 			showEstaciones: false,
 			showInfoEstacion: false,
-			dataEstacion:[]
+			dataEstacion:[],
+			variables: EstacionService.getVariables()
 		}
 		this.renderInfoEstacion = this.renderInfoEstacion.bind(this);
 	}
@@ -235,10 +238,11 @@ export default class Index extends React.Component{
 	}
 
 	loadDataEstacion(){
-		const {fIniEstacion,fFinEstacion,estacion} = this.state;
-		if(typeof fIniEstacion!=='undefined' && typeof fFinEstacion!=='undefined') {
+		const {fIniEstacion,fFinEstacion,estacion, varEstation} = this.state;
+		if(typeof fIniEstacion!=='undefined' && typeof fFinEstacion!=='undefined' && typeof varEstation!=='undefined') {
 			let service  = new EstacionService();
 			service.getDataFromWebService(estacion.id,moment(fIniEstacion).format('DD/MM/YYYY'),moment(fFinEstacion).format('DD/MM/YYYY'),(error, data)=>{
+				data = data.filter((item)=> item.var === varEstation)
 				this.setState({dataEstacion: data})
 			});
 		}
@@ -317,8 +321,12 @@ export default class Index extends React.Component{
 		
 		
 	}
+	handleChangeVar(event, index, value){
+		const {variables} = this.state;
+		this.setState({varEstation: value,varSelected: variables[index]},this.loadDataEstacion);
+	}
 	renderInfoEstacion(){
-		let {showInfoEstacion, estacion} = this.state;
+		let {showInfoEstacion, estacion, varSelected, variables} = this.state;
 			return 	<Drawer open={showInfoEstacion} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({showInfoEstacion:open})} width={400}>
 						{
 						(showInfoEstacion)?
@@ -332,44 +340,77 @@ export default class Index extends React.Component{
 							/>
 							<div className="container">
 								<div className="row">
-									<div className="col-sm-12"></div>
-									<div className="col-sm-12">
-										<label htmlFor="">Tipo:</label>
-										<input className="form-control" type="text" placeholder={(estacion.tipo==='E') ? 'Embalse': 'Hidrométrica'} readonly/>
+									<div className="col-sm-6">
+										<TextField
+										hintText="Tipo"
+										value = {(estacion.aut==='1') ? 'Automática': 'Convencional'}
+										floatingLabelText="Tipo"
+										floatingLabelFixed={true}
+										fullWidth
+										/>
 									</div>
-									<div className="col-sm-12">
+									<div className="col-sm-6">
+										<TextField
+										hintText="Tipo Estación"
+										value = {(estacion.tipo==='E') ? 'Embalse': 'Hidrométrica'}
+										floatingLabelText="Tipo Estación"
+										floatingLabelFixed={true}
+										fullWidth
+										/>
+									</div>
+									<div className="col-sm-6">
 										<DatePicker id="fIniEstacion" floatingLabelText="Fecha mínima" value={this.state.fIniEstacion}
-        onChange={(e,value) => this.handleChangeDateEstacion('fIniEstacion',value)} fullWidth/>
+        onChange={(e,value) => this.handleChangeDateEstacion('fIniEstacion',value)} autoOk={true} fullWidth/>
 									</div>
-									<div className="col-sm-12">
-										<DatePicker id="fFinEstacion" floatingLabelText="Fecha máxima" value={this.state.fFinEstacion}
+									<div className="col-sm-6">
+										<DatePicker id="fFinEstacion" floatingLabelText="Fecha máxima" autoOk={true} value={this.state.fFinEstacion}
         onChange={(e,value) => this.handleChangeDateEstacion('fFinEstacion',value)} fullWidth/>
 									</div>
 									<div className="col-sm-12">
-										<table className="table table-bordered">
-											<thead>
-												<tr>
-												<th>#</th>
-												<th>Fecha</th>
-												<th>Valor</th>
-												<th>Unidad</th>
-												</tr>
-											</thead>
-											<tbody>
-												{
-													this.state.dataEstacion.map((item,index) => {
-														return <tr>
-															<th scope="row">{index+1}</th>
-															<td>{item.fec}</td>
-															<td>{item.val}</td>
-															<td>{item.um}</td>
-														</tr>
-													})
-												}
-												
-												
-											</tbody>
+										<SelectField
+											floatingLabelText="Variable"
+											value={this.state.varEstation}
+											onChange={this.handleChangeVar.bind(this)}
+											fullWidth
+											>
+											{variables.map( (item) => <MenuItem value={item.id} primaryText={item.title} />)}
+
+										</SelectField>
+										<small>
+											{(varSelected) ? varSelected.description : ''} <br/> {(varSelected) ? <small><strong>Unidad de medida:</strong> {varSelected.um} </small>  : ''} 
+										</small>
+									</div>
+									<div className="col-sm-12">
+										{
+											(this.state.dataEstacion.length === 0)?
+											<div className="text-center">No existe información para mostrar</div>
+											:
+											<table className="table table-bordered">
+												<thead>
+													<tr>
+													<th>#</th>
+													<th>Fecha</th>
+													<th>Valor</th>
+													<th>Unidad</th>
+													</tr>
+												</thead>
+												<tbody>
+													{
+														this.state.dataEstacion.map((item,index) => {
+															return <tr>
+																<th scope="row">{index+1}</th>
+																<td>{item.fec}</td>
+																<td>{item.val}</td>
+																<td>{item.um}</td>
+															</tr>
+														})
+													}
+													
+													
+												</tbody>
 											</table>
+										}
+										
 									</div>
 								</div>
 							</div>

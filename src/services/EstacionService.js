@@ -1,7 +1,6 @@
 import SenamhiService from './SenamhiService';
 import _ from 'underscore';
 import Cache from './Cache';
-import ajax from 'basic-ajax';
 import {to_json} from'xmljson';
 
 const CACHE_NAME = "ESTATION";
@@ -62,7 +61,6 @@ export default class EstacionService extends SenamhiService {
       to_json(xml, function (err, data) {
         let dataStr = data['soap:Envelope']['soap:Body'].listarPuntosResponse.listarPuntosResult;
         const dataResult = JSON.parse(dataStr);
-        debugger;
         return next(null,dataResult)
       });
     })
@@ -88,6 +86,16 @@ export default class EstacionService extends SenamhiService {
         return next(null,dataResult)
       });
     })
+  }
+
+  static getVariables(){
+    const data = [
+      {id: 'niv_hor', title: 'Nivel Instantaneo', description: 'medida de nivel del rio en un determinado instante de tiempo', um: 'metros'},
+      {id: 'vol_ins', title: 'Volumen instantáneo', description: 'medida del volumen de un embalse en un determinado instante de tiempo', um: 'Hectómetros cúbicos'},
+      {id: 'Cau_ins', title: 'Caudal instantaneo del día', description: 'Caudal instantaneo del día', um: 'Metros cúbicos por segundo'},
+      {id: 'Cau_pro', title: 'Caudal promedio del día', description: 'Caudal promedio del día', um: 'Metros cúbicos por segundo'},
+    ]
+    return data;
   }
 
 }
