@@ -77,6 +77,7 @@ export default class Gastos extends React.Component{
             anios: generateAnios(),
             municipalidades: [],
             municipalidad: null,
+            anio: null,
             tabIndex: 0,
             data:[]
         };
@@ -105,9 +106,9 @@ export default class Gastos extends React.Component{
             if (value <= -1) {
                 data = [];
             } else if (value == 0) {
-                data =  MunicipalidadService.getAllGastos(value);
+                data =  MunicipalidadService.getAllGastos(this.state.anio);
             } else {
-                data = MunicipalidadService.getGastos(this.state.year, value);
+                data = MunicipalidadService.getGastos(this.state.anio, value);
             }
             this.setState({
                 [key]: value,

@@ -39,10 +39,12 @@ export default class MunicipalidadService extends ApiService{
     }
 
     static getByYear (year) {
+        debugger;
         return MUNICIPALIDADES.filter(obj => obj.ANIO == year);
     }
 
     static getAllGastos (year) {
+        debugger;
         return MUNICIPALIDADES.filter(obj => obj.ANIO == year);
     }
 
