@@ -425,18 +425,18 @@ export default class Index extends React.Component{
 		const {showEstaciones} = this.state;
 		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
-		let services=[];
 		let basemaps=[];
 		let tematicas=[];
 		this.state.layers.map((group,groupIndex)=>{
 			switch(group.type){
 				case 'services':
-					services=[];
+					let services=[];
 					group.items.map((item,index)=>{
 						services.push( <ListItem
-						key={"services-"+item.id}
+						key={"services-"+index}
 						primaryText={item.title}
-						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
+						rightToggle={<Toggle toggled={item.visible} 
+						onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
 					tematicas.push(
 						<ListItem
