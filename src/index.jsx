@@ -392,6 +392,9 @@ export default class Index extends React.Component{
 										</small>
 									</div>
 									<div className="col-sm-12">
+										<small style={{color:'#c3c3c3'}}>Las opciones de exportar datos se encuentran en la parte inferior de la tabla de resultados</small>
+									</div>
+									<div className="col-sm-12">
 										{
 											(this.state.dataEstacion.length === 0)?
 											<div className="text-center">No existe información para mostrar</div>
