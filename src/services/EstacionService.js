@@ -92,8 +92,8 @@ export default class EstacionService extends SenamhiService {
     const data = [
       {id: 'niv_hor', title: 'Nivel Instantaneo', description: 'medida de nivel del rio en un determinado instante de tiempo', um: 'metros'},
       {id: 'vol_ins', title: 'Volumen instantáneo', description: 'medida del volumen de un embalse en un determinado instante de tiempo', um: 'Hectómetros cúbicos'},
-      {id: 'Cau_ins', title: 'Caudal instantaneo del día', description: 'Caudal instantaneo del día', um: 'Metros cúbicos por segundo'},
-      {id: 'Cau_pro', title: 'Caudal promedio del día', description: 'Caudal promedio del día', um: 'Metros cúbicos por segundo'},
+      {id: 'cau_ins', title: 'Caudal instantaneo del día', description: 'Caudal instantaneo del día', um: 'Metros cúbicos por segundo'},
+      {id: 'cau_pro', title: 'Caudal promedio del día', description: 'Caudal promedio del día', um: 'Metros cúbicos por segundo'},
     ]
     return data;
   }

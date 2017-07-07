@@ -72,7 +72,7 @@ export default class Gastos extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            // departamentos:DepartamentoService.getAll({}),
+            departamentos:DepartamentoService.getAll({}),
             title: 'Gasto Público',
             anios: generateAnios(),
             municipalidades: [],
@@ -86,10 +86,25 @@ export default class Gastos extends React.Component{
     }
 
     componentDidMount(){
-        let service = new MunicipalidadService();
-        service.getAll({}, (error, data) => {
-            console.log(error,data);
-        });
+        setTimeout(()=>{
+            this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
+                this.setState({departamento:data.FIRST_IDDP},()=>{
+                    let service = new MunicipalidadService();
+                    service.getAll(data.FIRST_IDDP, () => {
+                        let data = [];
+                        if(this.state.anio)
+                            data = MunicipalidadService.getAllGastos(this.state.anio);
+                        if(this.state.municipalidad)
+                            data = MunicipalidadService.getGastos(this.state.anio, value);
+                        this.setState({
+                            data
+                        });
+                    });
+                });
+
+            });
+        },2000);
+       
     }
 
      handleChangeSelect(key, event, index, value){
@@ -114,6 +129,20 @@ export default class Gastos extends React.Component{
                 [key]: value,
                 data
             });
+        } else if (key==='departamento'){
+            let service = new MunicipalidadService();
+            service.getAll(value,() =>{
+                let data = [];
+                if(this.state.anio)
+                    data = MunicipalidadService.getAllGastos(this.state.anio);
+                if(this.state.municipalidad)
+                    data = MunicipalidadService.getGastos(this.state.anio, value);
+                this.setState({
+                    [key]: value,
+                    data
+                });
+            });
+            
         }
     }
 
@@ -150,6 +179,11 @@ export default class Gastos extends React.Component{
                 options = this.state.anios.map((obj, idx) => {
                     return <MenuItem key={`mi-prov-${idx}`} value={obj.id} primaryText={obj.nombre} />;
                 });
+                break;
+            case "departamentos":
+                options = this.state.departamentos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                })
                 break;
 
         }
@@ -191,7 +225,17 @@ export default class Gastos extends React.Component{
 
                     <div className="container-fluid">
                         <div className="row">
-
+                            <div className="col-md-12">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
+                            </div>
                             <div className="col-md-4">
                                 <SelectField
                                     fullWidth

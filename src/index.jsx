@@ -30,6 +30,7 @@ import _ from 'underscore';
 import EstacionService from './services/EstacionService';
 import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
+import TableExport from 'tableexport';
 let tematicaService=new TematicaService();
 let mapaService=new MapaService();
 
@@ -164,6 +165,7 @@ export default class Index extends React.Component{
 			keyboard:{ enable: true }
 		});
 
+
 	}
 	loadMap(){
 		let self=this;
@@ -243,9 +245,14 @@ export default class Index extends React.Component{
 			let service  = new EstacionService();
 			service.getDataFromWebService(estacion.id,moment(fIniEstacion).format('DD/MM/YYYY'),moment(fFinEstacion).format('DD/MM/YYYY'),(error, data)=>{
 				data = data.filter((item)=> item.var === varEstation)
-				this.setState({dataEstacion: data})
+				this.setState({dataEstacion: data},()=>{
+
+				})
 			});
 		}
+	}
+	componentDidUpdate(){
+		new TableExport(document.getElementById("data-station"),{boostrap:true,position:'top'});
 	}
 
 	handleChangeDateEstacion(key, value){
@@ -325,6 +332,11 @@ export default class Index extends React.Component{
 		const {variables} = this.state;
 		this.setState({varEstation: value,varSelected: variables[index]},this.loadDataEstacion);
 	}
+	exportDataStations(){
+		console.log("export..")
+		TableExport(document.getElementById("data-station"),{boostrap:true,position:'top'});
+	}
+
 	renderInfoEstacion(){
 		let {showInfoEstacion, estacion, varSelected, variables} = this.state;
 			return 	<Drawer open={showInfoEstacion} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({showInfoEstacion:open})} width={400}>
@@ -334,7 +346,6 @@ export default class Index extends React.Component{
 							
 							<AppBar
 							title={estacion.nombre}
-							iconClassNameRight="menu"
 							style={style.appbar}
 							onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
 							/>
@@ -385,7 +396,7 @@ export default class Index extends React.Component{
 											(this.state.dataEstacion.length === 0)?
 											<div className="text-center">No existe información para mostrar</div>
 											:
-											<table className="table table-bordered">
+											<table id="data-station" className="table table-bordered">
 												<thead>
 													<tr>
 													<th>#</th>
@@ -572,7 +583,7 @@ export default class Index extends React.Component{
 								<ListItem
 									key={"item-precipitaciones"}
 									leftIcon={<FontIcon  className="material-icons" color={green400}>my_location</FontIcon>}
-									primaryText={"Estaciones por cuenca"}
+									primaryText={"Estaciones de Monitoreo"}
 									secondaryText={"Consulte información de las estaciones"}
 									rightToggle={<Toggle toggled={showEstaciones} onToggle={this.handleEstaciones.bind(this)}/>} 
 									/>

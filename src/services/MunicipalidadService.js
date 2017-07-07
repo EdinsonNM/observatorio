@@ -9,27 +9,21 @@ export default class MunicipalidadService extends ApiService{
         super(serviceName);
     }
 
-    getAll(params, next){
+    getAll(dpto, next){
         let service =  this.getApi().all(serviceName);
-        let filter = process.env.DEPARTAMENTOS_CUENCA || '';
         
-        service.getAll(params, {}).then(
+        service.getAll({}, {}).then(
             response => {
-                if (filter !== '') {
-                    let idMunis = filter.split(',');
                     let municipalidades = response.body().data().data;
                     let munisFiltradas = municipalidades.filter(obj => {
                         let idUbigeo = obj.ID_UBIGEO.substr(0, 2);
                         
-                        return idUbigeo == idMunis[0] || idUbigeo == idMunis[1];
+                        return idUbigeo == dpto;
                     });
                     
                     MUNICIPALIDADES = munisFiltradas;
                     next(munisFiltradas);
-                }else{                
-                    MUNICIPALIDADES = municipalidades;
-                    next(municipalidades);
-                }
+
             },
             error => next(error.response.data.data)
 		);
