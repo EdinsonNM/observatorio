@@ -56,20 +56,28 @@ const outterBorder = {
     borderRadius: '4px'
 };
 
+const generateAnios = () => {
+    let currentYear = new Date().getFullYear();
+    let anios = [];
+    for (let i=currentYear-6; i<=currentYear; i++) {
+        anios.push({
+            id: i,
+            nombre: i
+        });
+    }
+    return anios;
+};
+
 export default class Gastos extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            // departamentos:DepartamentoService.getAll({}),
+            departamentos:DepartamentoService.getAll({}),
             title: 'Gasto Público',
-            anios:[
-                {id:2014,nombre:2014},
-                {id:2015,nombre:2015},
-                {id:2016,nombre:2016},
-                {id:2017,nombre:2017}
-            ],
+            anios: generateAnios(),
             municipalidades: [],
             municipalidad: null,
+            anio: null,
             tabIndex: 0,
             data:[]
         };
@@ -78,26 +86,63 @@ export default class Gastos extends React.Component{
     }
 
     componentDidMount(){
-        let service = new MunicipalidadService();
-        service.getAll({},(error,data)=>{
-            console.log(error,data);
-        });
+        setTimeout(()=>{
+            this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
+                this.setState({departamento:data.FIRST_IDDP},()=>{
+                    let service = new MunicipalidadService();
+                    service.getAll(data.FIRST_IDDP, () => {
+                        let data = [];
+                        if(this.state.anio)
+                            data = MunicipalidadService.getAllGastos(this.state.anio);
+                        if(this.state.municipalidad)
+                            data = MunicipalidadService.getGastos(this.state.anio, value);
+                        this.setState({
+                            data
+                        });
+                    });
+                });
+
+            });
+        },2000);
+       
     }
 
      handleChangeSelect(key, event, index, value){
         if (key === 'anio') {
-            let munis = [];
-            munis = MunicipalidadService.getByYear(value);
+            let munis = MunicipalidadService.getByYear(value);
+
             this.setState({
                 [key]: value,
                 municipalidades: munis
             });
-        }else if (key === 'municipalidad') {
+        } else if (key === 'municipalidad') {
+            let data;
+
+            if (value <= -1) {
+                data = [];
+            } else if (value == 0) {
+                data =  MunicipalidadService.getAllGastos(this.state.anio);
+            } else {
+                data = MunicipalidadService.getGastos(this.state.anio, value);
+            }
             this.setState({
-                [key]: value
-            },()=>{
-                this.getData();
+                [key]: value,
+                data
             });
+        } else if (key==='departamento'){
+            let service = new MunicipalidadService();
+            service.getAll(value,() =>{
+                let data = [];
+                if(this.state.anio)
+                    data = MunicipalidadService.getAllGastos(this.state.anio);
+                if(this.state.municipalidad)
+                    data = MunicipalidadService.getGastos(this.state.anio, value);
+                this.setState({
+                    [key]: value,
+                    data
+                });
+            });
+            
         }
     }
 
@@ -134,6 +179,11 @@ export default class Gastos extends React.Component{
                 options = this.state.anios.map((obj, idx) => {
                     return <MenuItem key={`mi-prov-${idx}`} value={obj.id} primaryText={obj.nombre} />;
                 });
+                break;
+            case "departamentos":
+                options = this.state.departamentos.map((obj, idx) => {
+                    return <MenuItem key={`mi-dep-${idx}`} value={obj.codigo_ubigeo} primaryText={obj.nombre_ubigeo} />;
+                })
                 break;
 
         }
@@ -175,7 +225,17 @@ export default class Gastos extends React.Component{
 
                     <div className="container-fluid">
                         <div className="row">
-
+                            <div className="col-md-12">
+                                    <SelectField
+                                        fullWidth
+                                        floatingLabelText="Departamento:"
+                                        value={this.state.departamento}
+                                        onChange={this.handleChangeSelect.bind(this, 'departamento')}
+                                    >
+                                        <MenuItem value={0} primaryText="Seleccionar" />
+                                        {this.buildSelectOptions('departamentos')}
+                                    </SelectField>
+                            </div>
                             <div className="col-md-4">
                                 <SelectField
                                     fullWidth
@@ -195,7 +255,8 @@ export default class Gastos extends React.Component{
                                     value={this.state.municipalidad}
                                     onChange={this.handleChangeSelect.bind(this, 'municipalidad')}
                                 >
-                                    <MenuItem value={0} primaryText="Seleccionar" />
+                                    <MenuItem value={-1} primaryText="Seleccionar" />
+                                    <MenuItem value={0} primaryText="Todas" />
                                     {this.buildSelectOptions('municipalidades')}
                                 </SelectField>
                             </div>
@@ -206,7 +267,7 @@ export default class Gastos extends React.Component{
                     <div className="container">
                         <div className="row">
                             <div className="col-md-12">
-                                <table className="table table-bordered" style={{width:'100%'}}>
+                                <table className="table table-bordered" style={{width:'100%', fontSize:'12px'}}>
                                     <thead displaySelectAll={false} adjustForCheckbox={false}>
                                         <tr>
                                             <th><abbr title="Código de Ubigeo">Cod. Ub</abbr></th>

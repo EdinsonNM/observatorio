@@ -46,7 +46,7 @@ export default class Admin extends React.Component {
      return (
       <div className="flex layout vertical center-center " style={{width:'100%',height:'100%'}}>
        	<AppBar
-						title="Visor de Mapas de la Cuenca Chancay-Lambayeque"
+						title="Visor de Mapas de la Cuenca Chira-Piura"
 						style={style.appbar}
 
 						titleStyle={style.title}
