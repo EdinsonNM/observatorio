@@ -9,18 +9,18 @@
   position: relative;
 }
 .searchbox > div > div > input{
-  padding-left: 40px!important;
-  padding-right: 85px!important;
+  padding-left: 96px!important;
+  padding-right: 135px!important;
 }
 .searchbox > div > div > input:not(:focus){
   color:#c3c3c3;
 }
 .searchbox > div > div > div{
-  padding-left: 40px!important;
+  padding-left: 96px!important;
   padding-right: 85px!important;
 }
 .searchbox > div > div > div  hr{
-  margin-left: -40px!important;
+  margin-left: -96px!important;
   margin-right: -85px!important;
   bottom: 0!important;
 }
@@ -41,7 +41,7 @@
   position: absolute!important;
   top: 0;
   left: 0;
-  width: 48px;
+  width: 96px;
   height: 48px;
   align-items: center;
   justify-content: center;
