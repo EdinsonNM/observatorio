@@ -497,10 +497,9 @@ export default class Index extends React.Component{
 				</Paper>
 				<div className="searchbox-container">
 					<div className="row">
-						<div className="col-md-4">
-
+						<div className="col-md-2">
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-8">
 							<Paper className="searchbox">
 								<AutoComplete
 								hintText="Busqueda por nombre del servicio"
@@ -533,13 +532,16 @@ export default class Index extends React.Component{
 
 								</span>
 								<span className="searchbox-icon-left">
+									<IconButton tooltip="Seleccionar mapa base"  href="/index.html">
+										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>home</FontIcon>
+									</IconButton>
 									<IconButton tooltip="Mostrar Servicios" onTouchTap={this.handleDrawerToggle.bind(this)}>
 										<FontIcon className="material-icons">menu</FontIcon>
 									</IconButton>
 								</span>
 							</Paper>
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-2">
 
 						</div>
 					</div>
@@ -611,7 +613,7 @@ export default class Index extends React.Component{
                                     this.state.urlsInfo.map((url,index)=>{
                                         return (<Tab key={index} icon={<FontIcon className="material-icons" style={{overflow:'auto'}}>layers</FontIcon>} >
                                                     <h3 className="layer-tab-title">{url.title}</h3>
-                                                    <iframe src={url.url} width="100%" height="600"></iframe>
+                                                    <iframe src={url.url} width="100%" style={{minHeight:300, height:'100%'}}></iframe>
                                                 </Tab>);
                                     })
                                 }

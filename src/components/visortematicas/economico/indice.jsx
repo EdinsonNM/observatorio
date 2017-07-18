@@ -54,7 +54,7 @@ export default class Indice extends React.Component{
             distritos: [],
             title: 'Indice de Desarrollo Humano',
             tabIndex: 0,
-            data:[['Año','Indice por AÑo'],['value',1]]
+            data:[]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -187,7 +187,6 @@ export default class Indice extends React.Component{
             let obj_distrito = this.state.distritos.find(obj => this.state.distrito == obj.codigo_ubigeo);
             distrito_nombre = obj_distrito ? obj_distrito.nombre_ubigeo : '';
         }
-
         return(
             <div className="tematica-home">
                 <AppBar
@@ -241,25 +240,32 @@ export default class Indice extends React.Component{
                         </div>
 
                             <div className={'my-pretty-chart-container'}>
-                                <Chart
-                                    chartType="AreaChart"
-                                    data={this.state.data}
-                                    options={{
-                                        title: 'Indice de Desarrollo Humano',
-                                        curveType: 'function',
-                                        legend: { position: 'top' },
-                                        hAxis: {
-                                            title: 'Año'
-                                        },
-                                        vAxis: {
-                                            title: 'Indice'
-                                        }
-                                    }}
-                                    graph_id="AreaChart"
-                                    width="100%"
-                                    height="400px"
-                                    legend_toggle
-                                />
+                                {
+                                    (this.state.data.length>1) ?
+                                    <Chart
+                                        chartType="AreaChart"
+                                        data={this.state.data}
+                                        options={{
+                                            title: 'Indice de Desarrollo Humano',
+                                            curveType: 'function',
+                                            legend: { position: 'top' },
+                                            hAxis: {
+                                                title: 'Año'
+                                            },
+                                            vAxis: {
+                                                title: 'Indice'
+                                            }
+                                        }}
+                                        graph_id="AreaChart"
+                                        width="100%"
+                                        height="400px"
+                                        legend_toggle
+                                    />
+                                    :  
+                                    <div className="alert alert-warning" role="alert">
+                                        No hay datos que mostrar
+                                    </div>
+                                }
                             </div>
                         </Tab>
 
