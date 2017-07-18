@@ -1,7 +1,7 @@
 
 <div align="center">
   <a href="https://edinsonnm.github.io/observatorio">
-    <img width="200" heigth="200" src="https://edinsonnm.github.io/observatorio/web/img/logo-observatorio-letras.png">
+    <img width="200" heigth="200" src="https://github.com/EdinsonNM/observatorio/blob/master/public/web/img/logo-observatorio-letras.png">
   </a>
   <br>
   <br>
@@ -11,6 +11,14 @@
     This application is developed by Edinson Nuñez More and Luis Pintado Huaman
   <p>
 </div>
+
+version 0.1
+
+## Requirements
+
+
+* Install NodeJS from [https://nodejs.org/](https://nodejs.org/)
+* Install MongoDB from [https://www.mongodb.org/](https://www.mongodb.org/)
 
 <h2 align="center">Install</h2>
 
