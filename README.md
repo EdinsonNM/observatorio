@@ -1,53 +1,76 @@
 
 <div align="center">
-  <a href="https://edinsonnm.github.io/observatorio">
-    <img width="200" heigth="200" src="https://github.com/EdinsonNM/observatorio/blob/master/public/web/img/logo-observatorio-letras.png">
-  </a>
-  <br>
-  <br>
-
-  <h1>OBSERVATORIO CUENCA CHANCAY LAMBAYEQUE</h1>
+  <h1>OBSERVATORIO PORTAL WEB DE LAS CUENCA CHANCAY LAMBAYEQUE, CHIRA-PIURA y QUILCA-CHILI</h1>
   <p>
-    This application is developed by Edinson Nuñez More and Luis Pintado Huaman
+    Esta aplicación ha sido desarrollada por Edinson Nuñez More y Luis Pintado Huaman
+    <small><strong>version 0.1</strong></small>
   <p>
 </div>
 
-version 0.1
-
-## Requirements
+<h2 align="center">Introduction</h2>
 
 
-* Install NodeJS from [https://nodejs.org/](https://nodejs.org/)
-* Install MongoDB from [https://www.mongodb.org/](https://www.mongodb.org/)
 
-<h2 align="center">Install</h2>
+El observatorio es un portal web cuya finalidad es poner a disposición de los usuarios, la información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y gestión de riesgos).
+
+> Esta documentación se centra en el visor de la cuenca Chancay-Lambayeque aunque la mayoria de caracteristicas y personalizaciones responden a esta documentación en el caso de implementación en otras cuencas.
+
+
+## Requerimientos
+
+Para poder iniciar el proyecto es necesario se instalen las siguientes herramientas:
+* Instalar la ultima version de Node JS desde [https://nodejs.org/](https://nodejs.org/)
+* Instalar Git desde [https://git-scm.com/](https://git-scm.com/)
+
+Una vez instaladas deberá clonar este repositorio escribiendo el siguiente comando en su terminal CMD en windows o BASH en ubuntu
+```
+git clone https://github.com/EdinsonNM/observatorio.git
+```
+
+<h2>Instalar Dependencias</h2>
+Antes de inicializar el proyecto es encesario instalar todas las dependencias del mismo, por lo cual sera necesario ejecutar los siguientes comandos:
 
 ```bash
 cd observatorio
 npm install
 ```
 
-<h2 align="center">Development</h2>
+<h2>Iniciar Proyecto en modo desarrollo</h2>
+Para iniciar el proyecto a modo desarrollo debera ejecutar el siguiente comando:
 
 ```bash
-cd observatorio
 npm start
 ```
+Una vez ejecutado el comando , se podra acceder al portal web a traves de la siguiente dirección [http://localhost:8000](http://localhost:8000)
 
-<h2 align="center">Production</h2>
+<h2>Producción</h2>
+Para generar los archivos necesarios para el ambiente a producción se deberá ejecutar el siguiente comando:
 
 ```bash
-cd observatorio
 npm run build
 ```
+Este comando creara una carpeta llamada "build" la cual contendra los archivos que deberan ser colocados en el servidor producción.
 
-<h2 align="center">Introduction</h2>
 
-> Esta documentación se centra en el visor de la cuenca Chancay-Lambayeque aunque la amyoria de caracteristicas y personalizaciones responden a esta documentación en el caso de implementación en otras cuencas.
+<h2>Cambiar de un portal a otro</h2>
 
-El observatorio es un portal web cuya finalidad es poner a disposición de los usuarios, la información existente sobre la cuenca en distintos campos de conocimiento (ambiental, hidrológico, socio-económico y gestión de riesgos). 
+Cabe mencionar que la rama "master" de este repositorio hace referencia al proyecto Chancay-Lambayeque , la rama "master-quilca" hace referencia a la cuenca Quilca-Chili y la rama "master-chira" hace referencia al portal de Chira-Piura. Por lo cual si se desea realizar alguna modificación en alguno de estos portales se deberá saltar de una rama a otra siguiendo los siguientes comandos
+<h3>Cambiando a Chancay-Lambayeque</h3>
 
-**Características**
+```bash
+git checkout master
+```
+<h3>Cambiando a Quilca-Chili</h3>
+
+```bash
+git checkout master-quilca
+```
+<h3>Cambiando a Chira-Piura</h3>
+
+```bash
+git checkout master-chira
+```
+**CARACTERÍSTICAS DEL PORTAL**
 
 * Portal principal con acceso a las noticias, temáticas y visor.
 * Temáticas y estadísticas.
@@ -56,8 +79,7 @@ El observatorio es un portal web cuya finalidad es poner a disposición de los u
 
 
 
-
-#### TECNOLOGÍAS
+#### TECNOLOGÍAS UTILIZADAS
 
 |Name|Description|
 |:--:|:----------|
@@ -73,7 +95,7 @@ El observatorio es un portal web cuya finalidad es poner a disposición de los u
 
 
 
-<h2 align="center">Core Team</h2>
+<h2>Desarrolladores</h2>
 
 <table>
   <tbody>
