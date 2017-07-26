@@ -532,7 +532,7 @@ export default class Index extends React.Component{
 
 								</span>
 								<span className="searchbox-icon-left">
-									<IconButton tooltip="Seleccionar mapa base"  href="/index.html">
+									<IconButton tooltip="Seleccionar mapa base"  href="./index.html">
 										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>home</FontIcon>
 									</IconButton>
 									<IconButton tooltip="Mostrar Servicios" onTouchTap={this.handleDrawerToggle.bind(this)}>
