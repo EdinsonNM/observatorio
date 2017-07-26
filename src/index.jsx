@@ -9,13 +9,15 @@ import Checkbox from 'material-ui/Checkbox';
 import Toggle from 'material-ui/Toggle';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import SelectField from 'material-ui/SelectField';
+import TextField from 'material-ui/TextField';
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, darkBlack, lightBlack, green400} from 'material-ui/styles/colors';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
@@ -25,6 +27,10 @@ import MapaService from './services/MapaService';
 import {pink500, teal500, blue500} from 'material-ui/styles/colors';
 import {CardHeader} from 'material-ui/Card';
 import _ from 'underscore';
+import EstacionService from './services/EstacionService';
+import DatePicker from 'material-ui/DatePicker';
+import moment from 'moment';
+import TableExport from 'tableexport';
 let tematicaService=new TematicaService();
 let mapaService=new MapaService();
 
@@ -53,8 +59,13 @@ export default class Index extends React.Component{
 			selectedBaseMap:1,
 			showbasemaps:false,
             openInfo:false,
-            urlsInfo:[]
+            urlsInfo:[],
+			showEstaciones: false,
+			showInfoEstacion: false,
+			dataEstacion:[],
+			variables: EstacionService.getVariables()
 		}
+		this.renderInfoEstacion = this.renderInfoEstacion.bind(this);
 	}
 	loadData(){
 		tematicaService.getAll({},(error,tematicas)=>{
@@ -154,6 +165,7 @@ export default class Index extends React.Component{
 			keyboard:{ enable: true }
 		});
 
+
 	}
 	loadMap(){
 		let self=this;
@@ -226,25 +238,223 @@ export default class Index extends React.Component{
 		layers[index].expanded=!group.expanded;
 		this.setState({layers:layers});
 	}
+
+	loadDataEstacion(){
+		const {fIniEstacion,fFinEstacion,estacion, varEstation} = this.state;
+		if(typeof fIniEstacion!=='undefined' && typeof fFinEstacion!=='undefined' && typeof varEstation!=='undefined') {
+			let service  = new EstacionService();
+			service.getDataFromWebService(estacion.id,moment(fIniEstacion).format('DD/MM/YYYY'),moment(fFinEstacion).format('DD/MM/YYYY'),(error, data)=>{
+				data = data.filter((item)=> item.var === varEstation)
+				this.setState({dataEstacion: data},()=>{
+
+				})
+			});
+		}
+	}
+	componentDidUpdate(){
+		new TableExport(document.getElementById("data-station"),{boostrap:true,position:'top'});
+	}
+
+	handleChangeDateEstacion(key, value){
+		switch(key) {
+			case 'fIniEstacion':
+				this.setState({fIniEstacion:value},this.loadDataEstacion);
+				break;
+			case 'fFinEstacion':
+			this.setState({fFinEstacion:value},this.loadDataEstacion);
+				break;	
+		}
+	}
+	handleEstaciones(e){
+		let showEstaciones = e.target.checked;
+		let service  = new EstacionService();
+		service.getEstacionesFromWebService((error, data) => {
+			let markers = [];
+            let iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+					anchor: [0.5, 46],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					opacity: 0.75,
+					src: 'visor/images/marker.png',
+					cursor:'pointer'
+				}))
+            });
+			var iconStyleSelected = new ol.style.Style({
+				image: new ol.style.Icon(({
+					anchor: [0.5, 46],
+					anchorXUnits: 'fraction',
+					anchorYUnits: 'pixels',
+					opacity: 0.75,
+					src: 'visor/images/marker-selected.png'
+				}))
+			});
+			data.forEach((item)=>{
+                let  iconFeature = new ol.Feature({
+					geometry: new ol.geom.Point(ol.proj.transform([parseFloat(item.lon), parseFloat(item.lat)], 'EPSG:4326', 'EPSG:3857')),
+					id: item.id,
+					nombre: item.nom,
+					tipo: item.tip,
+					lat:parseFloat(item.lat),
+					lon:parseFloat(item.lon),
+					aut: item.aut,
+					fmin: item.fmin,
+					fmax: item.fmax
+				});
+                iconFeature.setStyle(iconStyle);
+                markers.push(iconFeature);
+            });
+
+            var vectorSource = new ol.source.Vector({features: markers });
+            var vectorLayer = new ol.layer.Vector({source: vectorSource});
+            this.map.AddLayer(vectorLayer);
+            this.Layer = vectorLayer;
+
+			var popup = new ol.Overlay({
+				element: document.querySelector('#popup')
+			});
+			this.map.getMap().addOverlay(popup);
+
+			this.map.getMap().on('singleclick', (evt) => {
+				this.map.getMap().forEachFeatureAtPixel(evt.pixel, (feature, layer) => {
+					feature.setStyle(iconStyleSelected);
+					const estacion  = feature.getProperties();
+					const showInfoEstacion = true;
+					this.setState({showInfoEstacion,estacion})
+                });
+			});
+		});
+		this.setState({showEstaciones});
+		
+		
+	}
+	handleChangeVar(event, index, value){
+		const {variables} = this.state;
+		this.setState({varEstation: value,varSelected: variables[index]},this.loadDataEstacion);
+	}
+	exportDataStations(){
+		console.log("export..")
+		TableExport(document.getElementById("data-station"),{boostrap:true,position:'top'});
+	}
+
+	renderInfoEstacion(){
+		let {showInfoEstacion, estacion, varSelected, variables} = this.state;
+			return 	<Drawer open={showInfoEstacion} docked={false}  openSecondary={true} onRequestChange={(open) => this.setState({showInfoEstacion:open})} width={400}>
+						{
+						(showInfoEstacion)?
+						<div>
+							
+							<AppBar
+							title={estacion.nombre}
+							style={style.appbar}
+							onLeftIconButtonTouchTap={this.handleDrawerToggle.bind(this)}
+							/>
+							<div className="container">
+								<div className="row">
+									<div className="col-sm-6">
+										<TextField
+										hintText="Tipo"
+										value = {(estacion.aut==='1') ? 'Automática': 'Convencional'}
+										floatingLabelText="Tipo"
+										floatingLabelFixed={true}
+										fullWidth
+										/>
+									</div>
+									<div className="col-sm-6">
+										<TextField
+										hintText="Tipo Estación"
+										value = {(estacion.tipo==='E') ? 'Embalse': 'Hidrométrica'}
+										floatingLabelText="Tipo Estación"
+										floatingLabelFixed={true}
+										fullWidth
+										/>
+									</div>
+									<div className="col-sm-6">
+										<DatePicker id="fIniEstacion" floatingLabelText="Fecha mínima" value={this.state.fIniEstacion}
+        onChange={(e,value) => this.handleChangeDateEstacion('fIniEstacion',value)} autoOk={true} fullWidth/>
+									</div>
+									<div className="col-sm-6">
+										<DatePicker id="fFinEstacion" floatingLabelText="Fecha máxima" autoOk={true} value={this.state.fFinEstacion}
+        onChange={(e,value) => this.handleChangeDateEstacion('fFinEstacion',value)} fullWidth/>
+									</div>
+									<div className="col-sm-12">
+										<SelectField
+											floatingLabelText="Variable"
+											value={this.state.varEstation}
+											onChange={this.handleChangeVar.bind(this)}
+											fullWidth
+											>
+											{variables.map( (item) => <MenuItem value={item.id} primaryText={item.title} />)}
+
+										</SelectField>
+										<small>
+											{(varSelected) ? varSelected.description : ''} <br/> {(varSelected) ? <small><strong>Unidad de medida:</strong> {varSelected.um} </small>  : ''} 
+										</small>
+									</div>
+									<div className="col-sm-12">
+										<small style={{color:'#c3c3c3'}}>Las opciones de exportar datos se encuentran en la parte inferior de la tabla de resultados</small>
+									</div>
+									<div className="col-sm-12">
+										{
+											(this.state.dataEstacion.length === 0)?
+											<div className="text-center">No existe información para mostrar</div>
+											:
+											<table id="data-station" className="table table-bordered">
+												<thead>
+													<tr>
+													<th>#</th>
+													<th>Fecha</th>
+													<th>Valor</th>
+													<th>Unidad</th>
+													</tr>
+												</thead>
+												<tbody>
+													{
+														this.state.dataEstacion.map((item,index) => {
+															return <tr>
+																<th scope="row">{index+1}</th>
+																<td>{item.fec}</td>
+																<td>{item.val}</td>
+																<td>{item.um}</td>
+															</tr>
+														})
+													}
+													
+													
+												</tbody>
+											</table>
+										}
+										
+									</div>
+								</div>
+							</div>
+						</div>
+						:
+						null
+						}
+					</Drawer>
+
+	}
 	render() {
+		const {showEstaciones} = this.state;
 		const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
 		const favoritesIcon = <FontIcon className="material-icons" style={{width:'24px',margin:'auto'}}>maps</FontIcon>;
-		let services=[];
 		let basemaps=[];
 		let tematicas=[];
 		this.state.layers.map((group,groupIndex)=>{
 			switch(group.type){
 				case 'services':
-					services=[];
+					let services=[];
 					group.items.map((item,index)=>{
 						services.push( <ListItem
-						key={item.id}
+						key={"services-"+index}
 						primaryText={item.title}
-						rightToggle={<Toggle toggled={item.visible} onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
+						rightToggle={<Toggle toggled={item.visible} 
+						onToggle={this.handleService.bind(this,item,index,groupIndex)}/>} />);
 					});
 					tematicas.push(
 						<ListItem
-						key={group.id}
+						key={"group-"+groupIndex}
 						leftIcon={<FontIcon  className="material-icons" color={pink500}>view_carousel</FontIcon>}
 						primaryText={group.title}
 						secondaryText={group.subtitle}
@@ -258,6 +468,7 @@ export default class Index extends React.Component{
 				case 'basemaps':
 					group.items.map((item,index)=>{
 						basemaps.push(<BottomNavigationItem
+							key={index}
 							label={item.title}
 							icon={favoritesIcon}
 							onTouchTap={() => this.selectBaseMap(item,index,group.items)}
@@ -286,10 +497,9 @@ export default class Index extends React.Component{
 				</Paper>
 				<div className="searchbox-container">
 					<div className="row">
-						<div className="col-md-4">
-
+						<div className="col-md-2">
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-8">
 							<Paper className="searchbox">
 								<AutoComplete
 								hintText="Busqueda por nombre del servicio"
@@ -322,13 +532,16 @@ export default class Index extends React.Component{
 
 								</span>
 								<span className="searchbox-icon-left">
+									<IconButton tooltip="Seleccionar mapa base"  href="./index.html">
+										<FontIcon className="material-icons" color={(this.state.showbasemaps)?"#00BCD4":"#c3c3c3"}>home</FontIcon>
+									</IconButton>
 									<IconButton tooltip="Mostrar Servicios" onTouchTap={this.handleDrawerToggle.bind(this)}>
 										<FontIcon className="material-icons">menu</FontIcon>
 									</IconButton>
 								</span>
 							</Paper>
 						</div>
-						<div className="col-md-4">
+						<div className="col-md-2">
 
 						</div>
 					</div>
@@ -372,6 +585,13 @@ export default class Index extends React.Component{
 							<div id="layers" className="mCustomScrollbar" style={{flex:1,overflow:'hidden',height:'100%'}}>
 								<List>
 								{ tematicas }
+								<ListItem
+									key={"item-precipitaciones"}
+									leftIcon={<FontIcon  className="material-icons" color={green400}>my_location</FontIcon>}
+									primaryText={"Estaciones de Monitoreo"}
+									secondaryText={"Consulte información de las estaciones"}
+									rightToggle={<Toggle toggled={showEstaciones} onToggle={this.handleEstaciones.bind(this)}/>} 
+									/>
 								</List>
 							</div>
 						</div>
@@ -393,7 +613,7 @@ export default class Index extends React.Component{
                                     this.state.urlsInfo.map((url,index)=>{
                                         return (<Tab key={index} icon={<FontIcon className="material-icons" style={{overflow:'auto'}}>layers</FontIcon>} >
                                                     <h3 className="layer-tab-title">{url.title}</h3>
-                                                    <iframe src={url.url} width="100%" height="600"></iframe>
+                                                    <iframe src={url.url} width="100%" style={{minHeight:300, height:'100%'}}></iframe>
                                                 </Tab>);
                                     })
                                 }
@@ -405,7 +625,8 @@ export default class Index extends React.Component{
 
 
 					</Drawer>
-
+					{this.renderInfoEstacion()}
+				
 			</div>
 	  	);
 	}

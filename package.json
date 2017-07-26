@@ -1,6 +1,6 @@
 {
-  "name": "admision-cloud",
-  "description": "App de registro de postulantes",
+  "name": "observatorio-cuenca",
+  "description": "App para Observatorio de la Cuenca",
   "version": "1.0.0",
   "main": "main.jsx",
   "scripts": {
@@ -36,8 +36,10 @@
     "webpack-stream": "^3.2.0"
   },
   "dependencies": {
+    "basic-ajax": "^2.0.2",
     "custom-event": "^1.0.1",
     "dotenv-webpack": "^1.4.5",
+    "file-saverjs": "^1.3.6",
     "firebase": "^3.9.0",
     "highcharts": "^5.0.11",
     "jquery": "^2.2.4",
@@ -58,6 +60,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "request": "^2.79.0",
     "restful.js": "^0.9.6",
+    "tableexport": "^4.0.11",
     "toastr": "^2.1.2",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^2.0.3",
