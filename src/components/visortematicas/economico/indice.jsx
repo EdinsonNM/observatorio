@@ -161,11 +161,36 @@ export default class Indice extends React.Component{
         });
     }
 
+    buildDataForExport(data) {
+        let content = 'Año, Indice\n';
+        let dataString = '';
 
+        data.forEach((obj, idx) => {
+            if (idx > 0) {
+                dataString = obj.join(', ');
+                content += idx < data.length ? dataString + '\n' : dataString;
+            }
+        });
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.data);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_gastos_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
+    }
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
+        </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+            <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -194,6 +219,7 @@ export default class Indice extends React.Component{
                     iconElementLeft={iconButton}
                     style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
@@ -261,7 +287,7 @@ export default class Indice extends React.Component{
                                         height="400px"
                                         legend_toggle
                                     />
-                                    :  
+                                    :
                                     <div className="alert alert-warning" role="alert">
                                         No hay datos que mostrar
                                     </div>

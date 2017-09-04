@@ -45,19 +45,19 @@ export default class Pbi extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            departamentos:DepartamentoService.getAll({}),
-            anios:[
-                {id:2010,nombre:2010},
-                {id:2011,nombre:2011},
-                {id:2012,nombre:2012},
-                {id:2013,nombre:2013},
-                {id:2014,nombre:2014},
-                {id:2015,nombre:2015},
-                {id:2016,nombre:2016},
+            departamentos: DepartamentoService.getAll({}),
+            anios: [
+                {id: 2010, nombre: 2010},
+                {id: 2011, nombre: 2011},
+                {id: 2012, nombre: 2012},
+                {id: 2013, nombre: 2013},
+                {id: 2014, nombre: 2014},
+                {id: 2015, nombre: 2015},
+                {id: 2016, nombre: 2016},
             ],
             title: 'PBI Por Actividades Económicas',
             tabIndex: 0,
-            data:[['data','data'],['value',1]]
+            data: [['data', 'data'], ['value', 1]]
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
@@ -67,10 +67,7 @@ export default class Pbi extends React.Component{
      componentDidMount(){
          setTimeout(()=>{
             this.Layer = this.props.map.AddDptoInteractionSelect((error,data)=>{
-                this.setState({departamento:data.FIRST_IDDP},()=>{
-                    this.getData();
-                });
-
+                this.setState({departamento:data.FIRST_IDDP});
             });
         },2000);
     }
@@ -80,11 +77,11 @@ export default class Pbi extends React.Component{
     }
 
     handleChangeSelect(key, event, index, value){
-        this.setState({
-            [key]: value
-        },()=>{
+        this.setState({[key]: value});
+
+        if (key === 'anio') {
             this.getData();
-        });
+        }
     }
 
     handleChangeTab (value) {
@@ -99,13 +96,12 @@ export default class Pbi extends React.Component{
         let tableRows = [];
 
         for (let idx=1; idx<data.length; idx++) {
-                tableRows.push(
-                     <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
-                        <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
-                    </TableRow>
-                );
-
+            tableRows.push(
+                <TableRow key={`tr-${idx}`}>
+                    <TableRowColumn>{data[idx][0]} </TableRowColumn>
+                    <TableRowColumn>{`S/. ${data[idx][1]}`} </TableRowColumn>
+                </TableRow>
+            );
         }
 
         return tableRows;
@@ -125,7 +121,6 @@ export default class Pbi extends React.Component{
                     return <MenuItem key={`mi-prov-${idx}`} value={obj.id} primaryText={obj.nombre} />;
                 });
                 break;
-
         }
 
         return options;
@@ -134,7 +129,6 @@ export default class Pbi extends React.Component{
     getData(){
         let service = new PBIService();
         service.getAll(this.state.anio,this.state.departamento,(error,data) => {
-
             this.toggleFilter();
             let dataR=[ ['unidad', 'Por Dia']];
             data.forEach((item)=>{
@@ -146,18 +140,42 @@ export default class Pbi extends React.Component{
             console.log(dataR);
             console.log(transData);
             this.setState({data:transData});
-
-
         });
+    }
+
+    buildDataForExport(data) {
+        let content = '';
+        let dataString = '';
+
+        data.forEach((obj, idx) => {
+            dataString = obj.join(', ');
+            content += idx < data.length ? dataString + '\n' : dataString;
+        });
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.data);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_gastos_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
     }
 
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+            <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
+        </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
         let departamento_nombre = '';
+
         if (this.state.departamento) {
             let obj_departamento = this.state.departamentos.find(obj => this.state.departamento == obj.codigo_ubigeo);
             departamento_nombre = obj_departamento ? obj_departamento.nombre_ubigeo : '';
@@ -176,6 +194,7 @@ export default class Pbi extends React.Component{
                     iconElementLeft={iconButton}
                     style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
                 />
 
                 <div className="col-md-12" className="tematica-home-container">

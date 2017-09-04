@@ -153,11 +153,11 @@ export default class Denuncias extends React.Component{
     }
 
     export() {
-        var dataType = 'data:text/csv;charset=utf-8,';
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
         var csvContent = this.buildDataForExport(this.state.data1);
 
         var a = document.createElement('a');
-        a.href = encodeURI(dataType + csvContent);
+        a.href = dataType + encodeURI(csvContent);
         a.download = 'tabla_denuncias_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
         a.click();
     }

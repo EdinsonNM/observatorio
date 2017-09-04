@@ -104,7 +104,7 @@ export default class Gastos extends React.Component{
 
             });
         },2000);
-       
+
     }
 
      handleChangeSelect(key, event, index, value){
@@ -142,7 +142,7 @@ export default class Gastos extends React.Component{
                     data
                 });
             });
-            
+
         }
     }
 
@@ -199,9 +199,34 @@ export default class Gastos extends React.Component{
         }
     }
 
+    buildDataForExport(data) {
+        let content = 'Código de Ubigeo, Municipalidad, Monto Devengado, Monto Certificado\n';
+        let dataString = '';
+
+        data.forEach((obj, idx) => {
+            dataString = [obj.ID_UBIGEO, obj.MUNICIPALIDAD, obj.MON_DEVENGADO, obj.MON_CERTIFICADO].join(', ');
+            content += idx < data.length ? dataString + '\n' : dataString;
+        });
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.data);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_gastos_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
+    }
+
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDogAt_wkHk731PHh1/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
+        </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+            <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -219,6 +244,7 @@ export default class Gastos extends React.Component{
                     iconElementLeft={iconButton}
                     style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
                 />
 
                 <div className="col-md-12" className="tematica-home-container">

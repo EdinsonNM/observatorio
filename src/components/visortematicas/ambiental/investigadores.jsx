@@ -20,6 +20,7 @@ import {CardHeader} from 'material-ui/Card';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import SelectField from 'material-ui/SelectField';
 import Chip from 'material-ui/Chip';
+import moment from 'moment';
 
 import InvestigadorService from '../../../services/InvestigadorService';
 import BarChart from '../BarChart';
@@ -39,7 +40,7 @@ const style={
 };
 
 
-export default class Precipitaciones extends React.Component{
+export default class Investigadores extends React.Component{
     constructor(props){
         super(props);
         this.state={
@@ -54,7 +55,6 @@ export default class Precipitaciones extends React.Component{
     componentDidMount() {
         let investigadoresService = new InvestigadorService();
         investigadoresService.getAll({},(error,investigadores)=>{
-            console.log(investigadores);
             this.setState({
                 investigadores:investigadores
             });
@@ -86,14 +86,36 @@ export default class Precipitaciones extends React.Component{
         return tableRows;
     }
 
+    buildDataForExport(data) {
+        let content = 'Especialidad, Cantidad\n';
+        let dataString = '';
+
+        for (let idx = 0; idx < data.length; idx++) {
+            dataString = `${data[idx]['investigador']}, ${data[idx]['cantidad']}`;
+            content += idx < data.length ? dataString + '\n' : dataString;
+        }
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.investigadores);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_investigadores_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
+    }
 
     render (){
         let {estaciones,variables,anios,meses} = this.state;
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
-        // let tableRows = this.buildTableRows(this.state.data);
-
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+            <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
+        </IconButton>;
 
         return(
             <div className="tematica-home">
@@ -102,11 +124,11 @@ export default class Precipitaciones extends React.Component{
                     iconElementLeft={iconButton}
                     style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
                 />
 
                 <div className="col-md-12" className="tematica-home-container">
                     <BarChart data={this.state.investigadores} />
-
                 </div>
             </div>
         );

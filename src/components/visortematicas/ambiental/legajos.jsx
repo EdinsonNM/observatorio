@@ -150,9 +150,34 @@ export default class Legajos extends React.Component{
         }
     }
 
+    buildDataForExport(data) {
+        let content = '';
+        let dataString = '';
+
+        for (let idx = 0; idx < data.length; idx++) {
+            dataString = data[idx].join(', ');
+            content += idx < data.length ? dataString + '\n' : dataString;
+        }
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.data);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_legajos_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
+    }
+
     render (){
-       const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
+        const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
+        </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+           <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
         </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data);
@@ -175,6 +200,7 @@ export default class Legajos extends React.Component{
     				iconElementLeft={iconButton}
     				style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
 				/>
 
                 <div className="col-md-12" className="tematica-home-container">

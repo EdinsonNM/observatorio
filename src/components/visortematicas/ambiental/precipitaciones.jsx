@@ -271,18 +271,40 @@ export default class Precipitaciones extends React.Component{
     	let tableRows = [];
 
     	for (let idx=1; idx<data.length; idx++) {
-            if (idx % 2 === 0) {
-                tableRows.push(
-                    <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{` día ${data[idx][0]}`} </TableRowColumn>
-                        <TableRowColumn>{`${data[idx][1]} mm`} </TableRowColumn>
+            tableRows.push(
+                <TableRow key={`tr-${idx}`}>
+                    <TableRowColumn>{` día ${data[idx][0]}`} </TableRowColumn>
+                    <TableRowColumn>{`${data[idx][1]} mm`} </TableRowColumn>
 
-                    </TableRow>
-                );
-            }
+                </TableRow>
+            );
         }
 
         return tableRows;
+    }
+
+    buildDataForExport(data) {
+        let content = 'Dia, Cantidad\n';
+        let dataString = '';
+
+        for (let idx = 1; idx < data.length; idx++) {
+            dataString = data[idx].map((obj, index) => {
+                return index===0 ? `dia ${obj}` : `${obj} mm`
+            }).join(', ');
+            content += idx < data.length ? dataString + '\n' : dataString;
+        }
+
+        return content;
+    }
+
+    export() {
+        var dataType = 'data:text/csv;charset=utf-8,%EF%BB%BF';
+        var csvContent = this.buildDataForExport(this.state.data);
+
+        var a = document.createElement('a');
+        a.href = dataType + encodeURI(csvContent);
+        a.download = 'tabla_precipitaciones_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
+        a.click();
     }
 
     buildSelectOptions (type) {
@@ -374,6 +396,9 @@ export default class Precipitaciones extends React.Component{
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+            <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
+        </IconButton>;
         let tableRows = this.buildTableRows(this.state.data);
 
         let departamento_nombre = '';
@@ -421,6 +446,7 @@ export default class Precipitaciones extends React.Component{
     				iconElementLeft={iconButton}
     				style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight={iconButtonExport}
 				/>
 
                 <div className="col-md-12" className="tematica-home-container">
