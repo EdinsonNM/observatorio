@@ -18,7 +18,7 @@ gulp.task('nunjucks', function() {
 
 gulp.task("webpack", function(callback) {
   webpack(webpackConfig, function(err, stats) {
-    if(err) throw new gutil.PluginError("webpack", err);
+    if(err) console.log("webpack", err);
     callback();
   });
 });
