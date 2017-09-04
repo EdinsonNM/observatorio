@@ -98,7 +98,7 @@ export default class Denuncias extends React.Component{
             if (idx % 2 === 0) {
                 tableRows.push(
                      <TableRow key={`tr-${idx}`}>
-                        <TableRowColumn>{moment().month(parseInt(data[idx][0])-1).format('MMMM') } </TableRowColumn>
+                        <TableRowColumn>{data[idx][0]} </TableRowColumn>
                         <TableRowColumn>{`${data[idx][1]} denuncias`} </TableRowColumn>
                     </TableRow>
                 );
@@ -108,7 +108,19 @@ export default class Denuncias extends React.Component{
         return tableRows;
     }
 
-     buildSelectOptions (type) {
+    buildDataForExport (data) {
+        let content = '';
+        let dataString = '';
+
+        for (let idx = 0; idx < data.length; idx++) {
+            dataString = data[idx].join(', ');
+            content += idx < data.length ? dataString + '\n' : dataString;
+        }
+
+        return content;
+    }
+
+    buildSelectOptions (type) {
         let options = [];
 
         switch (type) {
@@ -141,13 +153,12 @@ export default class Denuncias extends React.Component{
     }
 
     export() {
-        var data_type = 'data:application/vnd.ms-excel';
-        var table_div = document.querySelector('table');
-        var table_html = table_div.outerHTML.replace(/ /g, '%20');
-    
+        var dataType = 'data:text/csv;charset=utf-8,';
+        var csvContent = this.buildDataForExport(this.state.data1);
+
         var a = document.createElement('a');
-        a.href = data_type + ', ' + table_html;
-        a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+        a.href = encodeURI(dataType + csvContent);
+        a.download = 'tabla_denuncias_' + moment().format("YYYY-MM-DD-HH-mm-ss").replace(/-/g, '') + '.csv';
         a.click();
     }
 
