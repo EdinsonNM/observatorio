@@ -31,6 +31,14 @@ export default class IndexRiesgo extends React.Component{
 
 	
 				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
+					<br/>
+				<div className="feature-box feature-box-style-2">
+						<div className="feature-box-info">
+							<p className="tall">
+								<a href="tematica_hidrologica.html"> <span className="fa fa-chevron-left"></span> Regresar</a>
+							</p>
+						</div>
+					</div>
 					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
 								<i className="fa fa-map-o"></i>

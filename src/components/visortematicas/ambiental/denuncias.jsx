@@ -129,7 +129,6 @@ export default class Denuncias extends React.Component{
     }
 
     getData(){
-        debugger;
         if(this.state.departamento&&this.state.anio){
             let service = new DenunciaAmbientalService();
             service.getAll(this.state.anio,this.state.departamento,(error,data) => {
@@ -141,10 +140,24 @@ export default class Denuncias extends React.Component{
         }
     }
 
+    export() {
+        var data_type = 'data:application/vnd.ms-excel';
+        var table_div = document.querySelector('table');
+        var table_html = table_div.outerHTML.replace(/ /g, '%20');
+    
+        var a = document.createElement('a');
+        a.href = data_type + ', ' + table_html;
+        a.download = 'exported_table_' + Math.floor((Math.random() * 9999999) + 1000000) + '.xls';
+        a.click();
+    }
+
     render (){
         const iconButton = <IconButton href="#/tematica/-KhDkIXgXKSWQpblXLLk/stats">
             <FontIcon className="material-icons" color="#006064">arrow_back</FontIcon>
         </IconButton>;
+        const iconButtonExport = <IconButton onClick={this.export.bind(this)}>
+                                <FontIcon className="material-icons" color="#006064">file_download</FontIcon>
+                            </IconButton>;
         const buttonFilter = <FlatButton icon={<FontIcon className="email" />} />;
         let tableRows = this.buildTableRows(this.state.data1);
         let departamento_nombre = '';
@@ -166,6 +179,7 @@ export default class Denuncias extends React.Component{
     				iconElementLeft={iconButton}
     				style={style.appbar}
                     titleStyle={{color:'black'}}
+                    iconElementRight = {iconButtonExport}
 				/>
 
                 <div className="col-md-12" className="tematica-home-container">
@@ -239,8 +253,8 @@ export default class Denuncias extends React.Component{
                         </Tab>
 
                         <Tab label="Tabla" value={1} icon={<FontIcon className="material-icons">reorder</FontIcon>}>
-                            <div>
-                                <Table fixedHeader={true} selectable={false} multiselectable={false}>
+                            <div id="data-table">
+                                <Table  fixedHeader={true} selectable={false} multiselectable={false}>
                                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                                         <TableRow>
                                             <TableHeaderColumn>Mes</TableHeaderColumn>

@@ -29,8 +29,15 @@ export default class IndexRiesgo extends React.Component{
 						avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
 						/>
 
-	
+				<br/>
 				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
+					<div className="feature-box feature-box-style-2">
+						<div className="feature-box-info">
+							<p className="tall">
+								<a href="tematica_cambio_climatico.html"> <span className="fa fa-chevron-left"></span> Regresar</a>
+							</p>
+						</div>
+					</div>
 					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
 								<i className="fa fa-map-o"></i>

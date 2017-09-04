@@ -37,6 +37,13 @@ export default class IndexEconomico extends React.Component{
 
 				<div className="col-md-12 tematica-home-container"  style={{flex:'1',overflowY:'auto'}}>
 					<div className="feature-box feature-box-style-2">
+						<div className="feature-box-info">
+							<p className="tall">
+								<a href="tematica_social_economica.html"> <span className="fa fa-chevron-left"></span> Regresar</a>
+							</p>
+						</div>
+					</div>
+					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
 								<i className="fa fa-usd"></i>
 							</div>
