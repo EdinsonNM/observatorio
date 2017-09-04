@@ -11,16 +11,16 @@ export default class MunicipalidadService extends ApiService{
 
     getAll(dpto, next){
         let service =  this.getApi().all(serviceName);
-        
+
         service.getAll({}, {}).then(
             response => {
                     let municipalidades = response.body().data().data;
                     let munisFiltradas = municipalidades.filter(obj => {
                         let idUbigeo = obj.ID_UBIGEO.substr(0, 2);
-                        
+
                         return idUbigeo == dpto;
                     });
-                    
+
                     MUNICIPALIDADES = munisFiltradas;
                     next(munisFiltradas);
 
@@ -33,12 +33,10 @@ export default class MunicipalidadService extends ApiService{
     }
 
     static getByYear (year) {
-        debugger;
         return MUNICIPALIDADES.filter(obj => obj.ANIO == year);
     }
 
     static getAllGastos (year) {
-        debugger;
         return MUNICIPALIDADES.filter(obj => obj.ANIO == year);
     }
 
