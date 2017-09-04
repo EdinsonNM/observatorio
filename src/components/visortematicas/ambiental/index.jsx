@@ -38,9 +38,7 @@ export default class IndexAmbiental extends React.Component{
 				<div className="col-md-12 tematica-home-container">
 					<div className="feature-box feature-box-style-2">
 						<div className="feature-box-info">
-							<h6>
-								<a href="tematica_ambiental.html"> <span className="fa fa-arrow-left"></span> Regresar</a>
-							</h6>
+							<h6><a href="tematica_ambiental.html"> <span className="fa fa-arrow-left"></span> Regresar</a></h6>
 							<br/>
 						</div>
 					</div>

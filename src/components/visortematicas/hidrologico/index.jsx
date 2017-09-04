@@ -22,22 +22,21 @@ export default class IndexRiesgo extends React.Component{
 						textStyle={{paddingRight:0}}
 						style={{backgroundColor: '#006064'}}
 						titleColor="#FFFFFF"
-					
+
 						subtitleColor="#FFFFFF"
 						title="Temática Hidrológica"
 						subtitle="Listados de estadísticas"
 						avatar={<Avatar icon={<FontIcon  className="fa fa-thermometer-full" color={pink500}></FontIcon>} backgroundColor={teal500}/>}
 						/>
 
-	
+
 				<div className="col-md-12" style={{flex:'1',overflowY:'auto'}}>
 					<br/>
 				<div className="feature-box feature-box-style-2">
-						<div className="feature-box-info">
-							<p className="tall">
-								<a href="tematica_hidrologica.html"> <span className="fa fa-chevron-left"></span> Regresar</a>
-							</p>
-						</div>
+					<div className="feature-box-info">
+						<h6><a href="tematica_hidrologica.html"> <span className="fa fa-arrow-left"></span> Regresar</a></h6>
+						<br />
+					</div>
 					</div>
 					<div className="feature-box feature-box-style-2">
 							<div className="feature-box-icon">
