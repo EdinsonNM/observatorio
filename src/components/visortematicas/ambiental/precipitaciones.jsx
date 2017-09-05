@@ -78,6 +78,7 @@ export default class Precipitaciones extends React.Component{
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
+        this.getData = this.getData.bind(this);
 	}
     toggleFilter(){
         this.setState({showFilter:!this.state.showFilter});
@@ -250,8 +251,6 @@ export default class Precipitaciones extends React.Component{
             case 'mes':
                 this.setState({
                     [key]: value
-                },()=>{
-                    this.getData();
                 });
                 break;
 
@@ -552,7 +551,9 @@ export default class Precipitaciones extends React.Component{
                                         }
                                     </SelectField>
                                 </div>
-
+                                <div className="col-md-3">
+                                    <button className="btn btn-info" style={{marginTop:20}} onClick={this.getData}>Filtrar</button>
+                                </div>
                             </div>
                         </div>
 

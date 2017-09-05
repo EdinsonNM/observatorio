@@ -59,6 +59,7 @@ export default class Indice extends React.Component{
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
+        this.getData = this.getData.bind(this);
     }
 
     componentDidMount() {
@@ -87,8 +88,6 @@ export default class Indice extends React.Component{
             default:
                 this.setState({
                     [key]: value
-                },()=>{
-                    this.getData();
                 });
         }
     }
@@ -228,7 +227,7 @@ export default class Indice extends React.Component{
                             <div className="text-filter">Aplique un filtro teniendo en cuenta uno o mas criterios.</div>
                             <div className="container-fluid">
                             <div className="row">
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Departamento:"
@@ -239,7 +238,7 @@ export default class Indice extends React.Component{
                                         {this.buildSelectOptions('departamentos')}
                                     </SelectField>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Provincia: "
@@ -250,7 +249,7 @@ export default class Indice extends React.Component{
                                         {this.buildSelectOptions('provincias')}
                                     </SelectField>
                                 </div>
-                                <div className="col-md-4">
+                                <div className="col-md-3">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Distrito: "
@@ -261,7 +260,9 @@ export default class Indice extends React.Component{
                                         {this.buildSelectOptions('distritos')}
                                     </SelectField>
                                 </div>
-
+                                <div className="col-md-3">
+                                    <button className="btn btn-info" style={{marginTop:20}} onClick={this.getData}>Filtrar</button>
+                                </div>
                             </div>
                         </div>
 

@@ -62,6 +62,7 @@ export default class Pbi extends React.Component{
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
+        this.getData = this.getData.bind(this);
     }
 
      componentDidMount(){
@@ -78,10 +79,6 @@ export default class Pbi extends React.Component{
 
     handleChangeSelect(key, event, index, value){
         this.setState({[key]: value});
-
-        if (key === 'anio') {
-            this.getData();
-        }
     }
 
     handleChangeTab (value) {
@@ -226,7 +223,9 @@ export default class Pbi extends React.Component{
                                         {this.buildSelectOptions('anios')}
                                     </SelectField>
                                 </div>
-
+                                <div className="col-md-4">
+                                    <button className="btn btn-info" style={{marginTop:20}} onClick={this.getData}>Filtrar</button>
+                                </div>
 
                             </div>
                         </div>

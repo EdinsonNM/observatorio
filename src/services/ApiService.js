@@ -22,7 +22,10 @@ export default class Model{
 				next(null,response.body().data());
 			},
 			(error)=>{
-				return next(error.response.data.data);
+				if(error.response)
+					return next(error.response.data.data);
+				else
+					return next('error service')
 			}
 		);
 	}

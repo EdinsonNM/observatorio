@@ -37,7 +37,12 @@ module.exports = {
 		contentBase: path.resolve(__dirname, 'public'),
 		host: '0.0.0.0',
 		port: 8000,
-		inline: true
+		inline: true,
+		proxy: [{
+            path: `http://sinia.minam.gob.pe/`,
+            target: 'http://sinia.minam.gob.pe/',
+            secure: false
+        }],
 	},
 	module: {
 		loaders: [

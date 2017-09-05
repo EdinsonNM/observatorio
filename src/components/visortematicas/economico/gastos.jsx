@@ -83,6 +83,7 @@ export default class Gastos extends React.Component{
         };
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
+        this.loadData = this.loadData.bind(this);
     }
 
     componentDidMount(){
@@ -106,8 +107,19 @@ export default class Gastos extends React.Component{
         },2000);
 
     }
-
-     handleChangeSelect(key, event, index, value){
+    loadData() {
+        const {anio, municipalidad} = this.state;
+        let data;
+        if (municipalidad <= -1) {
+            data = [];
+        } else if (municipalidad == 0) {
+            data =  MunicipalidadService.getAllGastos(anio);
+        } else {
+            data = MunicipalidadService.getGastos(anio, municipalidad);
+        }
+        this.setState({data});
+    }
+    handleChangeSelect(key, event, index, value){
         if (key === 'anio') {
             let munis = MunicipalidadService.getByYear(value);
 
@@ -116,19 +128,7 @@ export default class Gastos extends React.Component{
                 municipalidades: munis
             });
         } else if (key === 'municipalidad') {
-            let data;
-
-            if (value <= -1) {
-                data = [];
-            } else if (value == 0) {
-                data =  MunicipalidadService.getAllGastos(this.state.anio);
-            } else {
-                data = MunicipalidadService.getGastos(this.state.anio, value);
-            }
-            this.setState({
-                [key]: value,
-                data
-            });
+            this.setState({[key]: value});
         } else if (key==='departamento'){
             let service = new MunicipalidadService();
             service.getAll(value,() =>{
@@ -251,7 +251,7 @@ export default class Gastos extends React.Component{
 
                     <div className="container-fluid">
                         <div className="row">
-                            <div className="col-md-12">
+                            <div className="col-md-6">
                                     <SelectField
                                         fullWidth
                                         floatingLabelText="Departamento:"
@@ -262,7 +262,7 @@ export default class Gastos extends React.Component{
                                         {this.buildSelectOptions('departamentos')}
                                     </SelectField>
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-6">
                                 <SelectField
                                     fullWidth
                                     floatingLabelText="Año: "
@@ -286,6 +286,10 @@ export default class Gastos extends React.Component{
                                     {this.buildSelectOptions('municipalidades')}
                                 </SelectField>
                             </div>
+                            <div className="col-md-4">
+                                <button className="btn btn-info" style={{marginTop:20}} onClick={this.loadData}>Filtrar</button>
+                            </div>
+
                         </div>
                     </div>
 

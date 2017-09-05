@@ -2,7 +2,7 @@ import ApiService from './ApiService';
 import _ from 'underscore';
 import moment from 'moment';
 import {to_json} from'xmljson';
-const serviceName = '/wsoefa/oefa.php';
+const serviceName = 'wsoefa/oefa.php';
 
 export default class DenunciaAmbientalService extends ApiService{
 
@@ -37,12 +37,12 @@ export default class DenunciaAmbientalService extends ApiService{
       for(let mes = 0;mes<12;mes++){
         result.push([moment().month(mes).format('MMM'),0])
       }
-
-      data.forEach((item)=>{
-        let date = item.fechaDenuncia.split('/')
-        let month = parseInt(date[1]);
-        result[month][1]+=1;
-      });
+      if(data)
+        data.forEach((item)=>{
+          let date = item.fechaDenuncia.split('/')
+          let month = parseInt(date[1]);
+          result[month][1]+=1;
+        });
       return result;
   }
   getReport2(data){

@@ -59,6 +59,7 @@ export default class Denuncias extends React.Component{
 
         this.handleChangeSelect = this.handleChangeSelect.bind(this);
         this.handleChangeTab = this.handleChangeTab.bind(this);
+        this.getData = this.getData.bind(this);
 	}
     componentDidMount(){
          setTimeout(()=>{
@@ -78,8 +79,6 @@ export default class Denuncias extends React.Component{
     handleChangeSelect(key, event, index, value){
         this.setState({
             [key]: value
-        },()=>{
-            this.getData();
         });
     }
 
@@ -220,6 +219,9 @@ export default class Denuncias extends React.Component{
                                         <MenuItem value={0} primaryText="Seleccionar" />
                                         {this.buildSelectOptions('anios')}
                                     </SelectField>
+                                </div>
+                                <div className="col-md-4">
+                                    <button className="btn btn-info" style={{marginTop:20}} onClick={this.getData}>Filtrar</button>
                                 </div>
 
 
